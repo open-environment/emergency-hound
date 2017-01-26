@@ -1,0 +1,151 @@
+﻿<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+    <li><a href="#dashboard"><i class="fa fa-home"></i>Home</a></li>
+    <li><a href="#incidents">Incident Search</a></li>
+    <li class="active">Incident Details</li>
+</ul>
+
+<!-- START: INCIDENT WIZARD -->
+<section class="panel panel-default wizard">
+    <div class="wizard-steps clearfix" id="form-wizard">
+        <ul class="steps">
+            <li><a href="#incidentEdit"><span class="badge badge-success">1</span>General</a></li>
+            <li class="active"><a href=""><span class="badge badge-info">2</span>Map</a></li>
+            <li><a href="#incidentTeam"><span class="badge badge-danger">3</span>Team</a></li>
+            <li><a href="#incidentResources"><span class="badge badge-danger">4</span>Resources</a></li>
+            <li><a href="#incidentStatus"><span class="badge badge-danger">5</span>Status</a></li>
+            <li><a href="#incidentOpPeriods"><span class="badge badge-danger">6</span>Periods</a></li>
+            <li><a href="#incidentAttach"><span class="badge badge-danger">7</span>Images</a></li>
+        </ul>
+    </div>
+</section>
+<!-- END: INCIDENT WIZARD -->
+<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+
+<section class="panel panel-default">
+    <div class="panel-heading font-bold">Incident Location</div>
+    <form class="panel-body" name="submitForm" novalidate ng-submit="submitForm.$valid && incidentEdit.save()">
+        <div class="hbox stretch">
+            <div class="row">
+                <div class="col-md-8">
+                    {{offlineMap}}
+                    <div id="map_canvas" style="width: 100%; height: 500px;"></div>
+
+                    <!-- MAP OVERLAY PANEL-->
+                    <div id="panel" class="map-panel">
+                        Click map to edit:
+                        <br />
+                        <div class="btn-group-vertical" data-toggle="buttons">
+                            <label class="btn btn-sm btn-info lbl-btn-group">
+                                <input type="radio" name="options" id="option1" class="text-left"><i class="fa fa-check text-active"></i> Location
+                            </label>
+                            <label class="btn btn-sm btn-danger lbl-btn-group">
+                                <input type="radio" name="options" id="option2"><i class="fa fa-check text-active"></i> Impacted Area
+                            </label>
+                            <label class="btn btn-sm btn-warning lbl-btn-group">
+                                <input type="radio" name="options" id="option3"><i class="fa fa-check text-active"></i> Threatened Area
+                            </label>
+                        </div>
+                        <br />
+                        <input id="btnSave" onclick="polygon1Save();" class="btn btn-primary btn-sm" type="button" value="Save Changes" style="display:none" />
+                    </div>
+                    <div id="panel" class="map-panel-btm">
+                        <a href="#" class="btn btn-danger btn-xs dker" onclick="hideShowPoly1();"><i class="fa fa-eye"></i></a>
+                        <a href="#" class="btn btn-warning btn-xs dker" onclick="hideShowPoly2();"><i class="fa fa-eye"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Location Description</label>
+                                <textarea class="form-control" rows="3"
+                                          id="description"
+                                          data-ng-model="incident.incidenT_LOC_DESC"
+                                          placeholder="Location Description">
+                                    {{incident.incidenT_LOC_DESC}}
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" class="form-control"
+                                       data-ng-model="incident.incidenT_CITY"
+                                       value="{{incident.incidenT_CITY}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>State</label>
+                                <input type="text" class="form-control"
+                                       data-ng-model="incident.incidenT_STATE"
+                                       value="{{incident.incidenT_STATE}}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Latitude</label>
+                                <input type="text" class="form-control" id="latt"
+                                       data-ng-model="incident.incidenT_LAT"
+                                       value="{{incident.incidenT_LAT}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Longitude</label>
+                                <input type="text" class="form-control" id="longg"
+                                       data-ng-model="incident.incidenT_LONG"
+                                       value="{{incident.incidenT_LONG}}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Impacted Area</label><div id="impacted-acres"></div>
+                                <textarea class="form-control" rows="3"
+                                          id="impactedArea" readonly="readonly"
+                                          data-ng-model="incident.impactedArea">
+                                    {{incident.impactedArea}}
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Threatened Area</label><div id="threatened-acres"></div>
+                                <textarea class="form-control" rows="3"
+                                          id="threatenedArea" readonly="readonly"
+                                          data-ng-model="incident.threatenedArea">
+                                    {{incident.threatenedArea}}
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-sm btn-primary" data-ng-click="save()" ng-show="incident.caN_EDIT>0">Save</button>
+                            <button class="btn btn-sm btn-default" data-ng-click="close()">Close</button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+</section>

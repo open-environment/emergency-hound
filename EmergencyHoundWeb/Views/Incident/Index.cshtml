@@ -1,0 +1,264 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIncidentIndexViewModel
+@{
+    ViewBag.Title = "Incident Search";
+}
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+<script type="text/javascript">
+    //script for map tab
+    var map2;
+    var map_options2 = {
+        zoom: 9,
+        center: { lat: 35.479, lng: -95.510 },
+        mapTypeId: google.maps.MapTypeId.HYBRID
+    };
+    var bounds = new google.maps.LatLngBounds();
+    var myinfowindow = new google.maps.InfoWindow({ content: 'holding...'});     //define 1 infowindow
+    var poly;       //impacted area polygon
+    var polyOptions = {
+        strokeWeight: 2,
+        fillColor: "#fb6b5b",
+        geodesic: true
+    };
+    var polyThreatened;       //threatened area polygon
+    var polyThreatenedOptions = {
+        strokeWeight: 2,
+        fillColor: "#ffc333",
+        geodesic: true
+    };
+
+
+    $(document).ready(function () {
+        map2 = new google.maps.Map(document.getElementById('map_canvas2'), map_options2);
+
+        //create an event when tab is clicked to resize map
+        $("a[href='#mapper']").on('shown.bs.tab', function(){
+
+            //resize map so all tiles display properly
+            google.maps.event.trigger(map2, 'resize');
+
+            @foreach (var item in Model.t_em_incident)
+            {
+                if (item.INCIDENT_LAT != null)
+                {
+                    <text>
+            //display incident marker if there is one
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(@item.INCIDENT_LAT,@item.INCIDENT_LONG),
+                map: map2,
+                title: '@item.INCIDENT_NAME'
+            });
+
+            //display impacted area if there is one
+            poly = new google.maps.Polygon(polyOptions);
+            poly.setMap(map2);
+            @if (item.ImpactedArea != null)
+            {
+                <text>
+                    var impactedCoords = [@item.ImpactedArea];
+                poly.setPath(impactedCoords);        
+                </text>
+            }
+
+            //display threatened area if there is one
+            polyThreatened = new google.maps.Polygon(polyThreatenedOptions);
+            polyThreatened.setMap(map2);
+            @if (item.ThreatenedArea != null)
+            {
+            <text>
+                var impactedCoords = [@item.ThreatenedArea];
+            polyThreatened.setPath(impactedCoords);        
+            </text>
+            }
+
+
+            //marker click event
+            google.maps.event.addListener(marker, 'click', function () {
+                myinfowindow.setContent('<div id="content">' +
+                        '<div id="siteNotice">' +
+                        '</div>' +
+                        '<h4 id="firstHeading" class="firstHeading">' + '@item.ORG_NAME' + '</h4>' +
+                        '<div id="bodyContent">' +
+                        '<p><b>Name: </b> @item.INCIDENT_NAME' + '</p>' +
+                        '<p><b>Description: </b> @item.INCIDENT_DESC' + '</p>' +
+                        '<a href="/Incident/Edit/@item.INCIDENT_IDX " class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>' +
+                        '</div>' +
+                        '</div>');
+                myinfowindow.open(map2, this);
+            });
+
+
+            bounds.extend(marker.getPosition());
+            </text>
+                }
+            }
+            //now fit the map to the newly inclusive bounds
+            if (bounds.contains(marker.getPosition()))
+                map2.fitBounds(bounds);
+
+
+        });
+
+    });
+
+</script>
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+
+            <form role="form" class="">
+
+                <!-- BREADCRUMBS -->
+                <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                    <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                    <li>Response</li>
+                    <li class="active">Incident Search</li>
+                    <button type="submit" name="submitButton" value="Report" class="btn btn-xs btn-info pull-right">Report</button>
+                </ul>
+
+                <h3 class="m-b-md">Search Incidents</h3>
+
+                <!-- render the validation summary -->
+                @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+
+                <!-- START SEARCH PANEL -->
+                <div class="panel panel-success">
+
+                    <div class="panel-heading panel-success cursorpointer" data-toggle="collapse" href="#collapseOne">
+                        <i class="fa fa-search text-default"></i>
+                        Search Filter:<small class=" pull-right">(Click to expand)</small>
+                        @if (Model.selectOrgIDX != null)
+                    {
+                    <button type="button" class="btn btn-danger btn-xs">
+                        Jurisdiction: @Model.selectOrgName
+                    </button>
+                    }
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-sm-4">
+                                    <label>Jurisdiction:</label>
+                                    @Html.DropDownListFor(x => x.selectOrgIDX, Model.ddl_jurisdictions, "", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <button type="submit" class="btn btn-primary">Search <i class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SEARCH PANEL -->
+
+            </form>
+
+            <section class="panel panel-default">
+                <header class="panel-heading bg-light">
+                    <ul class="nav nav-tabs " id="myTabs">
+                        <li class="active"><a href="#lister" data-toggle="tab" aria-expanded="false"><i class="fa fa-list text-default"></i> List View</a></li>
+                        <li class=""><a href="#mapper" data-toggle="tab" aria-expanded="true"><i class="fa fa-map-marker text-default"></i> Map View</a></li>
+                    </ul>
+                </header>
+                <div class="panel-body">
+                    <div class="tab-content">
+
+                        <!-- START TAB 1 -->
+                        <div class="tab-pane active" id="lister">
+                            <div class="table-responsive">
+                                <table class="table table-striped m-b-none" data-ride="datatables">
+                                    <tr>
+                                        <th></th>
+                                        <th>ID</th>
+                                        <th>Jurisdiction</th>
+                                        <th>Incident Name</th>
+                                        <th>Incident Description</th>
+                                        <th>Shared With</th>
+                                        <th>Start Date</th>
+                                        <th>Location</th>
+                                        <th>State</th>
+                                        <th>County</th>
+                                        <th>City</th>
+                                    </tr>
+
+                                    @foreach (var item in Model.t_em_incident)
+                                    {
+                                        <tr>
+                                            <td style="min-width:78px">
+                                                <a href="@Url.Action("Edit", "Incident", new { id = item.INCIDENT_IDX })" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                                                <div class="delete-section" style="display:inline">
+                                                    <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = item.INCIDENT_IDX})"><i class="fa fa-times "></i></a>
+                                                    <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.INCIDENT_IDX" data-delete-path="@(Url.Content("~/"))" data-delete-p="/Incident/Delete"><b>Confirm Delete</b></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.INCIDENT_ID)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ORG_NAME)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.INCIDENT_NAME)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.INCIDENT_DESC)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SHARE_TYPE)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.INCIDENT_START_DT)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.INCIDENT_LOC_DESC)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.INCIDENT_STATE)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.INCIDENT_CNTY)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.INCIDENT_CITY)
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+                            </div>
+                        </div>
+                        <!-- END TAB 1 -->
+
+                        <!-- START TAB 2 -->
+                        <div class="tab-pane " id="mapper">
+                            <div id="map_canvas2" style="width: 100%; height: 500px;"></div>
+                        </div>
+                        <!-- END TAB 2 -->
+
+                    </div>
+                </div>
+            </section>
+            <p>
+                @if (Model.canAdd == true)
+                {
+                    @Html.ActionLink("Create New", "Create", "Incident", new object { }, new { @class = "btn btn-s-md btn-primary" })
+                }
+            </p>
+
+        </section>
+    </section>
+</section>
+
+@Scripts.Render("~/bundles/confirmdelete")
+

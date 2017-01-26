@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<section id="content">
+    <div class="bg-primary dk">
+        <div class="text-center wrapper">
+            <div class="m-t-lg m-b-lg">
+                <div class="text-uc h1 font-bold inline">
+                    <div class="pull-left m-r-sm text-white">Emergency Incidents <span class="font-thin text-muted">Managed</span></div>
+                    <div class="carousel slide carousel-fade inline auto aside text-left pull-left pull-none-xs" data-interval="2000">
+                        <div class="carousel-inner">
+                            <div class="item active text-warning">
+                                Faster
+                            </div>
+                            <div class="item text-dark">
+                                Easier
+                            </div>
+                            <div class="item">
+                                Safer
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h4 text-muted m-t-sm"> <span class=" text-warning">Emergency Hound:</span> A better way to prepare for and respond to emergencies.</div>
+            </div>
+            <p class="text-center m-b-l">
+                @*@Html.ActionLink("Join Our Mailing List", "MailingList", "Home", new object { }, new { @class = "btn btn-lg btn-dark m-sm" })*@
+                @Html.ActionLink("Register", "Register", "Account", new object { }, new { @class = "btn btn-lg btn-dark m-sm" })
+                @Html.ActionLink("Sign In", "Login", "Account", new object { }, new { @class = "btn btn-lg btn-warning b-white bg-empty m-sm" })
+            </p>
+        </div>
+        <div class="padder">
+            <div class="hbox">
+                <aside class="col-md-3 v-bottom text-right" style="z-index:900">
+                    <div class="hidden-sm hidden-xs">
+                        <section class="panel bg-dark inline m-b-n-lg m-r-n-xl aside-lg no-border device phone animated fadeInLeftBig" style="width:450px; margin-right:-200px">
+                            <header class="panel-heading text-center">
+                                <i class="fa fa-minus fa-2x m-b-n-xs block"></i>
+                            </header>
+                            <div>
+                                <div class="m-l-xs m-r-xs">
+                                    <img src="~/Content/Images/tablet-1.png" class="img-full">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </aside>
+                <aside class="col-sm-10 col-md-6">
+                    <section class="panel bg-dark m-b-n-lg no-border device animated fadeInUp">
+                        <header class="panel-heading text-left">
+                            <i class="fa fa-circle fa-fw"></i>
+                            <i class="fa fa-circle fa-fw"></i>
+                            <i class="fa fa-circle fa-fw"></i>
+                        </header>
+                        <img src="~/Content/Images/main.png" class="img-full">
+                    </section>
+                </aside>
+                <aside class="col-md-3 v-bottom">
+                    <div class="hidden-sm hidden-xs">
+                        <section class="panel bg-light m-b-n-lg m-l-n-lg aside no-border device phone animated fadeInRightBig">
+                            <header class="panel-heading text-center">
+                                <i class="fa fa-minus fa-2x text-white m-b-n-xs block"></i>
+                            </header>
+                            <div class="">
+                                <div class="m-l-xs m-r-xs">
+                                    <img src="~/Content/Images/phone-1.png" class="img-full">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </aside>
+            </div>
+        </div>
+        <div class="dker pos-rlt" style="z-index:999">
+            <div class="container wrapper">
+                <div class="m-t-lg m-b-lg text-center">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="about">
+        <div class="container">
+            <div class="m-t-xl m-b-xl text-center wrapper">
+                <h3>Comprehensive, systematic management of incidents</h3>
+                <p class="text-muted">Scalable and flexible framework that supports multiple jurisdictions</p>
+            </div>
+            <div class="row m-t-xl m-b-xl text-center">
+                <div class="col-sm-4" data-ride="animated" data-animation="fadeInLeft" data-delay="300">
+                    <p class="h3 m-b-lg">
+                        <i class="fa fa-lightbulb-o fa-3x text-info"></i>
+                    </p>
+                    <div class="">
+                        <h4 class="m-t-none">Prepare</h4>
+                        <p class="text-muted m-t-lg">Prepare for emergencies by developing an inventory of available resources and maintaining up-to-date responder certifications.</p>
+                    </div>
+                </div>
+                <div class="col-sm-4" data-ride="animated" data-animation="fadeInLeft" data-delay="600">
+                    <p class="h3 m-b-lg">
+                        <i class="fa fa-bullhorn fa-3x text-info"></i>
+                    </p>
+                    <div class="">
+                        <h4 class="m-t-none">Respond</h4>
+                        <p class="text-muted m-t-lg">Take Emergency Hound into the field to stay on top of an incident as it unfolds. Build an Incident Command Team, record incident information, upload pictures, videos, and audio recordings, and identify surrounding environmental areas of concern.</p>
+                    </div>
+                </div>
+                <div class="col-sm-4" data-ride="animated" data-animation="fadeInLeft" data-delay="900">
+                    <p class="h3 m-b-lg">
+                        <i class="fa fa-signal fa-3x text-info"></i>
+                    </p>
+                    <div class="">
+                        <h4 class="m-t-none">Analyze</h4>
+                        <p class="text-muted m-t-lg">View Generate FEMA reports, generate charts, and analyze your data. Identify resource deficiencies using map-based reports.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="responsive" class="bg-dark">
+        <div class="text-center">
+            <div class="container">
+                <div class="m-t-xl m-b-xl wrapper">
+                    <h3 class="text-white">Complete Emergency Management, no matter where you are</h3>
+                    <p>
+                        Emergency Hound can help you in the field or at the office.<br>
+                    </p>
+                </div>
+                <div class="row m-t-xl m-b-xl">
+                    <div class="col-sm-4 wrapper-xl" data-ride="animated" data-animation="fadeInLeft" data-delay="300">
+                        <p class="text-center h2 m-b-lg m-t-lg">
+                            <span class="fa-stack fa-2x">
+                                <i class="fa fa-circle fa-stack-2x text-dark"></i>
+                                <i class="fa fa-mobile fa-stack-1x text-muted"></i>
+                            </span>
+                        </p>
+                        <p>Mobile</p>
+                        <p>iPhone / Android</p>
+                    </div>
+                    <div class="col-sm-4 wrapper-xl" data-ride="animated" data-animation="fadeInLeft" data-delay="600">
+                        <p class="text-center h1 m-b-lg">
+                            <span class="fa-stack fa-2x">
+                                <i class="fa fa-circle fa-stack-2x text-dark"></i>
+                                <i class="fa fa-tablet fa-stack-1x text-muted"></i>
+                            </span>
+                        </p>
+                        <p>Tablet</p>
+                        <p>iPad / Android</p>
+                    </div>
+                    <div class="col-sm-4 wrapper-xl" data-ride="animated" data-animation="fadeInLeft" data-delay="900">
+                        <p class="text-center h2 m-b-lg m-t-lg">
+                            <span class="fa-stack fa-2x">
+                                <i class="fa fa-circle fa-stack-2x text-dark"></i>
+                                <i class="fa fa-desktop fa-stack-1x text-muted text-md"></i>
+                            </span>
+                        </p>
+                        <p>Desktop</p>
+                        <p>Internet Application</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="newsletter" class="bg-white clearfix wrapper-lg">
+        <div class="container text-center m-t-xl m-b-xl" data-ride="animated" data-animation="fadeIn">
+            <h2>Mailing List</h2>
+            <p>Do you want to be notified when Emergency Hound is ready? Subscribe to our mailing list to get periodic updates.</p>
+            <div class="form-inline m-t-xl m-b-xl">
+                <!--
+                          <div class="form-group">
+                            <input class="form-control input-lg" placeholder="Your email" data-ride="animated" data-animation="fadeInLeftBig" data-delay="300">
+                          </div> -->
+                @Html.ActionLink("Join Mailing List", "MailingList", "Home", new object { }, new { @class = "btn btn-lg btn-dark m-sm" })
+            </div>
+        </div>
+    </div>
+</section>

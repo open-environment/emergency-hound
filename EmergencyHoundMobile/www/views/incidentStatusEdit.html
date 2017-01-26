@@ -1,0 +1,53 @@
+﻿<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+
+<section class="panel panel-default">
+    <header class="panel-heading font-bold ">Incident Status</header>
+    <form class="panel-body" name="submitForm" novalidate ng-submit="submitForm.$valid && incidentEdit.save()">
+        <div class="hbox stretch">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Date/Time</label>
+                        <input type="text" class="form-control datetime-picker"
+                               data-ng-model="incidentstatus.statuS_DT"
+                               value="{{incidentstatus.STATUS_DT}}" required="" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Status Update Type:</label>
+                        <select class="form-control" id="statusType"
+                                data-ng-model="incidentstatus.statuS_TYPE_CD"
+                                ng-options="r.statuS_TYPE_CD as r.statuS_TYPE_CD for r in ddlStatusType"></select>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Status Description:</label>
+                        <textarea class="form-control" rows="3"
+                                  id="statuS_DESC" maxlength="400"
+                                  data-ng-model="incidentstatus.statuS_DESC"
+                                  placeholder="Status Description">
+                            {{incidentstatus.statuS_DESC}}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-sm btn-primary " data-ng-click="save()" >Save</button>
+                    <button class="btn btn-sm btn-default " data-ng-click="close()">Close</button>
+                    <button class="btn btn-sm btn-danger pull-right" data-ng-click="delete()" >Delete</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

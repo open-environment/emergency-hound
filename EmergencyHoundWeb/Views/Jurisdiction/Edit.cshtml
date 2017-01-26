@@ -1,0 +1,198 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmJurisdictionEditViewModel
+@{
+    ViewBag.Title = "Edit Jurisdiction";
+}
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content" style="width:100%">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Admin</a></li>
+                <li class="active"><a href="@Url.Action("Index", "Jurisdiction")">Jurisdictions </a></li>
+            </ul>
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+            <section class="panel panel-default">
+                <header class="panel-heading font-bold">Jurisdiction Details</header>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { id="iform" }))
+                    {
+                        @Html.HiddenFor(model => model.t_oe_organizations.ORG_IDX)
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <div>
+                            @Html.ValidationMessage("Error", String.Empty, new { @class = "alert alert-danger" })
+                        </div>
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <label>Jurisdiction Name</label>
+                                            @Html.TextBoxFor(model => model.t_oe_organizations.ORG_NAME, new { @class = "form-control", @placeholder = "Jurisdiction Name", @maxlength = "100" })
+                                            @Html.ValidationMessageFor(model => model.t_oe_organizations.ORG_NAME)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="checkbox">
+                                            <label>Active: 
+                                                @Html.CheckBoxFor(model => model.t_oe_organizations.ACT_IND, new { @class = "", @style="margin-left:0px" })
+                                                @Html.ValidationMessageFor(model => model.t_oe_organizations.ACT_IND)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Jurisdiction Description</label>
+                                            @Html.TextBoxFor(model => model.t_oe_organizations.ORG_DESC, new { @class = "form-control", @placeholder = "Description", @maxlength = "200" })
+                                            @Html.ValidationMessageFor(model => model.t_oe_organizations.ORG_DESC)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <legend>Can people request to join?</legend>
+                                                <div class="radio">
+                                                    @Html.RadioButtonFor(model => model.t_oe_organizations.ALLOW_JOIN_IND, true, new { id = "allowjoin-true", style="margin-left:0px;" })
+                                                    @Html.Label("allowjoin-true", "Yes - people can request to join this jurisdiction when they create their account")
+                                                </div>
+                                                <div class="radio">
+                                                    @Html.RadioButtonFor(model => model.t_oe_organizations.ALLOW_JOIN_IND, false, new { id = "allowjoin-false", style = "margin-left:0px;" })
+                                                    @Html.Label("allowjoin-false", "No - you will add people to the jurisdiction after they create their accounts")
+                                                </div>
+                                            </fieldset>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                        <a class=" btn btn-sm btn-warning" href="@Url.Action("Index" )">Back to List</a>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed line-lg pull-in"></div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+
+                                            @if (Model != null)
+                                            {
+
+                                                <fieldset>
+                                                    <legend>Jurisdiction Members</legend>
+                                                    <section class="panel panel-default">
+                                                        <div class="table-responsive">
+
+                                                            <table class="table table-striped m-b-none" data-ride="datatables">
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th>User</th>
+                                                                    <th>Role</th>
+                                                                    <th>Date Joined</th>
+                                                                </tr>
+                                                                @foreach (var item in Model.userOrgDisplayType)
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="delete-section" style="display:inline">
+                                                                                <a class=" btn btn-rounded btn-xs btn-icon btn-danger delete-link" href="#"><i class="fa fa-times "></i></a>
+                                                                                <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.USER_ORG_IDX" data-delete-p="/Jurisdiction/DeleteUserOrg"><b>Confirm Delete</b></div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => item.USER_NAME)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => item.ROLE_CD)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => item.CREATE_DT)
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </section>
+                                                </fieldset>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>
+                                    <a href="#modal-form" class="btn btn-sm btn-primary" data-toggle="modal">Add User</a>
+                                </p>
+
+                    }
+
+                </div>
+            </section>
+        </section>
+    </section>
+</section>
+
+<!-- modal  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Add User</h3>
+                        <p>Add user to jurisdiction.</p>
+                        @using (Html.BeginForm("AddUserOrg", "Jurisdiction", FormMethod.Post, new { id = "iform" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("oidx", Model.t_oe_organizations.ORG_IDX)
+
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    @Html.DropDownList("uidx", Model.ddl_usersNotInOrg, "", new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    <label>Role</label>
+                                    @Html.DropDownList("Role", new List<SelectListItem>
+                                     {
+                                        new SelectListItem{ Text="User", Value = "U" },
+                                        new SelectListItem{ Text="Admin", Value = "A" }
+                                     }, new { @class = "form-control" })
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-primary m-t-n-xs"><strong>Save</strong></button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/confirmdelete")
+}
+<script>
+    $('#iform').submit(function () {
+        if ($(this).valid()) {
+            $(this).find(':submit').attr('disabled', 'disabled');
+        }
+    });
+</script>
+
+

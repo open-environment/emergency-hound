@@ -1,0 +1,325 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIncidentTeamModel
+@{
+    ViewBag.Title = "Incident Team";
+}
+
+@Styles.Render("~/Content/cssTeam")
+
+<script>
+    function clickTemplate(x) {
+        $("#TeamType").val("Type " + x);
+        $("[id^=menuImg]").removeClass("teamclicked");
+        $("#menuImg" + x).addClass("teamclicked");
+    }
+
+
+    $(document).ready(function () {
+
+        //var TempObjIDX = $('#newObjective_INCIDENT_OBJECTIVE_IDX').val();   //store value of empty guid
+
+        //create an event when button is clicked to display aside
+        $(".team-btn-edit").click(function () {
+            $('#aside-header').text('Edit Team Member');
+            $('#editTeamMember_INCIDENT_TEAM_DTL_IDX').val($(this).parent('div').find('#element_INCIDENT_TEAM_DTL_IDX').val());
+            $('#editTeamMember_REPORTS_TO_TEAM_DTL_IDX').val($(this).parent('div').find('#element_REPORTS_TO_TEAM_DTL_IDX').val());
+            $('#editTeamMember_INDIVIDUAL_IDX').val($(this).parent('div').find('#element_INDIVIDUAL_IDX').val());
+            $('#editTeamMember_RESOURCE_IDX').val($(this).parent('div').find('#element_RESOURCE_IDX').val());
+            $('#editTeamMember_ROLE_NAME').val($(this).parent('div').find('#element_ROLE_NAME').val());
+            $('#editTeamMember_AGENCY').val($(this).parent('div').find('#element_AGENCY').val());
+
+            $('#aside').addClass("show");
+
+            if ($(this).parent('div').find('#element_INDIVIDUAL_IDX').val() != "") {
+                $('#editIndividual').show();
+                $('#editTeam').hide();
+                $('#option1').parent('label').addClass("active");
+                $('#option2').parent('label').removeClass("active");
+            }
+            else if ($(this).parent('div').find('#element_RESOURCE_IDX').val() != "") {
+                $('#editIndividual').hide();
+                $('#editTeam').show();
+                $('#option1').parent('label').removeClass("active");
+                $('#option2').parent('label').addClass("active");
+            }
+            else {
+                $('#editIndividual').show();
+                $('#editTeam').hide();
+                $('#option1').parent('label').addClass("active");
+                $('#option2').parent('label').removeClass("active");
+            }
+
+        });
+
+        //create an event when button is clicked to display modal
+        $(".add-it").click(function () {
+            $('#aside-header').text('Add Team Member');
+            $('#editTeam').hide();
+
+            $('#editTeamMember_INCIDENT_TEAM_DTL_IDX').val(null);
+            $('#editTeamMember_REPORTS_TO_TEAM_DTL_IDX').val(null);
+            $('#editTeamMember_INDIVIDUAL_IDX').val(null);
+            $('#editTeamMember_RESOURCE_IDX').val(null);
+            $('#editTeamMember_ROLE_NAME').val(null);
+            $('#editTeamMember_AGENCY').val(null);
+        });
+
+
+        $("#option1").parent().click(function () {
+            $('#editTeamMember_RESOURCE_IDX').val(null);
+            $('#editIndividual').show();
+            $('#editTeam').hide();
+        });
+
+
+        $("#option2").parent().click(function () {
+            $('#editTeamMember_INDIVIDUAL_IDX').val(null);
+            $('#editIndividual').hide();
+            $('#editTeam').show();
+        });
+
+    });
+
+
+</script>
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i>Home</a></li>
+                <li><a href="#">Incident</a></li>
+                <li class="active">Team</li>
+            </ul>
+
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+            <!-- START: INCIDENT WIZARD -->
+            <section class="panel panel-default wizard">
+                <div class="wizard-steps clearfix" id="form-wizard">
+                    <ul class="steps">
+                        <li class=""><a href="@Url.Action("Edit", "Incident", new { id = Model.IncidentIDX })"><span class="badge badge-success">1</span>Basic Info</a></li>
+                        <li class=""><a href="@Url.Action("Map", "Incident", new { id = Model.IncidentIDX })"><span class="badge badge-success">2</span>Location</a></li>
+                        <li class="active"><a href="@Url.Action("Team", "Incident", new { id = Model.IncidentIDX })"><span class="badge badge-info">3</span>Team</a></li>
+                        <li><a href="@Url.Action("IncResource", "Incident", new { id = Model.IncidentIDX })"><span class="badge badge-danger">4</span>Resources</a></li>
+                        <li><a href="@Url.Action("Status", "Incident", new { id = Model.IncidentIDX })"><span class="badge badge-danger">5</span>Status</a></li>
+                        <li><a href="@Url.Action("OpPeriods", "Incident", new { id = Model.IncidentIDX })"><span class="badge badge-danger">6</span>Operational Periods</a></li>
+                    </ul>
+                </div>
+            </section>
+            <!-- END: INCIDENT WIZARD -->
+            @if (Model.IncidentTeam.Count == 0)
+            {
+                <!-- START: GETTING STARTED -->
+                <section class="panel panel-default">
+                    <header class="panel-heading font-bold">Select Starting Template</header>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Team1", "Incident", FormMethod.Post, new { @class = "" }))
+                        {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.IncidentIDX)
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <img id="menuImg5" src="~/Content/Images/inc_type_5bw.png" onmouseover="this.src = '../../Content/Images/inc_type_5.png'" onmouseout="this.src = '../../Content/Images/inc_type_5bw.png'" onclick="clickTemplate(5);" />
+                                <br />
+                                Single Agency Team
+                            </div>
+                            <div class="col-sm-3">
+                                <img id="menuImg4" src="~/Content/Images/inc_type_4bw.png" onmouseover="this.src = '../../Content/Images/inc_type_4.png'" onmouseout="this.src = '../../Content/Images/inc_type_4bw.png'" onclick="clickTemplate(4);" />
+                                <br />
+                                Local Level
+                            </div>
+                            <div class="col-sm-3">
+                                <img id="menuImg3" src="~/Content/Images/inc_type_3bw.png" onmouseover="this.src = '../../Content/Images/inc_type_3.png'" onmouseout="this.src = '../../Content/Images/inc_type_3bw.png'" onclick="clickTemplate(3);" />
+                                <br />
+                                Local or State Level
+                            </div>
+                            <div class="col-sm-3">
+                                <img id="menuImg2" src="~/Content/Images/inc_type_2bw.png" onmouseover="this.src = '../../Content/Images/inc_type_2.png'" onmouseout="this.src = '../../Content/Images/inc_type_2bw.png'" onclick="clickTemplate(2);" />
+                                <br />
+                                State or National Level
+                            </div>
+
+                        </div>
+                        <div class="row"><p></p></div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Selected Team</label>
+                                    @Html.TextBoxFor(model => model.TeamType, new { @class = "form-control", @placeholder = "" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Incident Commander / Lead</label>
+                                    @Html.DropDownListFor(x => x.IncidentCommander, Model.ddl_Individuals, "", new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-s-md btn-primary">Next</button>
+                            </div>
+                        </div>
+
+                        }
+
+                    </div>
+                </section>
+                <!-- END: GETTING STARTED -->
+            }
+            else
+            {
+                <!-- START: TREE -->
+                <section class="hbox stretch">
+                    <aside>
+                        <section class="scrollable wrapper">
+                            <a href="#aside" data-toggle="class:show" class="btn btn-sm btn-primary add-it">Add Team Member</a>
+                            <div class="col-sm-12">
+
+                                <!-- EMERGENCY ORGANIZATION CHART BEGIN-->
+                                <div class="tree ui-layout-center">
+                                    <div>
+
+                                        @DisplayTree(Model.IncidentTeam.Where(e => e.REPORTS_TO_TEAM_DTL_IDX == null).OrderBy(e => e.SEQ_NO))
+                                        @helper DisplayTree(IEnumerable<EmergencyHoundModel.V_EM_INCIDENT_TEAM_DISPLAY> elements)
+                                        {
+                                            <ul>
+                                                @foreach (var element in elements)
+                                                {
+                                                    <li>
+                                                        <div class="treecont">
+                                                            <div class="treediv">
+                                                                <div class="treetitle @((element.RESOURCE_IDX==null && element.INDIVIDUAL_IDX == null) ? "treetitle-bg-danger" : "treetitle-bg-success") ">@element.ROLE_NAME</div>
+                                                                <span class="treebody">
+                                                                    <img class="aaa" src="/Content/Images/avatar_m.jpg" />
+                                                                    <div class="treename">
+                                                                        @element.INDV_FIRST_NAME
+                                                                        @element.INDV_LAST_NAME
+                                                                        @element.RESOURCE_TYPE_NAME
+                                                                    </div>
+                                                                    @element.AGENCY
+                                                                </span>
+                                                            </div>
+                                                            <div class="treeedit">
+                                                                <a href="#" class="btn btn-xs btn-info team-btn-edit"><i class="fa fa-pencil-square"></i> Edit</a>
+                                                                <div class="delete-section" style="display:inline">
+                                                                    <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = element.INCIDENT_TEAM_DTL_IDX})"><i class="fa fa-times "></i></a>
+                                                                    <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@element.INCIDENT_TEAM_DTL_IDX" data-delete-type="team" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Incident/DeleteTeamDtl"><b>Confirm Delete</b></div>
+                                                                </div>
+
+
+                                                                @Html.HiddenFor(x => element.INCIDENT_TEAM_DTL_IDX)
+                                                                @Html.HiddenFor(x => element.REPORTS_TO_TEAM_DTL_IDX)
+                                                                @Html.HiddenFor(x => element.INDIVIDUAL_IDX)
+                                                                @Html.HiddenFor(x => element.RESOURCE_IDX)
+                                                                @Html.HiddenFor(x => element.ROLE_NAME)
+                                                                @Html.HiddenFor(x => element.AGENCY)
+                                                            </div>
+                                                        </div>
+
+
+                                                        @{
+                                                            var children = Model.IncidentTeam.Where(e => e.REPORTS_TO_TEAM_DTL_IDX == element.INCIDENT_TEAM_DTL_IDX).OrderBy(e => e.SEQ_NO).ToList(); ;
+                                                            if (children.Count() > 0)
+                                                            {
+                                                                @DisplayTree(children)
+                                                            }
+                                                        }
+                                                    </li>
+                                                 }
+                                            </ul>
+}
+                                    </div>
+                                </div>
+
+                                <!-- EMERGENCY ORGANIZATION CHART END-->
+
+
+                            </div>
+                        </section>
+                    </aside>
+
+                    <aside class="aside-lg bg-white b-l hide" id="aside">
+                        <div class="wrapper">
+                            <h4 class="m-t-none" id="aside-header">Add Team Member</h4>
+                            @using (Html.BeginForm("Team", "Incident", FormMethod.Post, new { @class = "" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(model => model.editTeamMember.INCIDENT_TEAM_DTL_IDX)
+                                @Html.HiddenFor(model => model.IncidentIDX)
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-sm btn-info active">
+                                        <input type="radio" name="options" id="option1"><i class="fa fa-check text-active"></i> Person
+                                    </label>
+                                    <label class="btn btn-sm btn-success">
+                                        <input type="radio" name="options" id="option2"><i class="fa fa-check text-active"></i> Team
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Role Description</label>
+                                    @Html.TextBoxFor(model => model.editTeamMember.ROLE_NAME, new { @class = "form-control input-sm", @placeholder = "" })
+                                    @Html.ValidationMessageFor(model => model.editTeamMember.ROLE_NAME)
+                                </div>
+                                <div class="form-group" id="editIndividual">
+                                    <label>Person</label>
+                                    @Html.DropDownListFor(x => x.editTeamMember.INDIVIDUAL_IDX, Model.ddl_Individuals, "", new { @class = "input-sm form-control" })
+                                    @Html.ValidationMessageFor(model => model.editTeamMember.INDIVIDUAL_IDX)
+                                </div>
+                                <div class="form-group" id="editTeam">
+                                    <label>Team</label>
+                                    @Html.DropDownListFor(x => x.editTeamMember.RESOURCE_IDX, Model.ddl_Teams, "", new { @class = "input-sm form-control" })
+                                    @Html.ValidationMessageFor(model => model.editTeamMember.RESOURCE_IDX)
+                                </div>
+                                <div class="form-group">
+                                    <label>Reports To</label>
+                                    @Html.DropDownListFor(x => x.editTeamMember.REPORTS_TO_TEAM_DTL_IDX, Model.ddl_ReportsTo, "", new { @class = "input-sm form-control" })
+                                    @Html.ValidationMessageFor(model => model.editTeamMember.REPORTS_TO_TEAM_DTL_IDX)
+                                </div>
+                                <div class="form-group">
+                                    <label>Agency</label>
+                                    @Html.TextBoxFor(model => model.editTeamMember.AGENCY, new { @class = "form-control input-sm", @placeholder = "" })
+                                    @Html.ValidationMessageFor(model => model.editTeamMember.AGENCY)
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Contact Type</label>
+                                    <div>
+                                        <div class="btn-group">
+                                            <button data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle">
+                                                <span class="dropdown-label">Contact Type</span>
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-select">
+                                                <li class=""><a href="#"><input type="radio" name="d-s-r">Phone</a></li>
+                                                <li class=""><a href="#"><input type="radio" name="d-s-r">Email</a></li>
+                                                <li class=""><a href="#"><input type="radio" name="d-s-r">Pager</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-t-lg"><button class="btn btn-sm btn-primary">Save</button></div>
+                            }
+                        </div>
+                    </aside>
+                    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen, open" data-target="#nav,html"></a>
+                </section>
+            }
+        </section>
+    </section>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/team")
+    @Scripts.Render("~/bundles/confirmdelete")
+}
+

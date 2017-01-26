@@ -1,0 +1,82 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmReportfema202ViewModel
+@{
+    ViewBag.Title = "Incident Objectives";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<section id="content">
+    <section class="vbox bg-white">
+        <header class="header b-b b-light hidden-print">
+            <button href="#" class="btn btn-sm btn-danger pull-right m-l-sm" onclick="window.history.go(-1);"><i class="fa fa-close"></i> Close</button>
+            <button href="#" class="btn btn-sm btn-info pull-right  m-l-sm" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
+            <p>Incident Objectives (ICS 202)</p>
+        </header>
+        <section class="scrollable wrapper">
+            <h3 class="text-center font-bold m-t-none">INCIDENT OBJECTIVES (ICS 202)</h3>
+            <div class="well m-t">
+                <div class="row m-b-none">
+                    <div class="col-xs-4 well">
+                        <span class="font-bold">1. Incident Name</span><br />
+                        @Html.DisplayFor(model => model.t_em_incident.INCIDENT_NAME)
+                    </div>
+                    <div class="col-xs-4 well">
+                        <span class="font-bold">2. Incident Number</span><br />
+                        @Html.DisplayFor(modelItem => Model.t_em_incident.INCIDENT_ID)
+                    </div>
+                    <div class="col-xs-4 well">
+                        <span class="font-bold">3. Date/Time Initiated</span><br />
+                        @Html.DisplayFor(modelItem => Model.t_em_incident.INCIDENT_START_DT)
+                    </div>
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">7. Current and Planned Objectives:</span>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Objective</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.t_em_incident_objectives)
+                            {
+                                <tr>
+                                    <td>@item.INCIDENT_OBJECTIVE</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">4. Operation Period Command Emphasis</span>
+
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">General Situational Awareness</span>
+
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">5. Site Safety Plan Required</span>
+
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">6. Incident Action Plan</span>
+
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">7. Prepared By</span>
+
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">8. Approved by Incident Commander</span>
+                </div>
+
+            </div>
+        </section>
+    </section>
+    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen, open" data-target="#nav,html"></a>
+</section>
+

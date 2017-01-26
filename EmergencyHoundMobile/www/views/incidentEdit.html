@@ -1,0 +1,164 @@
+﻿<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+    <li><a href="#dashboard"><i class="fa fa-home"></i>Home</a></li>
+    <li><a href="#incidents">Incident Search</a></li>
+    <li class="active">Incident Details</li>
+</ul>
+
+<!-- START: INCIDENT WIZARD -->
+<section class="panel panel-default wizard">
+    <div class="wizard-steps clearfix" id="form-wizard">
+        <ul class="steps">
+            <li class="active"><a href=""><span class="badge badge-info">1</span>General</a></li>
+            <li><a href="#incidentMap2"  ><span class="badge badge-danger">2</span>Map</a></li>
+            <li><a href="#incidentTeam"><span class="badge badge-danger">3</span>Team</a></li>
+            <li><a href="#incidentResources"><span class="badge badge-danger">4</span>Resources</a></li>
+            <li><a href="#incidentStatus"><span class="badge badge-danger">5</span>Status</a></li>
+            <li><a href="#incidentOpPeriods"><span class="badge badge-danger">6</span>Periods</a></li>
+            <li><a href="#incidentAttach"><span class="badge badge-danger">7</span>Images</a></li>
+        </ul>
+    </div>
+</section>
+<!-- END: INCIDENT WIZARD -->
+
+<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+
+<!-- START: INCIDENT EDIT FORM -->
+<section class="panel panel-default">
+    <header class="panel-heading font-bold ">Basic Incident Information</header>
+    <form class="panel-body" name="submitForm" novalidate ng-submit="submitForm.$valid && incidentEdit.save()">
+        <div class="hbox stretch">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Incident ID</label>
+                        <input type="text" 
+                               class="form-control"
+                               data-ng-class="{'input-validation-error': (submitForm.$submitted) && (submitForm.incidenT_ID.$error.required) }"                               
+                               placeholder="Incident ID"
+                               data-ng-model="incident.incidenT_ID"
+                               ng-minlength="3" 
+                               value="{{incident.incidenT_ID}}" 
+                               name="incidenT_ID"
+                               required=""/>
+                        <div ng-show="submitForm.$submitted || submitForm.incidenT_ID.$touched">
+                            <span class="field-validation-error" ng-show="submitForm.incidenT_ID.$error.required">Please enter Incident ID.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Incident Name</label>
+                        <input type="text" name="incidenT_NAME" class="form-control"
+                               data-ng-class="{'input-validation-error': (submitForm.$submitted) && (submitForm.incidenT_NAME.$error.required) }"                               
+                               placeholder="Incident Name"
+                               data-ng-model="incident.incidenT_NAME"
+                               value="{{incident.incidenT_NAME}}" 
+                               required="" />
+                        <div ng-show="submitForm.$submitted || submitForm.incidenT_NAME.$touched">
+                            <span class="field-validation-error" ng-show="submitForm.incidenT_NAME.$error.required">Please enter Incident Name.</span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select class="form-control" id="sharing" 
+                                data-ng-model="incident.incidenT_PRIORITY" 
+                                ng-options="r.incidenT_PRIORITY as r.incidenT_PRIORITY for r in ddlPriority"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Incident Description</label>
+                        <textarea class="form-control" rows="3"
+                                  id="description"
+                                  data-ng-model="incident.incidenT_DESC"
+                                  placeholder="Incident Description">
+                            {{incident.incidenT_DESC}}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Jurisdiction</label>
+                        <select class="form-control" id="sharing" name="orG_IDX" 
+                                data-ng-model="incident.orG_IDX" 
+                                data-ng-class="{'input-validation-error': (submitForm.$submitted) && (submitForm.orG_IDX.$error.required) }"                               
+                                ng-options="r.orG_IDX as r.orG_NAME for r in ddlOrganizations" 
+                                required
+                                ng-show="incident.caN_EDIT==1"></select>
+                        <input type="text" class="form-control" data-ng-model="incident.orG_NAME" value="{{incident.orG_NAME}}" ng-show="incident.caN_EDIT==0"/>
+                        <div ng-show="submitForm.$submitted || submitForm.orG_IDX.$touched">
+                            <span class="field-validation-error" ng-show="submitForm.orG_IDX.$error.required">Please enter Jurisdiction.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Sharing With</label>
+                        <select class="form-control" id="sharing" data-ng-model="incident.sharE_TYPE" ng-options="r.sharE_TYPE as r.sharE_TYPE for r in ddlShareType">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Incident Start Date/Time</label>
+                        <input type="text" class="form-control datetime-picker"
+                               data-ng-model="incident.incidenT_START_DT"
+                               value="{{incident.incidenT_START_DT}}"  />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Incident End Date/Time</label>
+                        <input type="text" class="form-control datetime-picker"
+                               data-ng-model="incident.incidenT_END_DT"
+                               value="{{incident.incidenT_END_DT}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Weather Conditions</label>
+                        <input type="text" class="form-control"
+                               data-ng-model="incident.incidenT_WEATHER"
+                               value="{{incident.incidenT_WEATHER}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Hazardous Materials Concerns</label>
+                        <input type="text" class="form-control"
+                               placeholder=""
+                               data-ng-model="incident.incidenT_HAZ_MAT"
+                               value="{{incident.incidenT_HAZ_MAT}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-sm btn-primary"  data-ng-click="save()" ng-show="incident.caN_EDIT>0">Save</button>
+                    <button class="btn btn-sm btn-default" data-ng-click="close()">Close</button>
+                    <button class="btn btn-sm btn-danger pull-right" data-ng-click="delete()" ng-show="incident.caN_EDIT>0">Delete</button>
+                </div>
+            </div>
+            {{incident.modifY_DT}}
+        </div>
+    </form>
+</section>
+
+<!-- END: INCIDENT EDIT FORM-->
+

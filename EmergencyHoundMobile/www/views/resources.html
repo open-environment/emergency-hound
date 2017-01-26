@@ -1,0 +1,86 @@
+﻿<button type="submit" class="btn btn-sm btn-primary pull-right" data-ng-click="addResource()">Add New Resource</button>
+<h3 class="m-b-md">Search Resources</h3>
+
+<!-- START SEARCH PANEL -->
+<div class="panel panel-success">
+    <div class="panel-heading panel-success cursorpointer" data-toggle="collapse" href="#collapseOne">
+        <i class="fa fa-search text-default"></i>
+        Search Filter:<small class=" pull-right">(Touch to expand)</small>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group col-sm-3">
+                    <label>Filter:</label>
+                    <input type="text" class="form-control" placeholder="" ng-model="searchKind">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END SEARCH PANEL -->
+
+<section class="panel panel-default">
+    <header class="panel-heading bg-light">
+        <ul class="nav nav-tabs " id="myTabs">
+            <li class="active"><a data-toggle="tab" data-target="#lister" aria-expanded="true"><i class="fa fa-list text-default"></i> List View</a></li>
+            <li class="" ng-show="offlineMap.length==0"><a data-target="#mapper" data-toggle="tab" href="mapz" aria-expanded="false"><i class="fa fa-map-marker text-default"></i> Map View</a></li>
+        </ul>
+    </header>
+    <div class="panel-body">
+        <div class="tab-content">
+
+            <!-- START TAB 1 -->
+            <div class="tab-pane active" id="lister">
+                <div class="table-responsive">
+                    <table class="table table-striped b-t b-light" data-ride="datatables">
+                        <tr>
+                            <th>Editing</th>
+                            <th>Jurisdiction</th>
+                            <th>Resource Type</th>
+                            <th>Resource Description</th>
+                            <th>Kind</th>
+                            <th>Count</th>
+                            <th>Units</th>
+                            <th>Status</th>
+                            <th>Last Verified</th>
+                        </tr>
+                        <tr ng-repeat="resource in resources | filter:searchKind">
+                            <td style="min-width:85px">
+                                <a ng-click="editResource(resource.resourcE_IDX)" class="btn btn-rounded btn-xs btn-default" ng-show="resource.caN_EDIT>0" title="Edit"><i class="fa fa-pencil fa-success"></i></a>
+                                <a ng-click="editResource(resource.resourcE_IDX)" class="btn btn-rounded btn-xs btn-default" ng-show="resource.caN_EDIT==0" title="View"><i class="fa fa-eye fa-success"></i></a>
+                                <a class="btn btn-rounded btn-xs btn-dark" ng-show="!resource.synced" ng-click="editResource(resource.resourcE_IDX)"><i class="fa fa-exclamation fa-dark" title="Not yet saved to server"></i></a>
+                            </td>
+                            <td>
+                                <div ng-repeat="org in orgs | filter: { orG_IDX: resource.orG_IDX }">{{org.orG_NAME}} </div>
+                            </td>
+                            <td>
+                                <div ng-repeat="resourcetype in resourcetypes | filter: { resourcE_TYPE_IDX: resource.resourcE_TYPE_IDX }">{{resourcetype.resourcE_TYPE_NAME}} </div>
+                            </td>
+                            <td>{{resource.resourcE_DESC}}</td>
+                            <td>
+                                <div ng-repeat="resourcetype in resourcetypes | filter: { resourcE_TYPE_IDX: resource.resourcE_TYPE_IDX }">{{resourcetype.resourcE_KIND}} </div>
+                            </td>
+                            <td>{{resource.resourcE_COUNT}}</td>
+                            <td>{{resource.resourcE_UNIT}}</td>
+                            <td>
+                                <div ng-repeat="refstatus in refstatuses | filter: { resourcE_STATUS_CD: resource.resourcE_STATUS_CD }">{{refstatus.resourcE_STATUS_NAME}} </div>
+                            </td>
+                            <td>{{resource.verifY_DT}}</td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+        <!-- END TAB 1 -->
+        <!-- START TAB 2 -->
+        <div class="tab-pane " id="mapper" ng-show="offlineMap.length==0">
+            {{offlineMap}}
+            <div id="map_canvas2" style="width: 100%; height: 500px;"></div>
+        </div>
+        <!-- END TAB 2 -->
+    </div>
+
+    </div>
+</section>
+<p>
+</p>

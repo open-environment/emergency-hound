@@ -1,0 +1,32 @@
+﻿<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+    <li><a href="#dashboard"><i class="fa fa-home"></i>Home</a></li>
+    <li><a href="#incidents">Incident Search</a></li>
+    <li class="active">Incident Attachments</li>
+</ul>
+
+<!-- START: INCIDENT WIZARD -->
+<section class="panel panel-default wizard">
+    <div class="wizard-steps clearfix" id="form-wizard">
+        <ul class="steps">
+            <li><a href="#incidentEdit"><span class="badge badge-success">1</span>General</a></li>
+            <li><a href="#incidentMap2"><span class="badge badge-success">2</span>Map</a></li>
+            <li><a href="#incidentTeam"><span class="badge badge-success">3</span>Team</a></li>
+            <li><a href="#incidentResources"><span class="badge badge-success">4</span>Resources</a></li>
+            <li><a href="#incidentStatus"><span class="badge badge-success">5</span>Status</a></li>
+            <li><a href="#incidentOpPeriods"><span class="badge badge-success">6</span>Periods</a></li>
+            <li class="active"><a href=""><span class="badge badge-info">7</span>Images</a></li>
+        </ul>
+    </div>
+</section>
+<!-- END: INCIDENT WIZARD -->
+
+
+<div class="form-group padding-top" ng-show="online">
+    <button class="btn btn-sm btn-primary"  data-ng-click="takePicture()">Take Picture</button>
+    <button class="btn btn-sm btn-primary"  data-ng-click="choosePicture()">Choose Picture</button>
+    <button class="btn btn-sm btn-primary" data-ng-click="sendPicture()">Send Picture</button>
+</div>
+<div class="form-group padding-top" ng-hide="online">Viewing and taking pictures is only enabled when your device is online.</div>
+<div class="item item-image" ng-repeat="galleryItem in gallery">
+    <img ng-src="{{urls}}api/incident/GetIncImage?AttachIDX={{galleryItem.attacH_IDX}}" />
+</div>                    

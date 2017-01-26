@@ -1,0 +1,274 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmResourceTypeEditViewModel
+@{
+    ViewBag.Title = "Edit Resource Type";
+}
+
+<script type="text/javascript">
+    var TempDtlIDX;
+    var TempIDX;
+    $(document).ready(function () {
+
+        TempDtlIDX = $('#newResourceTypeDtl_RESOURCE_TYPE_DTL_IDX').val();   //store value of empty guid
+        TempIDX = $('#newResourceTypeDtl_RESOURCE_TYPE_IDX').val();   //store value of empty guid
+
+        //create an event when button is clicked to display modal
+        $(".modal-it").click(function () {
+            $('#newResourceTypeDtl_RESOURCE_TYPE_DTL_IDX').val($(this).parent('td').find('#item_RESOURCE_TYPE_DTL_IDX').val());
+            $('#item_RESOURCE_TYPE_IDX').val($(this).parent('td').find('#item_RESOURCE_TYPE_IDX').val());
+            $('#newResourceTypeDtl_COMPONENT').val($(this).parent('td').find('#item_COMPONENT').val());
+            $('#newResourceTypeDtl_METRIC').val($(this).parent('td').find('#item_METRIC').val());
+            $('#newResourceTypeDtl_CAPABILITY').val($(this).parent('td').find('#item_CAPABILITY').val());
+        });
+
+        //create an event when button is clicked to display modal
+        $(".add-it").click(function () {
+            $('#newResourceTypeDtl_RESOURCE_TYPE_DTL_IDX').val(TempObjIDX);
+            $('#item_RESOURCE_TYPE_IDX').val(TempIDX);
+            $('#newResourceTypeDtl_COMPONENT').val(null);
+            $('#newResourceTypeDtl_METRIC').val(null);
+            $('#newResourceTypeDtl_CAPABILITY').val(null);
+        });
+
+
+    });
+</script>
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i>Home</a></li>
+                <li><a href="#">Resource</a></li>
+                <li class="active">Resource Type</li>
+            </ul>
+
+            <h3 class="m-b-md">@(Model.t_em_ref_resource_type.RESOURCE_TYPE_NAME == null ? "Add New" : "Edit") Resource Type</h3>
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+
+            @using (Html.BeginForm("ResourceTypeEdit", "Resource", FormMethod.Post, new { @class = "", @id = "iform" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.t_em_ref_resource_type.RESOURCE_TYPE_IDX)
+
+                <section class="panel panel-default">
+                    <div class="panel-heading font-bold ">Resource Type General Info</div>
+                    <div class="panel-body">
+                        <div class="hbox stretch">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Resource Type Name</label>
+                                        @Html.TextBoxFor(model => model.t_em_ref_resource_type.RESOURCE_TYPE_NAME, new { @class = "form-control", @placeholder = "", @maxlength = "102" })
+                                        @Html.ValidationMessageFor(model => model.t_em_ref_resource_type.RESOURCE_TYPE_NAME)
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        @Html.DropDownListFor(x => x.t_em_ref_resource_type.RESOURCE_CATEGORY, Model.ddl_Category, "", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.t_em_ref_resource_type.RESOURCE_CATEGORY)
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Kind</label>
+                                        @Html.DropDownListFor(x => x.t_em_ref_resource_type.RESOURCE_KIND, Model.ddl_Kind, "", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.t_em_ref_resource_type.RESOURCE_KIND)
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Core Capacity</label>
+                                        @Html.DropDownListFor(x => x.t_em_ref_resource_type.RESOURCE_CORE_CAP, Model.ddl_CoreCapacity, "", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.t_em_ref_resource_type.RESOURCE_CORE_CAP)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Jurisdiction</label>
+                                        @Html.DropDownListFor(x => x.t_em_ref_resource_type.ORG_IDX, Model.ddl_Jurisdiction, User.IsInRole("Admins") ? "" : null, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.t_em_ref_resource_type.ORG_IDX)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        @Html.TextAreaFor(model => model.t_em_ref_resource_type.RESOURCE_TYPE_DESC, new { @class = "form-control", @placeholder = "", @maxlength = "1000" })
+                                        @Html.ValidationMessageFor(model => model.t_em_ref_resource_type.RESOURCE_TYPE_DESC)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Function</label>
+                                        @Html.TextAreaFor(model => model.t_em_ref_resource_type.RESOURCE_FUNCTION, new { @class = "form-control", @placeholder = "", @maxlength = "1000" })
+                                        @Html.ValidationMessageFor(model => model.t_em_ref_resource_type.RESOURCE_FUNCTION)
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Ordering Instructions</label>
+                                        @Html.TextAreaFor(model => model.t_em_ref_resource_type.RESOURCE_ORDERING_INST, new { @class = "form-control", @placeholder = "", @maxlength = "1000" })
+                                        @Html.ValidationMessageFor(model => model.t_em_ref_resource_type.RESOURCE_ORDERING_INST)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" name="submitButton" value="Save" class="btn btn-sm btn-primary">Save</button>
+                                    <a href="@((HttpContext.Current.Request.QueryString["s"]??"").ToString()=="1" ? Url.Action("Add","Resource") : Url.Action("ResourceType","Resource"))" class="btn btn-sm btn-default">Close</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+            }
+
+            @if (Model.t_em_ref_resource_type.RESOURCE_TYPE_NAME != null)
+            { 
+                <section class="panel panel-default">
+                    <div class="panel-heading font-bold ">Resource Type Properties</div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped m-b-none" data-ride="datatables">
+                                <tr>
+                                    <th>Editing</th>
+                                    <th>Component</th>
+                                    <th>Metric or Unit or Measure</th>
+                                    <th>Capability</th>
+                                </tr>
+                                @if (Model.t_em_ref_resource_type_dtl != null)
+                                {
+                                    foreach (var item in Model.t_em_ref_resource_type_dtl)
+                                    {
+                                        <tr>
+                                            <td style="min-width:78px">
+                                                <a href="#modal-form" class="btn btn-rounded btn-xs btn-default modal-it" data-toggle="modal"><i class="fa fa-pencil fa-success"></i></a>
+                                                <div class="delete-section" style="display:inline">
+                                                    <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new { id = item.RESOURCE_TYPE_DTL_IDX })"><i class="fa fa-times "></i></a>
+                                                    <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.RESOURCE_TYPE_DTL_IDX" data-delete-p="/Resource/ResourceTypeDtlDelete"><b>Confirm Delete</b></div>
+                                                </div>
+                                                @Html.HiddenFor(modelItem => item.RESOURCE_TYPE_DTL_IDX)
+                                                @Html.HiddenFor(modelItem => item.RESOURCE_TYPE_IDX)
+                                                @Html.HiddenFor(modelItem => item.ORDERING_SEQ)
+                                                @Html.HiddenFor(modelItem => item.COMPONENT)
+                                                @Html.HiddenFor(modelItem => item.METRIC)
+                                                @Html.HiddenFor(modelItem => item.CAPABILITY)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.COMPONENT)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.METRIC)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CAPABILITY)
+                                            </td>
+                                        </tr>
+                                }
+                            }
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                <p>
+                    <a href="#modal-form" class="btn btn-s-md btn-primary add-it" data-toggle="modal">Add Resource Type Property</a>
+                </p>
+            }
+
+
+        </section>
+    </section>
+</section>
+
+
+
+<!-- START MODAL Resource Type Properties  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Add New Resource Type Property</h3>
+
+                        @using (Html.BeginForm("ResourceTypeDtl", "Resource", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(model => model.newResourceTypeDtl.RESOURCE_TYPE_DTL_IDX)
+                            @Html.HiddenFor(model => model.t_em_ref_resource_type.RESOURCE_TYPE_IDX)
+
+                            <div class="panel-body" style="padding: 0px">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            Component:
+                                            @Html.TextBoxFor(model => model.newResourceTypeDtl.COMPONENT, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            Metric (or Unit of Measure):
+                                            @Html.TextBoxFor(model => model.newResourceTypeDtl.METRIC, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            Capability:
+                                            @Html.TextBoxFor(model => model.newResourceTypeDtl.CAPABILITY, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button id="picLoc" type="submit" class="btn btn-sm btn-primary"><strong>Save</strong></button>
+                                        <button type="submit" class="btn btn-sm btn-default" data-dismiss="modal"><strong>Cancel</strong></button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- END MODAL Resource Type Properties -->
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/confirmdelete")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+            $('#iform').submit(function () {
+                if ($(this).valid()) {
+                    $(this).find(':submit').attr('disabled', 'disabled');
+                }
+            });
+    </script>
+
+}
+
+

@@ -1,0 +1,108 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmAccountRegisterModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<section id="content" class="m-t-lg wrapper-md animated fadeInUp ">
+    <div class="container aside-xxl">
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <h4><i class="fa fa-ok-sign"></i>Verification Required!</h4>
+                <br />
+                You will need to verify your account. Please <b><u>check your email</u></b> and click the link in the email to verify your account.
+            </div>
+                <div class="text-center">
+                    <a href="@Url.Action("Index", "Home") " class="btn btn-primary">Return to Home Page</a>
+            </div>
+        }
+        else
+        {
+
+        <section class="panel panel-default bg-white m-t-lg">
+            <header class="panel-heading text-center">
+                <strong>Register</strong>
+            </header>
+            @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "panel-body wrapper-lg", @id="iform" }))
+            {
+                @Html.AntiForgeryToken()
+
+                if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                {
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <h4><i class="fa fa-info-circle"></i>Validation Error</h4>
+                        <br />
+                        @Html.ValidationSummary()
+                    </div>
+                }
+
+
+                <!-- render the validation summary -->
+                @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UserName, new { @class = "" })
+                    <i class=" m-l-xs fa fa-question-circle" data-toggle="tooltip" data-placement="top" data-original-title="Only one account allowed per email address."></i>
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg focus", @placeholder = "test@example.com", @type="email" })
+                    @Html.ValidationMessageFor(m => m.UserName)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmUserName, new { @class = "" })
+                    @Html.TextBoxFor(m => m.ConfirmUserName, new { @class = "form-control input-lg", @placeholder = "test@example.com", })
+                    @Html.ValidationMessageFor(m => m.ConfirmUserName)
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control input-lg ", @placeholder = "First Name" })
+                            @Html.ValidationMessageFor(m => m.FirstName)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control input-lg", @placeholder = "Last Name" })
+                            @Html.ValidationMessageFor(m => m.LastName)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Which Jurisdiction</label>
+                    <i class=" m-l-xs fa fa-question-circle" data-toggle="tooltip" data-placement="top" data-original-title="If your jurisdiction is not listed, it may be set to private. You can still register, and then ask your jurisdiction administrator to add you to the jurisdiction."></i>
+                    @Html.DropDownListFor(model => model.intSelOrgIDX, new SelectList(Model.OrgList, "ORG_IDX", "ORG_NAME"), "-Please Select-", new { @class = "form-control input-lg m-b" })
+                    @Html.ValidationMessageFor(m => m.intSelOrgIDX)
+                </div>
+                @*<div class="form-group">
+                    Can be assigned to incidents
+                    @Html.CheckBoxFor(m => m.CreateIndiv, new { @checked = "checked" })
+                </div>*@
+                <button type="submit" class="btn btn-primary">Register</button>
+                @Html.ActionLink("Already have an account?", "Login", new object { }, new { @class = "pull-right m-t-xs" })
+
+            }
+
+        </section>
+
+        }
+    </div>
+</section>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $('#iform').submit(function () {
+            if ($(this).valid()) {
+                $(this).find(':submit').attr('disabled', 'disabled');
+            }
+        });
+    </script>
+}
+
+

@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+<html class="app">
+<head>
+    <meta charset="utf-8" />
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *">-->
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline' https://*.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googleapis.com http://query.yahooapis.com ">
+    <title>Emergency Hound Mobile</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- EmergencyHoundMobile references -->
+    <link href="css/index.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/font-awesome.css" rel="stylesheet" />
+    <link href="css/animate.css" rel="stylesheet" />
+    <link href="css/loading-bar.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="css/app_custom.css" rel="stylesheet" />
+    <link href="css/jquery.datetimepicker.css" rel="stylesheet" />
+</head>
+<body ng-app="ehApp">
+    <section class="vbox" style="overflow-x:hidden;" ng-controller="indexController" >
+        <!-- start page header -->
+        <header class="header bg-dark dk navbar navbar-fixed-top-xs">
+            <div class="navbar-header aside-md">
+                <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <a href="#dashboard" class="navbar-brand" style="float:none !important">
+                    <img src='images/logo-header.png' class="m-r-sm" />
+                </a>
+                <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user">
+                    <i class="fa fa-cog"></i>
+                </a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li>
+                    <div class="m-t m-l">
+                        <button type="submit" class="btn btn-sm btn-warning " data-ng-click="pushSync()" ng-show="$root.needSync">Submit Pending Data to Server</button>
+                    </div>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right hidden-xs nav-user">
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" style="padding-right: 25px;">
+                        <!--<span class="thumb-sm avatar pull-left">
+                            <img src='images/avatar_m.jpg'>
+                        </span>-->
+                        {{authentication.userName}}
+                        <b class="caret"></b>
+
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight">
+                        <li class="arrow top"></li>
+                        <!--<li>
+                            <a href='#'>Profile</a>
+                        </li>-->
+                        <li>
+                            <a href="#config">Mobile Config</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a data-ng-click="logOut()" href="">Log off</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </header>
+        <!-- end page header -->
+
+        <!-- start main -->
+        <section>
+            <section class="hbox stretch">
+
+                <!-- start left menu -->
+                <aside class="bg-dark lter aside-md hidden-print hidden-xs" id="nav">
+                    <section class="vbox">
+                        <header class="header bg-primary lter text-center clearfix">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-icon btn-dark" ><i class="fa fa-wifi" data-ng-class="{'text-primary': online, 'text-danger': !online}"></i></button>
+                                <div class="btn-group hidden-nav-xs">
+                                    <div class="btn btn-sm " data-ng-class="{'btn-primary': online, 'btn-danger': !online}">
+                                        {{online == true ? "online mode" : "offline mode" }} 
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        <section class="w-f scrollable">
+                            <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="5px" data-color="#333333">
+                                <nav class="nav-primary hidden-xs" >
+                                    <ul class="nav">
+                                        <li class="active">
+                                            <a href="#dashboard">
+                                                <i class=" fa fa-dashboard icon">
+                                                    <b class="bg-danger"></b>
+                                                </i>
+                                                <span>Dashboard</span>
+                                            </a>
+                                        </li>   
+                                        <li>
+                                            <a href="">
+                                                <i class="fa fa-pencil-square-o icon">
+                                                    <b class="bg-warning"></b>
+                                                </i>
+                                                <span class="pull-right">
+                                                    <i class="fa fa-angle-down text"></i>
+                                                    <i class="fa fa-angle-up text-active"></i>
+                                                </span>
+                                                <span>Planning</span>
+                                            </a>
+                                            <ul class="nav lt">
+                                                <li>
+                                                    <a href="#resources">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span>Resources</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#people">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span>People / Certification</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="fa fa-bullhorn icon">
+                                                    <b class="bg-warning lter"></b>
+                                                </i>
+                                                <span class="pull-right">
+                                                    <i class="fa fa-angle-down text"></i>
+                                                    <i class="fa fa-angle-up text-active"></i>
+                                                </span>
+                                                <span>Response</span>
+                                            </a>
+                                            <ul class="nav lt">
+                                                <li>
+                                                    <a href="#incidents">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span>Incident Search</span>
+                                                    </a>
+                                                </li>
+                                                <li class="active" ng-show="">
+                                                    <a href="" class="active">
+                                                        <i class="fa fa-angle-down text"></i>
+                                                        <i class="fa fa-angle-up text-active"></i>
+                                                        <span>Incident Details</span>
+                                                    </a>
+                                                    <ul class="nav dker">
+                                                        <li>
+                                                            <a href="#incidentedit">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span class="m-l-md">Basic Info</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span class="m-l-md">Location</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span class="m-l-md">Command Team</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span class="m-l-md">Resource</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span class="m-l-md">Status/Timeline</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span class="m-l-md">Attachments</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span class="m-l-md">Reports</span>
+                                                            </a>
+                                                        </li>
+
+
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <!--<li>
+                                            <a href="#documents">
+                                                <i class=" fa fa-file-text icon">
+                                                    <b class="bg-info"></b>
+                                                </i>
+                                                <span>Documents</span>
+                                            </a>
+                                        </li>-->
+
+                                    </ul>
+
+                                </nav>
+                            </div>
+                        </section>
+                        <footer class="footer lt hidden-xs b-t b-dark">
+                            <a href="#nav" data-toggle="class:nav-xs" class="pull-right btn btn-sm btn-dark btn-icon">
+                                <i class="fa fa-angle-left text"></i>
+                                <i class="fa fa-angle-right text-active"></i>
+                            </a>
+                        </footer>
+
+                    </section>
+                </aside>
+                <!-- end left menu -->
+
+                <!-- start specific view -->
+                <section id="content">
+                    <section class="vbox">
+                        <section class="scrollable padder">
+                            <section data-ng-view="" class="content stretch"></section>
+                        </section>
+                    </section>
+                </section>
+                <!-- end specific view -->
+            </section>
+        </section>
+        <!-- end main -->
+
+
+    </section>
+
+    <!-- default scripts from Cordova (not added by us)-->
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+    <script src="scripts/index.js"></script>
+
+    <!-- emergency hound javascripts -->
+    <script type="text/javascript" src="scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBns1ftjfx921TVoR98F9Wn42CvEMQlw8Y&sensor=true"></script>
+    <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="scripts/framework/angular.min.js"></script>
+    <script type="text/javascript" src="scripts/framework/angular-route.min.js"></script>
+    <script type="text/javascript" src="scripts/framework/angular-local-storage.min.js"></script>
+    <script type="text/javascript" src="scripts/framework/loading-bar.js"></script>
+    <script type="text/javascript" src="scripts/framework/underscore.js"></script>
+    <script type="text/javascript" src="scripts/framework/jquery.datetimepicker.js"></script>
+    <script type="text/javascript" src="scripts/framework/moment.js"></script>
+    <script type="text/javascript" src="scripts/framework/indexeddbshim.js"></script>
+    <script type="text/javascript" src="scripts/app.js"></script>
+    <script type="text/javascript" src="scripts/mobile.js"></script>
+    <!--<script src="scripts/mapping.js"></script>-->
+
+    <!-- AngularJS service scripts -->
+    <script src="scripts/services/authService.js"></script>
+    <script src="scripts/services/dbManagerService.js"></script>
+    <script src="scripts/services/uuidService.js"></script>
+    <script src="scripts/services/cameraService.js"></script>
+
+    <!-- AngularJS controller scripts -->
+    <script src="scripts/controllers/indexController.js"></script>
+    <script src="scripts/controllers/dashboardController.js"></script>
+    <script src="scripts/controllers/resourcesController.js"></script>
+    <script src="scripts/controllers/resourceEdit2Controller.js"></script>
+    <script src="scripts/controllers/resourceVerifyController.js"></script>
+    <script src="scripts/controllers/peopleController.js"></script>
+    <script src="scripts/controllers/personEditController.js"></script>
+    <script src="scripts/controllers/qualificationEditController.js"></script>
+    <script src="scripts/controllers/incidentsController.js"></script>
+    <script src="scripts/controllers/incidentEditController.js"></script>
+    <script src="scripts/controllers/incidentMap2Controller.js"></script>
+    <script src="scripts/controllers/incidentTeamController.js"></script>
+    <script src="scripts/controllers/incidentResourcesController.js"></script>
+    <script src="scripts/controllers/incidentOpPeriodsController.js"></script>
+    <script src="scripts/controllers/incidentStatusController.js"></script>
+    <script src="scripts/controllers/incidentStatusEditController.js"></script>
+    <script src="scripts/controllers/incidentAttachController.js"></script>
+    <script src="scripts/controllers/documentsController.js"></script>
+    <script src="scripts/controllers/loginController.js"></script>
+    <script src="scripts/controllers/configController.js"></script>
+    <script src="scripts/controllers/confirmController.js"></script>
+
+</body>
+</html>

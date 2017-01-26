@@ -1,0 +1,40 @@
+﻿DB Change Log: 
+--------------------------------
+1.0.4
+- alter table T_EM_RESOURCE add RESOURCE_EXP_DT datetime2() null;
+- update SP_RESOURCE_ADV_SEARCH
+
+1.0.5 
+- Add and populate T_OE_REF_STATE
+- Add and populate T_OE_REF_COUNTY
+- Add T_EM_INCIDENT_DMG_ASSESS
+
+
+
+Mobile Change Log:
+---------------------------
+1.0.1
+- Fixed bug: incident page map display
+- New icons for resource and incident map page
+- Added indicator for unsynced people records
+- Fixed bug: incident search filter
+- Fixed some display issues on smaller resolutions
+
+1.0.2
+- Fixed bug: selection of resource location on map
+- Fixed bug: display some data fields blank after insert
+
+1.0.3
+- Fixed bug: display and edit of qualifications
+
+1.0.4
+- Added: incident status tracking
+- Added: take and store photos for an incident
+- Added: new field (resource expiration date) added to resource screen
+- Fixed bug: select incident location on map
+- Fixed bug: click map to jump to edit resource/incident
+- Fixed bug: data sync error during offline mode
+
+1.0.5
+- Display EPA regulated facilities on map
+- *InProgress: (Web only) new field (resource expiration date) added to resource screen 

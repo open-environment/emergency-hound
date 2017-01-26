@@ -1,0 +1,485 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIncidentMapViewModel
+@{
+    ViewBag.Title = "Incident Location";
+}
+<script type="text/javascript" src="~/Scripts/areyousure/jquery.are-you-sure.js"></script>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+<script type="text/javascript">
+    //global variables
+    var map;
+    var mapOptions = {
+        center: new google.maps.LatLng(35.982, -96.1473),
+        zoom: 13,
+        mapTypeId: google.maps.MapTypeId.HYBRID 
+    };
+    var marker;  // incident location
+
+    //EPA stuff
+    var markers = [];      //EPA sites
+    var latBot, latTop, longWest, longEast;
+
+    var selBtn = 'option1';      //selected button group
+    var poly;       //impacted polygon
+    var polyOptions = {
+        strokeWeight: 1,
+        fillColor: "#fb6b5b",
+        geodesic: true
+    };
+    var polyThreatened;       //threatened polygon
+    var polyThreatenedOptions = {
+        strokeWeight: 1,
+        fillColor: "#ffc333",
+        geodesic: true
+    };
+
+    var handlerPolyAddVert;  //polygon add verticices event
+    var handlerPolyAddVert2;  //polygon add verticices event
+    var polyInfoWindow = new google.maps.InfoWindow();  //polygon info window
+
+
+    $(document).ready(function () {
+
+        //warn user if leaving unsaved page
+        $('form').areYouSure();
+
+        //click handler for map legend - will set the map click function
+        $('.lbl-btn-group').on('click', function () {
+            google.maps.event.clearListeners(map, 'click');
+
+            selBtn = $(this).find('input').attr('id');
+
+            if (selBtn == 'option1') {
+                google.maps.event.addListener(map, 'click', function (event) {
+                    placeMarker(event.latLng);
+                });
+            }
+            else if (selBtn == 'option2') {
+                AddImpactedPoly();
+            }
+            else if (selBtn == 'option3') {
+                AddThreatenedPoly();
+            };
+        });
+
+        //initialize info window
+        var info_window = new google.maps.InfoWindow({
+            content: 'loading',
+            zIndex: null
+        });
+
+        //create map using map options and populate to DIV
+        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+
+        //display initial marker if there is one
+        @if (Model.t_em_incident.INCIDENT_LAT != null && Model.t_em_incident.INCIDENT_LONG != null)
+        {
+            <text>
+                marker = new google.maps.Marker({
+                position: new google.maps.LatLng(@Model.t_em_incident.INCIDENT_LAT,@Model.t_em_incident.INCIDENT_LONG),
+                map: map,
+                title: '@Model.t_em_incident.INCIDENT_NAME'
+                });
+            </text>
+        }
+
+        //display impacted area if there is one
+        poly = new google.maps.Polygon(polyOptions);
+        poly.setMap(map);
+        @if (Model.ImpactedArea != null)
+        {
+            <text>
+                var impactedCoords = [@Model.ImpactedArea];
+                poly.setPath(impactedCoords);    
+            </text>
+        }
+
+
+        //display threatened area if there is one
+        polyThreatened = new google.maps.Polygon(polyThreatenedOptions);
+        polyThreatened.setMap(map);
+        @if (Model.ThreatenedArea != null)
+        {
+            <text>
+                var threatenedCoords = [@Model.ThreatenedArea];
+                polyThreatened.setPath(threatenedCoords);        
+            </text>
+        }
+
+
+        //add google map listener for idle (retrieve EPA data)
+        google.maps.event.addListener(map, "idle", function () {
+            // send the new bounds back to your server
+            latTop = this.getBounds().getNorthEast().lat();
+            longEast = this.getBounds().getNorthEast().lng();
+            latBot = this.getBounds().getSouthWest().lat();
+            longWest = this.getBounds().getSouthWest().lng();
+
+            PopulateEPAData(latBot, latTop, longWest, longEast, map, info_window);
+        });
+
+    });
+
+
+    //*************************************************************************************   
+    //************************************* functions *************************************   
+    //*************************************************************************************   
+
+    //function to populate data from EPA
+    function PopulateEPAData(latBot, latTop, longWest, longEast, map, info_window) {
+
+        var i = 0;
+
+        //GET DATA FROM EPA
+        var site = 'http://iaspub.epa.gov/enviro/efservice/multisystem/minLatitude/' + latBot + '/maxLatitude/' + latTop + '/minLongitude/' + longWest + '/maxLongitude/' + longEast + '/rows/1:100';
+        var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + site + '"') + '&format=xml&callback=?';
+        // Request that YSQL string, and run a callback function.
+        // Pass a defined function to prevent cache-busting.
+        $.getJSON(yql, function (data) {
+
+            //convert to XML
+            var xml = $.parseXML(data.results[0]);
+
+            //loop through each FacilitySite
+            $(xml).find("FacilitySite").each(function () {
+
+                // create a marker
+                var facid = $(this).find("FacilityRegistryIdentifier").text();
+                var fac = $(this).find("FacilitySiteName").text();
+                var addy = $(this).find("LocationAddressText").text() + "<br/>" + $(this).find("LocalityName").text() + ", " + $(this).find("StateUSPSCode").text() + $(this).find("LocationZIPCode").text()
+                var link = "<a href='http://oaspub.epa.gov/enviro/multisys2_v2.get_list?facility_uin=" + facid + "' target='blank'>EPA Data</a>"
+                var latlng1 = new google.maps.LatLng($(this).find("LatitudeMeasure").text(), $(this).find("LongitudeMeasure").text());
+                var marker1 = new google.maps.Marker({
+                    position: latlng1,
+                    map: map,
+                    //animation: google.maps.Animation.DROP,
+                    icon: "../../Content/Images/circle_b.png",
+                    title: 'Facility'
+                });
+
+                //create an info window
+                (function (i, marker1) {
+                    google.maps.event.addListener(marker1, 'click', function () {
+                        info_window.setContent("<b>" + fac + "</b><br/><br/>" + link + "<br/><br/>" + addy);
+                        info_window.open(map, marker1);
+                        map.panTo(latlng1);
+                    });
+
+                })(i, marker1);
+
+                i++;
+            });
+        });
+
+    };
+
+    //function when placing single incident location
+    function placeMarker(location) {
+        //clear any previous markers
+        if (marker) { marker.setMap(null) }
+
+        //add marker to map
+        marker = new google.maps.Marker({ position: location, map: map });
+
+        //populate textboxes
+        $('#t_em_incident_INCIDENT_LAT').val(location.lat());
+        $('#t_em_incident_INCIDENT_LONG').val(location.lng());
+    }
+
+    //function called when Add Impacted Area button is clicked (
+    function AddImpactedPoly() {
+
+        poly.setEditable(true);
+
+        //show save button
+        document.getElementById('btnSave').style.display = '';
+
+        // Add listener for map click to add polygon vertices 
+        handlerPolyAddVert = google.maps.event.addListener(map, 'click', addPolygon1);
+
+        // event for removing a node
+        var deleteNode = function (mev) {
+            if (mev.vertex != null) {
+                poly.getPath().removeAt(mev.vertex);
+                storePath(poly.getPath(), '#ImpactedArea', 'impacted-acres');
+            }
+        }
+
+        // Add listener for polygon vertices set or move 
+        google.maps.event.addListener(poly, 'rightclick', deleteNode);     // Add listener for polygon right-click
+        google.maps.event.addListener(poly.getPath(), 'set_at', pointUpdated);
+        google.maps.event.addListener(poly.getPath(), 'insert_at', pointUpdated);
+
+        // Add listener for polygon click
+        google.maps.event.addListener(poly, 'click', function x(event) {
+            polyInfoWindow.setContent('<b>Impacted Area</b><br/>');
+            polyInfoWindow.setPosition(event.latLng);
+            polyInfoWindow.open(map);
+        });          
+
+    }
+
+    //function to store the updated polygon and calculate area
+    function storePath(myPath, polyTxt, polyAcresTxt)
+    {
+        var pathArrayStr;
+        for (var i = 0; i < myPath.getLength() ; i++) {
+            var xy = myPath.getAt(i);
+            pathArrayStr += '{lat: ' + xy.lat() + ', lng: ' + xy.lng() + '},';
+            pathArrayStr = pathArrayStr.replace('undefined', '');
+        }
+
+        $(polyTxt).val(pathArrayStr);
+
+        var area = google.maps.geometry.spherical.computeArea(myPath);
+        document.getElementById(polyAcresTxt).innerHTML = "Area = " + Math.round(area / 40.4686) / 100 + " acres";
+    }
+
+    //function called when Add Impacted Area button is clicked (
+    function AddThreatenedPoly() {
+
+        polyThreatened.setEditable(true);
+
+        //show save button
+        document.getElementById('btnSave').style.display = '';
+
+        // Add listener for map click to add polygon vertices 
+        handlerPolyAddVert2 = google.maps.event.addListener(map, 'click', addPolygon2);
+
+        // event for removing a node
+        var deleteNode = function (mev) {
+            if (mev.vertex != null) {
+                polyThreatened.getPath().removeAt(mev.vertex);
+                storePath(poly.getPath(), '#ThreatenedArea', 'threatened-acres');
+            }
+        }
+
+        // Add listener for polygon vertices set or move 
+        google.maps.event.addListener(polyThreatened, 'rightclick', deleteNode);
+        google.maps.event.addListener(polyThreatened.getPath(), 'set_at', pointUpdated2);
+        google.maps.event.addListener(polyThreatened.getPath(), 'insert_at', pointUpdated2);
+
+        // Add listener for polygon click
+        google.maps.event.addListener(polyThreatened, 'click',  function x(event) {
+            polyInfoWindow.setContent('<b>Threatened Area</b><br/>');
+            polyInfoWindow.setPosition(event.latLng);
+            polyInfoWindow.open(map);
+        });
+    }
+
+    //clicking the save button to save polygon
+    function polygon1Save() {
+        poly.setEditable(false);
+        polyThreatened.setEditable(false);
+        google.maps.event.removeListener(handlerPolyAddVert);
+        google.maps.event.removeListener(handlerPolyAddVert2);
+        document.getElementById('btnSave').style.display = 'none';
+    }
+
+    //clicking button to edit polygon
+    function polygon1Edit() {
+        poly.setEditable(true);
+        handlerPolyAddVert = google.maps.event.addListener(map, 'click', addPolygon1);
+        document.getElementById('btnSave').style.display = '';
+        polyInfoWindow.close();
+    }
+
+    //adding each polygon vertices
+    function addPolygon1(event) {
+        var path = poly.getPath();
+        path.push(event.latLng);
+        storePath(poly.getPath(), '#ImpactedArea', 'impacted-acres');
+    }
+
+    //adding each polygon vertices
+    function addPolygon2(event) {
+        var path = polyThreatened.getPath();
+        path.push(event.latLng);
+        storePath(poly.getPath(), '#ThreatenedArea', 'threatened-acres');
+    }
+
+    //moving polygon points
+    function pointUpdated(index) {
+        storePath(poly.getPath(), '#ImpactedArea', 'impacted-acres');
+    }
+
+    //moving polygon points
+    function pointUpdated2(index) {
+        storePath(polyThreatened.getPath(), '#ThreatenedArea', 'threatened-acres');
+    }
+
+    //hide/show the affected area polygon
+    function hideShowPoly1() {
+        if (poly.getMap() != null)
+            poly.setMap(null);
+        else
+            poly.setMap(map);
+    }
+
+    function hideShowPoly2() {
+        if (polyThreatened.getMap() != null)
+            polyThreatened.setMap(null);
+        else
+            polyThreatened.setMap(map);
+    }
+
+</script>
+
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i>Home</a></li>
+                <li><a href="#">Response</a></li>
+                <li class="active">Map</li>
+            </ul>
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+            <!-- START: INCIDENT WIZARD -->
+            <section class="panel panel-default wizard">
+                <div class="wizard-steps clearfix" id="form-wizard">
+                    <ul class="steps">
+                        <li class=""><a href="@Url.Action("Edit", "Incident", new { id = Model.t_em_incident.INCIDENT_IDX })"><span class="badge badge-success">1</span>Basic Info</a></li>
+                        <li class="active"><a href="@Url.Action("Map", "Incident", new { id = Model.t_em_incident.INCIDENT_IDX })"><span class="badge badge-info">2</span>Location</a></li>
+                        <li><a href="@Url.Action("Team", "Incident", new { id = Model.t_em_incident.INCIDENT_IDX })"><span class="badge badge-danger">3</span>Team</a></li>
+                        <li><a href="@Url.Action("IncResource", "Incident", new { id = Model.t_em_incident.INCIDENT_IDX })"><span class="badge badge-danger">4</span>Resources</a></li>
+                        <li><a href="@Url.Action("Status", "Incident", new { id = Model.t_em_incident.INCIDENT_IDX })"><span class="badge badge-danger">5</span>Status</a></li>
+                        <li><a href="@Url.Action("OpPeriods", "Incident", new { id = Model.t_em_incident.INCIDENT_IDX })"><span class="badge badge-danger">6</span>Operational Periods</a></li>
+                    </ul>
+                </div>
+            </section>
+            <!-- END: INCIDENT WIZARD -->
+
+
+            @using (Html.BeginForm("Map", "Incident", FormMethod.Post, new { @class = "" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.t_em_incident.INCIDENT_IDX)
+
+                <section class="panel panel-default">
+                    <div class="panel-heading font-bold">Incident Location</div>
+                    <div class="panel-body">
+                        <div class="hbox stretch">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div id="map_canvas" style="width: 100%; height: 500px;"></div>
+
+                                    <!-- MAP OVERLAY PANEL-->
+                                    <div id="panel" class="map-panel">
+                                        Click map to edit:
+                                        <br />
+                                        <div class="btn-group-vertical" data-toggle="buttons">
+                                            <label class="btn btn-sm btn-info lbl-btn-group" >
+                                                <input type="radio" name="options" id="option1" class="text-left" ><i class="fa fa-check text-active"></i> Location
+                                            </label>
+                                            <label class="btn btn-sm btn-danger lbl-btn-group">
+                                                <input type="radio" name="options" id="option2" ><i class="fa fa-check text-active"></i> Impacted Area
+                                            </label>
+                                            <label class="btn btn-sm btn-warning lbl-btn-group">
+                                                <input type="radio" name="options" id="option3"><i class="fa fa-check text-active"></i> Threatened Area
+                                            </label>
+                                        </div>
+                                        <br/>
+                                        <input id="btnSave" onclick="polygon1Save();" class="btn btn-primary btn-sm" type="button" value="Save Changes" style="display:none" />
+                                    </div>
+                                    <div id="panel" class="map-panel-btm">
+                                        <a href="#" class="btn btn-danger btn-xs dker" onclick="hideShowPoly1();"><i class="fa fa-eye"></i></a>
+                                        <a href="#" class="btn btn-warning btn-xs dker" onclick="hideShowPoly2();"><i class="fa fa-eye"></i></a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Location Description</label>
+                                                @Html.TextAreaFor(model => model.t_em_incident.INCIDENT_LOC_DESC, new { @class = "form-control", @placeholder = "Incident Location Description" })
+                                                @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_LOC_DESC)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>City</label>
+                                                @Html.TextBoxFor(model => model.t_em_incident.INCIDENT_CITY, new { @class = "form-control", @placeholder = "" })
+                                                @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_CITY)
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>County</label>
+                                                @Html.TextBoxFor(model => model.t_em_incident.INCIDENT_CNTY, new { @class = "form-control", @placeholder = "" })
+                                                @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_CNTY)
+                                            </div>
+                                        </div>*@
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>State</label>
+                                                @Html.TextBoxFor(model => model.t_em_incident.INCIDENT_STATE, new { @class = "form-control", @placeholder = "" })
+                                                @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_STATE)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Latitude</label>
+                                                @Html.TextBoxFor(model => model.t_em_incident.INCIDENT_LAT, new { @class = "form-control", @placeholder = "XX.XXXXXX" })
+                                                @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_LAT)
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Longitude</label>
+                                                @Html.TextBoxFor(model => model.t_em_incident.INCIDENT_LONG, new { @class = "form-control", @placeholder = "XX.XXXXXX" })
+                                                @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_LONG)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Impacted Area</label><div id="impacted-acres"></div>
+                                                @Html.TextAreaFor(model => model.ImpactedArea, new { @class = "form-control", @placeholder = "", @readonly = "readonly" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Threatened Area</label><div id="threatened-acres"></div>
+                                                @Html.TextAreaFor(model => model.ThreatenedArea, new { @class = "form-control", @placeholder = "", @readonly = "readonly" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button type="submit" name="submitButton" value="Save" class="btn btn-sm btn-primary">Save</button>
+                                            <button type="submit" name="submitButton" value="Continue" class="btn btn-sm btn-primary">Save and Continue to Team <i class="fa fa-arrow-circle-right"></i></button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </section>
+            }
+        </section>
+    </section>
+</section>

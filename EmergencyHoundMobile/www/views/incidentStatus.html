@@ -1,0 +1,57 @@
+﻿<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+    <li><a href="#dashboard"><i class="fa fa-home"></i>Home</a></li>
+    <li><a href="#incidents">Incident Search</a></li>
+    <li class="active">Incident Status</li>
+</ul>
+
+<!-- START: INCIDENT WIZARD -->
+<section class="panel panel-default wizard">
+    <div class="wizard-steps clearfix" id="form-wizard">
+        <ul class="steps">
+            <li><a href="#incidentEdit"><span class="badge badge-success">1</span>General</a></li>
+            <li><a href="#incidentMap2"><span class="badge badge-success">2</span>Map</a></li>
+            <li><a href="#incidentTeam"><span class="badge badge-success">3</span>People</a></li>
+            <li><a href="#incidentResources"><span class="badge badge-success">4</span>Resources</a></li>
+            <li class="active"><a ><span class="badge badge-info">5</span>Status</a></li>
+            <li><a href="#incidentOpPeriods"><span class="badge badge-danger">6</span>Periods</a></li>
+            <li><a href="#incidentAttach"><span class="badge badge-danger">7</span>Images</a></li>
+        </ul>
+    </div>
+</section>
+<!-- END: INCIDENT WIZARD -->
+
+
+<section class="panel panel-default">
+    <div class="panel-body">
+
+        <!-- START STATUS UPDATE TABLE -->
+        <div class="table-responsive">
+            <table class="table table-striped m-b-none" data-ride="datatables">
+                <tr>
+                    <th ng-show="incident.caN_EDIT==1" >Editing</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                </tr>
+                <tr ng-repeat="status in statuses"  >
+                    <td style="min-width:78px" ng-show="incident.caN_EDIT==1" >
+                        <a ng-click="editIncidentStatus(status.inC_STATUS_IDX)" class="btn btn-rounded btn-xs btn-default" ><i class="fa fa-pencil fa-success"></i></a>
+                    </td>
+                    <td>
+                        {{status.statuS_DT}}
+                    </td>
+                    <td>
+                        {{status.statuS_TYPE_CD}}
+                    </td>
+                    <td>
+                        {{status.statuS_DESC}}
+                    </td>
+                </tr>
+        </table>
+    </div>
+    <!-- END STATUS UPDATE TABLE -->
+    </div>
+</section>
+<p>
+    <a data-ng-click="addIncidentStatus()" class="btn btn-s-md btn-primary " ng-show="incident.caN_EDIT==1" >Add Status</a>
+</p>

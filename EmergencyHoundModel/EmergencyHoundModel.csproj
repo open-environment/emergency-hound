@@ -1,0 +1,356 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7D66ACBA-7BC3-4461-9A64-9F85C6199BA6}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EmergencyHoundModel</RootNamespace>
+    <AssemblyName>EmergencyHoundModel</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.2.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\1_CreateDatabase.sql" />
+    <Content Include="App_Data\2_PopulateData.sql" />
+    <Content Include="App_Data\3_PopulateProjectData.sql" />
+    <Content Include="App_Data\ChangeLog.txt" />
+    <Content Include="packages.config" />
+    <EntityDeploy Include="EmergencyHoundEFModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EmergencyHoundEFModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="EmergencyHoundEFModel.edmx.diagram">
+      <DependentUpon>EmergencyHoundEFModel.edmx</DependentUpon>
+    </Content>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EmergencyHoundEFModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EmergencyHoundEFModel.edmx</DependentUpon>
+      <LastGenOutput>EmergencyHoundEFModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="EmergencyHoundEFModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EmergencyHoundEFModel.edmx</DependentUpon>
+      <LastGenOutput>EmergencyHoundEFModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccessLayer\db_Accounts.cs" />
+    <Compile Include="DataAccessLayer\db_EmergencyHound.cs" />
+    <Compile Include="DataAccessLayer\db_Ref.cs" />
+    <Compile Include="DataAccessLayer\db_Util.cs" />
+    <Compile Include="EmergencyHoundEFModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmergencyHoundEFModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmergencyHoundEFModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmergencyHoundEFModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmergencyHoundEFModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Identity\CustomClaim.cs" />
+    <Compile Include="Identity\CustomRole.cs" />
+    <Compile Include="Identity\CustomUser.cs" />
+    <Compile Include="Identity\CustomUserManager.cs" />
+    <Compile Include="Identity\CustomUserRole.cs" />
+    <Compile Include="Identity\CustomIdentityDBContext.cs" />
+    <Compile Include="Identity\CustomLogin.cs" />
+    <Compile Include="Identity\EmailService.cs" />
+    <Compile Include="Identity\SmsService.cs" />
+    <Compile Include="ModelExtend.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SP_DASHBOARD_COUNTS_Result.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_INCIDENT_ADV_SEARCH_Result.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_INCIDENT_STATUS_QUERY_Result.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_RESOURCE_ADV_SEARCH_Result.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_RESOURCE_DTL_ADV_SEARCH_Result.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_RESOURCE_DTL_Result.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_DOCUMENTS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INCIDENT.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INCIDENT_ACTIONS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INCIDENT_ATTACH.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INCIDENT_LOC_AREA.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INCIDENT_OBJECTIVES.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INCIDENT_OP_PERIOD.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INCIDENT_RESOURCES.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INCIDENT_STATUS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INCIDENT_TEAM_DTL.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_INDIVIDUALS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_QUALIFICATIONS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_QUALIFICATION_ATTACH.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_COMPLEX_LVL.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_DOC_STATUS_TYPE.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_DOC_TYPE.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_INCIDENT_PRIORITY.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_INC_STATUS_TYPE.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_MANAGEMENT_ORG.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_QUAL_CATEGORY.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_QUAL_TYPE.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_QUAL_TYPE_REQ.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_RESOURCE_CAT.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_RESOURCE_CORE_CAP.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_RESOURCE_DISCIPLINE.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_RESOURCE_KIND.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_RESOURCE_STATUS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_RESOURCE_TYPE.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_RESOURCE_TYPE_DTL.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_RESOURCE_TYPE_DTL_DATA.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_REF_SHARE_TYPE.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_RESOURCE.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_RESOURCE_DTL.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_RESOURCE_VER_HIST.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_USER_NOTIFICATION.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_USER_ORG.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_OE_APP_SETTINGS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_OE_ORGANIZATIONS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_OE_ROLES.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_OE_SYS_EMAIL_LOG.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_OE_SYS_LOG.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_OE_USERS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_OE_USER_ROLES.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_OE_USER_TOKENS.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_EM_INCIDENT_TEAM_DISPLAY.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_EM_TIMELINE.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>6509</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:6509/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

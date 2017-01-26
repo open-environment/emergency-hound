@@ -1,0 +1,56 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmAccountNotificationViewModel
+@{
+    ViewBag.Title = "Notifications";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Notifications</a></li>
+            </ul>
+
+            <div class="m-b-md">
+                <h3 class="m-b-none">Notifications</h3>
+            </div>
+
+            <section class="panel panel-default">
+                <div class="table-responsive">
+                    <table class="table table-striped m-b-none">
+                        <thead>
+                            <tr>
+                                <th width="20"></th>
+                                <th>Date</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.t_em_user_notifications)
+                            {
+                                <tr style="@(item.READ_IND==true ? "" : "font-weight:bold")">
+                                    <td>
+                                        <div class="delete-section" style="display:inline">
+                                            <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = item.NOTIFICATION_IDX})"><i class="fa fa-times "></i></a>
+                                            <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.NOTIFICATION_IDX" data-delete-path="@(Url.Content("~/"))" data-delete-p="/Account/DeleteNotify"><b>Confirm Delete</b></div>
+                                        </div>
+                                    </td>
+                                    <td>@item.NOTIFY_DT</td>
+                                    <td>@item.NOTIFY_TITLE</td>
+                                    <td>@item.NOTIFY_DESC</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </section>    
+    </section>
+</section>
+
+@Scripts.Render("~/bundles/confirmdelete")

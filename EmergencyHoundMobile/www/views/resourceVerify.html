@@ -1,0 +1,42 @@
+﻿<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+    <li><a href="#dashboard"><i class="fa fa-home"></i>Home</a></li>
+    <li><a href="#resources">Resource Search</a></li>
+    <li class="active">Resource Details</li>
+</ul>
+
+<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+
+<!-- START: RESOURCE EDIT FORM -->
+<div class="panel panel-default">
+    <header class="panel-heading font-bold">Resource Verification History</header>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped m-b-none" data-ride="datatables">
+                <tr>
+                    <th>Delete</th>
+                    <th>Verification Date</th>
+                    <th>Verified By</th>
+                </tr>
+                <tr ng-repeat="verify in verifies">
+                    <td style="min-width:78px">
+                        <div class="delete-section" style="display:inline">
+                            <a ng-click="delVerification(verify.resourcE_VER_HIST_IDX)" class="btn btn-rounded btn-xs btn-default" ng-show="resource.caN_EDIT>0" title="Edit"><i class="fa fa-pencil fa-success"></i></a>
+                        </div>
+                    </td>
+                    <td>{{verificatioN_DT}}</td>
+                    <td>{{verifieD_BY_NAME}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <button class="btn btn-sm btn-default" data-ng-click="close()">Close</button>
+    <br />
+</div>
+

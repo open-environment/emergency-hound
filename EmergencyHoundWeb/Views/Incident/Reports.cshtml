@@ -1,0 +1,97 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmReportIndex
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="@Url.Action("Index", "Incident")">Incidents</a></li>
+                <li class="active"><a href="#">Incident Reports</a></li>
+            </ul>
+            <div class="m-b-md">
+                <h3 class="m-b-none">Incident Detail Reports</h3>
+            </div>
+
+            <section class="panel panel-default">
+                <div class="table-responsive">
+
+                    <table class="table table-striped m-b-none" data-ride="datatables">
+                        <tr>
+                            <th>Run Report</th>
+                            <th>Report Name</th>
+                            <th>Report Description</th>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                @using (Html.BeginForm("RptFema201", "Incident", FormMethod.Post, new { @class = "" }))
+                                {
+                                    @Html.Hidden("IncidentIDX", Model.IncidentIDX)
+                                    @Html.DropDownListFor(x => x.selOpPeriod, Model.ddl_OpPeriods, "", new { @class = "form-control", @style = "display: inline; width:200px;" })
+                                    <button type="submit" value="Save" class="btn btn-info btn-xs"><i class="fa fa-arrow-circle-right fa-success"></i> Run</button>
+                                }
+                            </td>
+                            <td>ICS 201</td>
+                            <td>FEMA ICS 201 Form: Incident Briefing</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @using (Html.BeginForm("RptFema202", "Incident", FormMethod.Post, new { @class = "" }))
+                                {
+                                    @Html.Hidden("IncidentIDX", Model.IncidentIDX)
+                                    @Html.DropDownListFor(x => x.selOpPeriod, Model.ddl_OpPeriods, "", new { @class = "form-control", @style = "display: inline; width:200px;" })
+                                    <button type="submit" value="Save" class="btn btn-info btn-xs"><i class="fa fa-arrow-circle-right fa-success"></i> Run</button>
+                                }
+                            </td>
+                            <td>ICS 202</td>
+                            <td>FEMA ICS 202 Form: Incident Objectives</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @using (Html.BeginForm("RptFema207", "Incident", FormMethod.Post, new { @class = "" }))
+                                {
+                                    @Html.Hidden("IncidentIDX", Model.IncidentIDX)
+                                    @Html.DropDownListFor(x => x.selOpPeriod, Model.ddl_OpPeriods, "", new { @class = "form-control", @style = "display: inline; width:200px;" })
+                                    <button type="submit" value="Save" class="btn btn-info btn-xs"><i class="fa fa-arrow-circle-right fa-success"></i> Run</button>
+                                }
+                            </td>
+                            <td>ICS 207</td>
+                            <td>FEMA ICS 207 Form: Organization Chart</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @using (Html.BeginForm("RptFema208", "Incident", FormMethod.Post, new { @class = "" }))
+                                {
+                                    @Html.Hidden("IncidentIDX", Model.IncidentIDX)
+                                    @Html.DropDownListFor(x => x.selOpPeriod, Model.ddl_OpPeriods, "", new { @class = "form-control", @style = "display: inline; width:200px;" })
+                                    <button type="submit" value="Save" class="btn btn-info btn-xs"><i class="fa fa-arrow-circle-right fa-success"></i> Run</button>
+                                }
+                            </td>
+                            <td>ICS 208</td>
+                            <td>FEMA ICS 208 Form: Safety Message / Plan</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @using (Html.BeginForm("RptFema209", "Incident", FormMethod.Post, new { @class = "" }))
+                                {
+                                    @Html.Hidden("IncidentIDX", Model.IncidentIDX)
+                                    <button type="submit" value="Save" class="btn btn-info btn-xs"><i class="fa fa-arrow-circle-right fa-success"></i> Run</button>
+                                }
+                            </td>
+                            <td>ICS 209</td>
+                            <td>FEMA ICS 209 Form: Incident Status Summary </td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </section>
+</section>

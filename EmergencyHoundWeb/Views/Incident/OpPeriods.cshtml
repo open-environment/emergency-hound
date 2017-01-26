@@ -1,0 +1,161 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIncidentOpPeriodModel
+
+@{
+    ViewBag.Title = "Incident Operational Periods";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i>Home</a></li>
+                <li><a href="#">Incident</a></li>
+                <li class="active">Edit</li>
+            </ul>
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+            <!-- START: INCIDENT WIZARD -->
+            <section class="panel panel-default wizard">
+                <div class="wizard-steps clearfix" id="form-wizard">
+                    <ul class="steps">
+                        <li><a href="@Url.Action("Edit", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-success">1</span>Basic Info</a></li>
+                        <li><a href="@Url.Action("Map", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-success">2</span>Location</a></li>
+                        <li><a href="@Url.Action("Team", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-success">3</span>Team</a></li>
+                        <li><a href="@Url.Action("IncResource", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-success">4</span>Resources</a></li>
+                        <li><a href="@Url.Action("Status", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-success">5</span>Status</a></li>
+                        <li class="active"><a href="@Url.Action("OpPeriods", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-info">6</span>Operational Periods</a></li>
+                    </ul>
+                </div>
+            </section>
+            <!-- END: INCIDENT WIZARD -->
+
+            <section class="panel panel-default">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped m-b-none" data-ride="datatables">
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Objectives</th>
+                            </tr>
+
+                            @foreach (var item in Model.t_em_incident_op_period)
+                            {
+                                <tr>
+                                    <td style="min-width:78px">
+                                        <a href="@Url.Action("OpPeriodEdit", "Incident", new { id = item.INCIDENT_OP_PERIOD_IDX })" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                                        <div class="delete-section" style="display:inline">
+                                            <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = item.INCIDENT_OP_PERIOD_IDX})"><i class="fa fa-times "></i></a>
+                                            <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.INCIDENT_OP_PERIOD_IDX" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Incident/DeleteOpPeriod"><b>Confirm Delete</b></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OP_PERIOD_NAME)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OP_PERIOD_START_DT)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OP_PERIOD_END_DT)
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+            <p>
+                <a id="addit" href="#modal-form" class="btn btn-s-md btn-primary" data-toggle="modal">Add New</a>
+            </p>
+
+        </section>
+    </section>
+</section>
+
+
+<!-- modal  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Add New Operational Period</h3>
+
+                        @using (Html.BeginForm("OpPeriods", "Incident", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(model => model.IncidentIDX)
+
+                            <div class="panel-body" style="padding: 0px">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            Name:
+                                            @Html.TextBoxFor(model => model.newOpPeriodName, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            Start Date:
+                                            @Html.TextBoxFor(model => model.newStartDate, new { @class = "form-control datetime-picker" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            End Date:
+                                            @Html.TextBoxFor(model => model.newEndDate, new { @class = "form-control datetime-picker" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <button id="picLoc" type="submit" class="btn btn-sm btn-primary text-uc form-control"><strong>Continue</strong></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-sm btn-default text-uc form-control" data-dismiss="modal"><strong>Cancel</strong></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/confirmdelete")
+    @Scripts.Render("~/bundles/datetimepicker")
+
+    <script>
+            jQuery('.datetime-picker').datetimepicker({
+                format: 'm/d/Y h:i:s A'
+            });
+    </script>
+
+}
+
+

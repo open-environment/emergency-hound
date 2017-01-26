@@ -1,0 +1,220 @@
+﻿/*CSS used for diplaying command team*/
+ * {
+    margin: 0;
+    padding: 0;
+}
+.tree {
+    min-width:1000px;
+}
+.tree ul {
+    padding-top: 20px;
+    position: relative;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+}
+.tree li {
+    float: left;
+    text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 0px 2px 0 2px;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+}
+
+/*use ::before and ::after to draw the connectors*/
+ .tree li::before, .tree li::after {
+    content:'';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    border-top: 1px solid #ccc;
+    width: 50%;
+    height: 20px;
+    z-index:-1;
+}
+.tree li::after {
+    right: auto;
+    left: 50%;
+    border-left: 1px solid #ccc;
+}
+/*remove left-right connectors from elements without any siblings*/
+ .tree li:only-child::after, .tree li:only-child::before {
+    display: none;
+}
+/*Remove space from the top of single children*/
+ .tree li:only-child {
+    padding-top: 0;
+}
+/*Remove left connector from first child and right connector from last child*/
+ .tree li:first-child::before, .tree li:last-child::after {
+    border: 0 none;
+}
+/*Adding back the vertical connector to the last nodes*/
+ .tree li:last-child::before {
+    border-right: 1px solid #ccc;
+    border-radius: 0 5px 0 0;
+    -webkit-border-radius: 0 5px 0 0;
+    -moz-border-radius: 0 5px 0 0;
+}
+.tree li:first-child::after {
+    border-radius: 5px 0 0 0;
+    -webkit-border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;
+}
+/*Time to add downward connectors from parents*/
+ .tree ul ul::before {
+    content:'';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 2px solid #ccc;
+    width: 0;
+    height: 20px;
+    z-index:-1;
+}
+.tree li .treediv {
+    margin-left: 0px;
+    margin-right: 0px;
+    border: 1px solid #ccc;
+    padding: 3px 3px;
+    text-decoration: none;
+    color: #666;
+    font-family: arial, verdana, tahoma;
+    font-size: 11px;
+    display: inline-block;
+    width: auto; 
+    background-color: #eeeeee;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, 0.75);
+    box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, 0.75);
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+}
+
+.treecont {
+    margin-right:-20px;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;    
+}
+.treecont:hover{
+    margin-right:1px;
+}
+/*Time for some hover effects*/
+
+/*We will apply the hover effect the the lineage of the element also*/
+/* make image bigger*/
+/*.tree li a:hover .aaa {
+    width: 42px;
+    height:42px;
+}
+*/
+
+/* show expand icons */
+.treecont:hover .treeedit {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    opacity:100   
+}
+
+
+/* cell hover */
+.treecont:hover .treediv, .treecont:hover+ul li .treediv{
+    background: #c8e4f8;
+    color: #000;
+    border: 1px solid #94a0b4;
+}
+
+
+/* Connector styles on hover*/
+ .tree li .treecont:hover+ul li::after, .tree li .treecont:hover+ul li::before, .tree li .treecont:hover+ul::before, .tree li .treecont:hover+ul ul::before {
+    border-color: #94a0b4;
+    border-width: 2px; 
+}
+
+.treetitle {
+    font-size:12px;
+    font-weight:bold;
+    color:#fff;
+    padding:2px 6px;
+    border-radius: 3px 3px 0px 0px;
+    -webkit-border-radius: 3px 3px 0px 0px;
+    -moz-border-radius: 3px 3px 0px 0px;
+}
+.treetitle-bg-success{
+    background-color: #65bd77;
+}
+.treetitle-bg-danger{
+    background-color: #fb6b5b;
+}
+
+.treebody {
+    display:block;
+    padding: 2px 0px;
+}
+.treebody > img.aaa {
+    float: left;
+    width: 32px;
+    height:32px;
+}
+.treename {
+    font-size: 13px;
+    font-weight: bold;
+    display:block;
+}
+
+.treeedit {
+    display:inline-block;
+    width: 20px;
+    opacity:0;
+    padding:0px;
+    margin:0px
+}
+
+.person
+{
+ margin-left: 3px;
+    margin-right: 3px;
+    border: 1px solid #ccc;
+    padding: 3px 3px;
+    text-decoration: none;
+    color: #666;
+    font-family: arial, verdana, tahoma;
+    font-size: 11px;
+    display: inline-block;
+    background-color: #eeeeee;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, 0.75);
+    box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, 0.75);
+     cursor: move;
+
+}
+.person:hover {
+    background: #c8e4f8;
+    color: #000;
+    border: 1px solid #94a0b4;
+}
+.person.ui-draggable-dragging { background: #c8e4f8; }
+
+
+
+/* *******************    PRELIMINARY STUFF ********************************************* */
+    .teamclicked {
+        border-width: 10px;
+        border-style: solid;
+        border-radius: 10px;
+        border-color: #8ec165;
+    }

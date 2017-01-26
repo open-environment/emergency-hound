@@ -1,0 +1,46 @@
+﻿@model EmergencyHoundWeb.Controllers.IncidentHeaderViewModel
+
+@if (@Model.IncIDX != null)
+{
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle dker" data-toggle="dropdown">
+            <i class="fa fa-building-o"></i>
+            <span class="font-bold">
+                @Model.IncName 
+            </span>
+            @*<br/>
+            <span class="font-bold">
+                @( Model.IncDate != "1/1/0001" ? Model.IncDate : "")
+            </span>*@
+        </a>
+        <section class="dropdown-menu aside-xl on animated fadeInLeft no-borders lt">
+            <div class="wrapper lter m-t-n-xs">
+                <div class="clear">
+                    <a href="#"><span class="text-white font-bold">@Model.IncName</span></a>
+                    <small class="block">Lead Responder: @Model.LeadResponder</small>
+                    <a href="@Url.Action("Edit","Incident", new { id=Model.IncIDX })" class="btn btn-xs btn-success m-t-xs">View/Edit Incident</a>
+                </div>
+            </div>
+            <div class="row m-l-none m-r-none m-b-n-xs text-center">
+                <div class="col-xs-4">
+                    <div class="padder-v">
+                        <span class="m-b-xs h4 block text-white">@Model.IncResponderCount.ToString()</span>
+                        <small class="text-muted">Responders</small>
+                    </div>
+                </div>
+                <div class="col-xs-4 dk">
+                    <div class="padder-v">
+                        <span class="m-b-xs h4 block text-white">@Model.IncStatusCount.ToString()</span>
+                        <small class="text-muted">Status Updates</small>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="padder-v">
+                        <span class="m-b-xs h4 block text-white">@Model.IncResourceCount.ToString()</span>
+                        <small class="text-muted">Resources</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </li>
+}

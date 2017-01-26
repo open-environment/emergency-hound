@@ -1,0 +1,77 @@
+﻿<button type="submit" class="btn btn-sm btn-primary pull-right" data-ng-click="addIncident()">Add New Incident</button>
+<h3 class="m-b-md">Search Incidents</h3>
+
+<!-- START SEARCH PANEL -->
+<div class="panel panel-success">
+    <div class="panel-heading panel-success cursorpointer" data-toggle="collapse" href="#collapseOne">
+        <i class="fa fa-search text-default"></i>
+        Search Filter:<small class=" pull-right">(Touch to expand)</small>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Filter:</label>
+                    <input type="text" class="form-control" placeholder="" ng-model="searchKind">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END SEARCH PANEL -->
+
+<section class="panel panel-default">
+    <header class="panel-heading bg-light">
+        <ul class="nav nav-tabs " id="myTabs">
+            <li class="active"><a data-toggle="tab" data-target="#lister" aria-expanded="true"><i class="fa fa-list text-default"></i> List View</a></li>
+            <li class="" ng-show="offlineMap.length==0"><a data-target="#mapper" data-toggle="tab" href="mapz" aria-expanded="false"><i class="fa fa-map-marker text-default"></i> Map View</a></li>
+        </ul>
+    </header>
+    <div class="panel-body">
+        <div class="tab-content">
+
+            <!-- START TAB 1 -->
+            <div class="tab-pane active" id="lister">
+                <div class="table-responsive">
+                    <table class="table table-striped m-b-none" data-ride="datatables">
+                        <tr>
+                            <th>Editing</th>
+                            <th>ID</th>
+                            <th>Jurisdiction</th>
+                            <th>Incident Name</th>
+                            <th>Incident Description</th>
+                            <th>Shared With</th>
+                            <th>Start Date</th>
+                            <th>Priority</th>
+                        </tr>
+
+                        <tr ng-repeat="incident in incidents  | filter:searchKind">
+                            <td style="min-width:108px">
+                                <a ng-click="editIncident(incident.incidenT_IDX)" ng-show="incident.caN_EDIT==1" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                                <a ng-click="editIncident(incident.incidenT_IDX)" ng-show="incident.caN_EDIT!=1" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-eye fa-success"></i></a>
+                                <a class="btn btn-rounded btn-xs btn-dark" ng-show="!incident.synced" ng-click="editIncident(incident.incidenT_IDX)" ><i class="fa fa-exclamation fa-dark" title="Not yet saved to server"></i></a>
+                            </td>
+                            <td>{{incident.incidenT_ID}}</td>
+                            <td>
+                                <div ng-repeat="org in orgs | filter: { orG_IDX: incident.orG_IDX }">{{org.orG_NAME}} </div>
+                            </td>
+                            <td>{{incident.incidenT_NAME}}</td>
+                            <td>{{incident.incidenT_DESC}}</td>
+                            <td>{{incident.sharE_TYPE}}</td>
+                            <td>{{incident.incidenT_START_DT}}</td>
+                            <td>{{incident.incidenT_PRIORITY}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- END TAB 1 -->
+            <!-- START TAB 2 -->
+            <div class="tab-pane" id="mapper" ng-show="offlineMap.length==0">
+                {{offlineMap}}
+                <div id="map_canvas2" style="width: 100%; height: 500px;"></div>
+            </div>
+            <!-- END TAB 2 -->
+
+        </div>
+    </div>
+</section>

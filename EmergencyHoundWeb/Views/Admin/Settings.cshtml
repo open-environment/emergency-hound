@@ -1,0 +1,120 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmAdminSettingsViewModel
+@{
+    ViewBag.Title = "Global Settings";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //create an event when button is clicked to display modal
+        $(".modal-it").click(function () {
+            $('#edit_app_setting_SETTING_IDX').val($(this).parent('td').find('#item_SETTING_IDX').val());
+            $('#edit_app_setting_SETTING_NAME').val($(this).parent('td').find('#item_SETTING_NAME').val());
+            $('#edit_app_setting_SETTING_VALUE').val($(this).parent('td').find('#item_SETTING_VALUE').val());            
+        });
+    });
+</script>
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Admin</a></li>
+                <li class="active">Settings</li>
+            </ul>
+            <h3 class="m-b-md">Global Settings</h3>
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+
+            <section class="panel panel-default">
+                <div class="table-responsive">
+                    <table class="table table-striped m-b-none" data-ride="datatables">
+                        <tr>
+                            <th>Edit</th>
+                            <th>Setting Name</th>
+                            <th>Setting Value</th>
+                        </tr>
+
+                        @foreach (var item in Model.app_settings)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="#modal-form" class="btn btn-rounded btn-xs btn-default modal-it" data-toggle="modal"><i class="fa fa-pencil fa-success"></i></a>
+                                    @Html.HiddenFor(modelItem => item.SETTING_IDX)
+                                    @Html.HiddenFor(modelItem => item.SETTING_NAME)
+                                    @Html.HiddenFor(modelItem => item.SETTING_VALUE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SETTING_NAME)
+                                </td>
+                                <td>
+                                    @(item.ENCRYPT_IND != true ? item.SETTING_VALUE : "*********************")
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </section>
+        </section>
+    </section>
+</section>
+
+
+
+
+<!-- START MODAL EDIT  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Edit Setting</h3>
+
+                        @using (Html.BeginForm("Settings", "Admin", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(model => model.edit_app_setting.SETTING_IDX)
+
+                            <div class="panel-body" >
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Global Setting Name</label>
+                                            @Html.TextBoxFor(model => model.edit_app_setting.SETTING_NAME, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Global Setting Value</label>
+                                            @Html.TextBoxFor(model => model.edit_app_setting.SETTING_VALUE, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.edit_app_setting.SETTING_VALUE)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button id="picLoc" type="submit" class="btn btn-sm btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-sm btn-default" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- END MODAL CERTIFICATIONS -->
+

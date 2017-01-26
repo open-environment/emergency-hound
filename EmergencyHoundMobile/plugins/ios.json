@@ -1,0 +1,37 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "org.openenvironment.emergencyhound"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "org.openenvironment.emergencyhound"
+        },
+        "cordova-plugin-transport-security": {
+            "PACKAGE_NAME": "org.openenvironment.emergencyhound"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "org.openenvironment.emergencyhound"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "org.openenvironment.emergencyhound"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "org.openenvironment.emergencyhound"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "org.openenvironment.emergencyhound"
+        },
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "org.openenvironment.emergencyhound"
+        }
+    }
+}

@@ -1,0 +1,83 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmResourceTypeListViewModel
+@{
+    ViewBag.Title = "Resource Types List";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Planning</a></li>
+                <li class="active">Resource Types</li>
+            </ul>
+            <h3 class="m-b-sm">Resource Types</h3>
+            <p>
+                @Html.ActionLink("Add Resource Type", "ResourceTypeEdit", "Resource", new object { }, new { @class = "btn btn-s-md btn-primary" })
+            </p>
+
+            <section class="panel panel-default">
+                <div class="table-responsive">
+                    <table class="table table-striped m-b-none scrollable padder" data-ride="datatables">
+                        <tr>
+                            <th></th>
+                            <th>Resource Type Name</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Kind</th>
+                            <th>Core Capacity</th>
+                            <th>Jurisdiction</th>
+                        </tr>
+                        @foreach (var item in Model.t_em_ref_resource_types)
+                        {
+                            <tr>
+                                <td style="min-width:78px">
+                                    @if (User.IsInRole("Admins") || item.ORG_IDX != null)
+                                    {
+                                        <a href="@Url.Action("ResourceTypeEdit", "Resource", new { id = item.RESOURCE_TYPE_IDX })" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                                        <div class="delete-section" style="display:inline">
+                                            <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new { id = item.RESOURCE_TYPE_IDX })"><i class="fa fa-times "></i></a>
+                                            <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.RESOURCE_TYPE_IDX" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Resource/ResourceTypeDelete"><b>Confirm Delete</b></div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("ResourceTypeEdit", "Resource", new { id = item.RESOURCE_TYPE_IDX })" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-eye fa-success"></i></a>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RESOURCE_TYPE_NAME)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RESOURCE_TYPE_DESC)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RESOURCE_CATEGORY)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RESOURCE_KIND)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RESOURCE_CORE_CAP)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.T_OE_ORGANIZATIONS.ORG_NAME)
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+
+            </section>
+        </section>
+    </section>
+</section>
+
+
+@Scripts.Render("~/bundles/confirmdelete")
+

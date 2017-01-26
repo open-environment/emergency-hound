@@ -1,0 +1,67 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIncidentTimelineViewModel
+@{
+    ViewBag.Title = "Incident Timeline";
+
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <!-- BREADCRUMBS -->
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Incident</a></li>
+                <li class="active">Timeline</li>
+            </ul>
+
+            <a href="@Url.Action("Status", "Incident", new { id=Model.t_em_incident.INCIDENT_IDX })" class="btn btn-warning ">View Status Updates</a>
+
+            <div class="timeline">
+                <article class="timeline-item active ">
+                    <div class="timeline-caption">
+                        <div class="panel bg-primary lter no-borders">
+                            <div class="panel-body">
+                                <h4>Incident Timeline</h4>
+                                <span class="timeline-icon"><i class="fa fa-clock-o time-icon bg-primary"></i></span>
+                                <span class="timeline-date">@Model.t_em_incident.INCIDENT_START_DT ?? @Model.t_em_incident.CREATE_DT</span>
+                                <h5>
+                                    <span>Incident Initiated</span>
+                                    by @Model.IncidentCreator
+                                </h5>
+                                <div class="m-t-sm timeline-action">
+                                    <span class="h3 pull-left m-r-sm"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                @{
+                    var odd = false;
+                }
+                @foreach (var item in Model.v_em_timeline)
+                {
+                    odd = !odd;
+                    <article class="timeline-item @(odd ? "alt" : "")">
+                        <div class="timeline-caption">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <span class="arrow @(odd ? "right" : "left")"></span>
+                                    <span class="timeline-icon"><i class="fa @(item.UPDATE_TYPE=="Attachment" ? "fa-camera" : "fa-file")  time-icon bg-dark"></i></span>
+                                    <span class="timeline-date">@item.TIMELINE_DT</span>
+                                    <h5>
+                                        <span>@item.UPDATE_TYPE</span>
+                                        @item.NME
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                }
+            </div>
+        </section>
+    </section>
+</section>

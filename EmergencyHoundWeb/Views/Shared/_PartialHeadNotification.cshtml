@@ -1,0 +1,42 @@
+﻿@using EmergencyHoundWeb.App_Logic
+@model EmergencyHoundWeb.Controllers.NotificationHeaderViewModel
+
+<li class="hidden-xs">
+    <a href="#" class="dropdown-toggle dker" data-toggle="dropdown">
+        <i class="fa fa-bell"></i>
+@if (Model.NotifyCount > 0)
+{
+        <span class="badge badge-sm up bg-danger m-l-n-sm count">@Model.NotifyCount</span>
+}
+    </a>
+    <section class="dropdown-menu aside-xl">
+        <section class="panel bg-white">
+            <header class="panel-heading b-light bg-light">
+                <strong>You have <span class="count">@Model.NotifyCount</span> notifications</strong>
+            </header>
+            <div class="list-group list-group-alt animated fadeInRight">
+                @if (Model.Notifications != null)
+                {
+                    foreach (var item in Model.Notifications)
+                    {
+                        TimeSpan ts = @System.DateTime.Now - @item.NOTIFY_DT;
+
+                        <a href="@Url.Action("Notifications","Account", new { id= item.NOTIFICATION_IDX })" class="media list-group-item">
+                            <span class="pull-left thumb-sm text-center">
+                                <i class="fa fa-2x text-success @(item.NOTIFY_TYPE=="EMAIL" ? "fa-envelope" : "fa-exclamation-circle")"></i>
+                            </span>
+                            <span class="media-body block m-b-none">
+                                @item.NOTIFY_TITLE<br>
+                            <small class="text-muted">@ts.TimespanFriendly() ago</small>
+                        </span>
+                    </a>
+                    }
+                }
+            </div>
+            <footer class="panel-footer text-sm">
+                <a href="#" class="pull-right"><i class="fa fa-close"></i></a>
+                <a href="@Url.Action("Notifications","Account")" >View all notifications</a>
+            </footer>
+        </section>
+    </section>
+</li>

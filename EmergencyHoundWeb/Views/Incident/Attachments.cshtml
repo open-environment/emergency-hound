@@ -1,0 +1,86 @@
+﻿@model IEnumerable<EmergencyHoundModel.T_EM_INCIDENT_ATTACH>
+
+@{
+    ViewBag.Title = "Attachments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+<link href="~/Scripts/prettyphoto/prettyPhoto.css" rel="stylesheet" />
+<link href="~/Scripts/grid/gallery.css" rel="stylesheet" />
+<script src="~/Scripts/prettyphoto/jquery.prettyPhoto.js"></script>
+<script src="~/Scripts/grid/jquery.grid-a-licious.min.js"></script>
+<script src="~/Scripts/grid/gallery.js"></script>
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i>Home</a></li>
+                <li><a href="#">Response</a></li>
+                <li class="active"><a href="#">Attachments</a></li>
+            </ul>
+
+            <div class="m-b-md">
+                <h3 class="m-b-none">Incident Attachments</h3>
+            </div>
+
+            <div class="panel-group m-b" id="accordion2">
+                <div class="panel panel-default">
+                    <div class="panel-heading btn btn-primary">
+                        <a class="accordion-toggle collapsed " data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Add New Attachment</a>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body text-sm">
+                            <p>
+                                @using (Html.BeginForm("AttachImageUpload", "Incident", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    <label for="file">Upload Image:</label>
+                                    <input type="file" name="file" id="file" accept="image/*" class="form-control" />
+                                    <input type="submit" value="Upload" class="submit btn btn-s-md btn-primary" />
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="hbox stretch">
+                <!-- /.aside -->
+                <section id="content2">
+                    <section class="vbox bg-white">
+                        <section class="scrollable">
+                            <div id="gallery" class="gallery animated fadeInUpBig">
+
+                                @foreach (var item in Model)
+                                {
+
+                                    <div class="item" style="padding: 2px">
+                                        @if (item.ATTACH_CONTENT != null)
+                                        {
+                                            <img src="data:image;base64,@System.Convert.ToBase64String(item.ATTACH_CONTENT)" />
+
+                                            <a href="data:image;base64,@System.Convert.ToBase64String(item.ATTACH_CONTENT)" rel="prettyPhoto[gallery]"></a>    
+                                        }
+
+                                        <div class="desc">
+                                            <h4>@item.ATTACH_NAME</h4>
+                                            <p>@item.ATTACH_DESC</p>
+                                            <span>@item.CREATE_DT.ToString()</span>
+                                        </div>
+                                    </div>
+
+                                }
+
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+
+        </section>
+    </section>
+</section>
+

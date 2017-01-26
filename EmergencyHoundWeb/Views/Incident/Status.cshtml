@@ -1,0 +1,195 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIncidentStatusModel
+@{
+    ViewBag.Title = "Status Update";
+}
+
+<script type="text/javascript">
+    var TempStatusIDX;
+    $(document).ready(function () {
+
+        TempStatusIDX = $('#new_t_em_incident_status_INC_STATUS_IDX').val();   //store value of empty guid
+
+        //create an event when button is clicked to display modal
+        $(".modal-it").click(function () {
+            $('#new_t_em_incident_status_INC_STATUS_IDX').val($(this).parent('td').find('#item_INC_STATUS_IDX').val());
+            $('#new_t_em_incident_status_STATUS_DT').val($(this).parent('td').find('#item_STATUS_DT').val());
+            $('#new_t_em_incident_status_STATUS_TYPE_CD').val($(this).parent('td').find('#item_STATUS_TYPE_CD').val());
+            $('#new_t_em_incident_status_STATUS_DESC').val($(this).parent('td').find('#item_STATUS_DESC').val());
+
+        });
+
+        //create an event when button is clicked to display modal
+        $(".add-it").click(function () {
+            $('#new_t_em_incident_status_INC_STATUS_IDX').val(TempStatusIDX);
+            $('#new_t_em_incident_status_STATUS_DT').val(null);
+            $('#new_t_em_incident_status_STATUS_TYPE_CD').val(null);
+            $('#new_t_em_incident_status_STATUS_DESC').val(null);
+        });
+
+    });
+</script>
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i>Home</a></li>
+                <li><a href="#">Incident</a></li>
+                <li class="active">Edit</li>
+            </ul>
+            <div class="m-b-md">
+                <h3 class="m-b-none">Incident Status Updates</h3>
+            </div>
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+
+            <!-- START: INCIDENT WIZARD -->
+            <section class="panel panel-default wizard">
+                <div class="wizard-steps clearfix" id="form-wizard">
+                    <ul class="steps">
+                        <li><a href="@Url.Action("Edit", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-success">1</span>Basic Info</a></li>
+                        <li><a href="@Url.Action("Map", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-success">2</span>Location</a></li>
+                        <li><a href="@Url.Action("Team", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-success">3</span>Team</a></li>
+                        <li><a href="@Url.Action("IncResource", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-success">4</span>Resources</a></li>
+                        <li class="active"><a href="@Url.Action("Status", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-info">5</span>Status</a></li>
+                        <li><a href="@Url.Action("OpPeriods", "Incident", new { id=Model.IncidentIDX })"><span class="badge badge-danger">6</span>Operational Periods</a></li>
+                    </ul>
+                </div>
+            </section>
+            <!-- END: INCIDENT WIZARD -->
+
+            <section class="panel panel-default">
+                <div class="panel-body">
+
+                    <!-- START STATUS UPDATE TABLE -->
+                    <div class="table-responsive">
+                        <table class="table table-striped m-b-none" data-ride="datatables">
+                            <tr>
+                                <th>Editing</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Description</th>
+                            </tr>
+                            @if (Model.t_em_incident_statuses != null)
+                            {
+                            foreach (var item in Model.t_em_incident_statuses)
+                            {
+                                <tr>
+                                    <td style="min-width:78px">
+                                        <a href="#modal-form" class="btn btn-rounded btn-xs btn-default modal-it" data-toggle="modal"><i class="fa fa-pencil fa-success"></i></a>
+                                        <div class="delete-section" style="display:inline">
+                                            <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new { id = item.INC_STATUS_IDX })"><i class="fa fa-times "></i></a>
+                                            <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.INC_STATUS_IDX" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Incident/DeleteStatus"><b>Confirm Delete</b></div>
+                                        </div>
+                                        @Html.HiddenFor(modelItem => item.INC_STATUS_IDX)
+                                        @Html.HiddenFor(modelItem => item.STATUS_DT)
+                                        @Html.HiddenFor(modelItem => item.STATUS_TYPE_CD)
+                                        @Html.HiddenFor(modelItem => item.STATUS_DESC)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.STATUS_DT)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.STATUS_TYPE_CD)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.STATUS_DESC)
+                                    </td>
+                                </tr>
+                            }
+                            }
+                        </table>
+                    </div>
+                    <!-- END STATUS UPDATE TABLE -->
+                </div>
+            </section>
+            <p>
+                <a id="addit" href="#modal-form" class="btn btn-s-md btn-primary add-it" data-toggle="modal">Add Status</a>
+                <a href="@Url.Action("Timeline", "Incident", new { id=Model.IncidentIDX })" class="btn btn-warning ">View Timeline</a>
+            </p>
+        </section>
+    </section>
+</section>
+
+
+<!-- modal  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Status Details</h3>
+
+                        @using (Html.BeginForm("Status", "Incident", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(model => model.new_t_em_incident_status.INC_STATUS_IDX)
+                            @Html.HiddenFor(model => model.new_t_em_incident_status.INCIDENT_IDX)
+
+                            <div class="panel-body" style="padding: 0px">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            Date:
+                                            @Html.TextBoxFor(model => model.new_t_em_incident_status.STATUS_DT, new { @class = "form-control datetime-picker", @required="required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            Status Update Type:
+                                            @Html.DropDownListFor(x => x.new_t_em_incident_status.STATUS_TYPE_CD, Model.ddl_incident_status_type_cd, "", new { @class = "form-control", @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.new_t_em_incident_status.STATUS_TYPE_CD)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            Status Description:
+                                            @Html.TextAreaFor(model => model.new_t_em_incident_status.STATUS_DESC, new { @class = "form-control", @maxlength="400" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button id="picLoc" type="submit" class="btn btn-sm btn-primary ">Save</button>
+                                        <button type="submit" class="btn btn-sm btn-default " data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/confirmdelete")
+    @Scripts.Render("~/bundles/datetimepicker")
+    <script>
+        jQuery('.datetime-picker').datetimepicker({
+            format: 'm/d/Y h:i:s A'
+        });
+    </script>
+}
+
+
+
+
+
+

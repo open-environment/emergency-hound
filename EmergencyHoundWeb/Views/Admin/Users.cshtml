@@ -1,0 +1,86 @@
+﻿@model IEnumerable<EmergencyHoundModel.T_OE_USERS>
+@{
+    ViewBag.Title = "Users";
+}
+
+<!-- render the left menu -->
+@Html.Action("_LeftMenu", "Shared")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Admin</a></li>
+                <li class="active">Users</li>
+            </ul>
+            <div class="m-b-md">
+                <h3 class="m-b-none">Users</h3>
+            </div>
+
+            <section class="panel panel-default">
+                <div class="table-responsive">
+
+                    <table class="table table-striped m-b-none" data-ride="datatables">
+                        <tr>
+                            <th></th>
+                            <th>User ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Last Login Date</th>
+                            <th>Phone</th>
+                            <th>Active</th>
+                            <th>Created Date</th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("UserEdit","Admin", new { id=item.USER_IDX })" class="btn btn-rounded btn-xs btn-icon btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                                    <div class="delete-section" style="display:inline">
+                                        <a class=" btn btn-rounded btn-xs btn-icon btn-danger delete-link" href="@Url.Action("Delete", new {id = item.USER_IDX})"><i class="fa fa-times "></i></a>
+                                        <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.USER_IDX" data-delete-path="@(Url.Content("~/"))" data-delete-p="/Admin/DeleteUser"><b>Confirm Delete</b></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.USER_ID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FNAME)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LNAME)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LASTLOGIN_DT)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PHONE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ACT_IND)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CREATE_DT)
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+
+                </div>
+
+            </section>
+        </section>
+    </section>
+    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
+</section>
+
+
+@Scripts.Render("~/bundles/confirmdelete")
+
+
+
+

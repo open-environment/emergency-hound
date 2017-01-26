@@ -1,0 +1,345 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmResourceIndexViewModel
+@{
+    ViewBag.Title = "Resource List";
+}
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+<script type="text/javascript">
+    //script for showing single resource on modal map
+    var map;
+    var marker;  //define globally so it can be cleared each time
+    var iLat, iLong;
+    var mapOptions = {
+        zoom: 13,
+        center: { lat: 35.479, lng: -95.510 },
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };    
+
+    $(document).ready(function () {
+
+        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+        //create an event when modal form is displayed to resize map
+        $("#modal-form").on("shown.bs.modal", function () {
+
+            //resize map so all tiles display properly
+            google.maps.event.trigger(map, "resize");
+
+            //place marker on the map
+            if (iLat.length > 0 && iLong.length > 0) {
+                placeMarker(new google.maps.LatLng(iLat, iLong));
+            }
+        });
+
+        //create an event when button is clicked to display modal
+        $(".mapit").click(function () {
+            iLat = $(this).parent().parent().find('#item_RESOURCE_LAT').val();
+            iLong = $(this).parent().parent().find('#item_RESOURCE_LONG').val();
+        });
+    });
+
+
+    //Adds marker to map and populates lat/long textboxes
+    function placeMarker(location) {
+        //clear any previous markers
+        if (marker) { marker.setMap(null) }
+
+        //add marker to map
+        marker = new google.maps.Marker({ position: location, map: map });
+
+        //center map on marker
+        map.setCenter(location);
+
+        //populate modal textboxes
+        $('#txtLat1').val(location.lat());
+        $('#txtLong1').val(location.lng());
+    }
+</script>
+<script type="text/javascript">
+    //script for map tab
+    var map2;
+    var map_options2 = {
+        zoom: 9,
+        center: { lat: 35.479, lng: -95.510 },
+        mapTypeId: google.maps.MapTypeId.HYBRID
+    };
+    var bounds = new google.maps.LatLngBounds();
+    var myinfowindow = new google.maps.InfoWindow({ content: 'holding...'});     //define 1 infowindow
+
+    $(document).ready(function () {
+
+        map2 = new google.maps.Map(document.getElementById('map_canvas2'), map_options2);
+
+        //create an event when tab is clicked to resize map
+        $("a[href='#mapper']").on('shown.bs.tab', function(){
+
+            //resize map so all tiles display properly
+            google.maps.event.trigger(map2, 'resize');
+
+            //place markers
+            @foreach (var item in Model.sp_resource_adv_search)
+            {
+                if (item.RESOURCE_LAT != null)
+                {
+                    <text>
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(@item.RESOURCE_LAT,@item.RESOURCE_LONG),
+                        map: map2,
+                        title: '@item.RESOURCE_TYPE_NAME'
+                    });
+
+                    //marker click event
+                    google.maps.event.addListener(marker, 'click', function () {
+                        myinfowindow.setContent('<div id="content">' +
+                                '<div id="siteNotice">' +
+                                '</div>' +
+                                '<h4 id="firstHeading" class="firstHeading">' + '@item.ORG_NAME' + '</h4>' +
+                                '<div id="bodyContent">' +
+                                '<p><b>Type: </b> @item.RESOURCE_TYPE_NAME' + '</p>' +
+                                '<p><b>Description: </b><span style="white-space: pre-line"> @((item.RESOURCE_DESC ??"").Replace(System.Environment.NewLine, ""))' + '</span></p>' +
+                                '<p><b>Status: </b> @item.RESOURCE_STATUS_CD.Replace("A","Available").Replace("U","Unavailable")' + '</p>' +
+                                '<a href="/Resource/Edit/@item.RESOURCE_IDX" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>' +
+                                '</div>' +
+                                '</div>');
+                        myinfowindow.open(map2, this);
+                    });
+
+                    bounds.extend(marker.position);
+                    </text>
+                }
+            }
+
+            //now fit the map to the newly inclusive bounds
+            if (bounds.contains(marker.getPosition()))
+                map2.fitBounds(bounds);
+        });
+
+    });
+</script>
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+
+            <form role="form" class="">
+
+                <!-- BREADCRUMBS -->
+                <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                    <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="#">Planning</a></li>
+                    <li class="active">Resources</li>
+                    <button type="submit" name="submitButton" value="Report" class="btn btn-xs btn-info pull-right">Report</button>
+                </ul>
+
+                <h3 class="m-b-md">Search Resources</h3>
+
+                <!-- render the validation summary -->
+                @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+                <!-- START SEARCH PANEL -->
+                <div class="panel panel-success">
+                    <div class="panel-heading panel-success cursorpointer" data-toggle="collapse" href="#collapseOne">
+                        <i class="fa fa-search text-default"></i>
+                        Search Filter:<small class=" pull-right">(Click to expand)</small>
+                        @if (!String.IsNullOrEmpty(Model.selectKind))
+                        {
+                            <button type="button" class="btn btn-danger btn-xs">
+                                Kind: @Model.selectKind
+                            </button>
+                        }
+                        @if (Model.selectOrgIDX != null)
+                        {
+                            <button type="button" class="btn btn-danger btn-xs">
+                                Jurisdiction: @Model.selectOrgName
+                            </button>
+                        }
+                        @if (!String.IsNullOrEmpty(Model.selectStatusName))
+                        {
+                            <button type="button" class="btn btn-danger btn-xs">
+                                Status: @Model.selectStatusName
+                            </button>
+                        }
+
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-sm-3">
+                                    <label>Jurisdiction:</label>
+                                    @Html.DropDownListFor(x => x.selectOrgIDX, Model.ddl_jurisdictions, "", new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label>Status:</label>
+                                    @Html.DropDownListFor(x => x.selectStatusCd, Model.ddl_status, "", new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label>Kind:</label>
+                                    @Html.DropDownListFor(x => x.selectKind, Model.ddl_kind, "", new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <button type="submit" name="submitButton" value="Search" class="btn btn-primary">Search <i class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SEARCH PANEL -->
+            </form>
+
+            <section class="panel panel-default">
+                <header class="panel-heading bg-light text-right">
+                    <ul class="nav nav-tabs pull-left" id="myTabs">
+                        <li class="active"><a href="#lister" data-toggle="tab" aria-expanded="false"><i class="fa fa-list text-default"></i> List View</a></li>
+                        <li class=""><a href="#mapper" data-toggle="tab" aria-expanded="true"><i class="fa fa-map-marker text-default"></i> Map View</a></li>
+                    </ul>
+                    <span class="hidden-sm">Resource Listing</span>
+                </header>
+                <div class="panel-body">
+                    <div class="tab-content">
+
+                        <!-- START TAB 1 -->
+                        <div class="tab-pane active" id="lister">
+                            <div class="table-responsive ">
+                                <table class="table table-striped b-t b-light  " >
+                                    <tr>
+                                        <th>Editing</th>
+                                        <th>Jurisdiction</th>
+                                        <th>Resource Type</th>
+                                        <th>Resource Description</th>
+                                        <th>Kind</th>
+                                        <th>Count</th>
+                                        <th>Units</th>
+                                        <th>Status</th>
+                                        <th>Last Verified</th>
+                                        <th>Location</th>
+                                    </tr>
+                                    @foreach (var item in Model.sp_resource_adv_search)
+                                    {
+                                        <tr>
+                                            @Html.HiddenFor(model => item.RESOURCE_LAT)
+                                            @Html.HiddenFor(model => item.RESOURCE_LONG)
+
+                                            <td style="min-width:78px">
+                                                @if (item.CAN_EDIT > 0)
+                                                {
+                                                <a href="@Url.Action("Edit", "Resource", new { id = item.RESOURCE_IDX })" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                                                <div class="delete-section" style="display:inline">
+                                                    <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new { id = item.RESOURCE_IDX })"><i class="fa fa-times "></i></a>
+                                                    <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.RESOURCE_IDX" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Resource/Delete"><b>Confirm Delete</b></div>
+                                                </div>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("Edit", "Resource", new { id = item.RESOURCE_IDX })" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-eye fa-success"></i></a>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ORG_NAME)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RESOURCE_TYPE_NAME)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RESOURCE_DESC)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RESOURCE_KIND)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RESOURCE_COUNT)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RESOURCE_UNIT)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RESOURCE_STATUS_NAME)
+                                            </td>
+                                            <td>
+                                                @Html.ValueFor(modelItem => item.VERIFY_DT, "{0:MM/dd/yyyy}")
+                                            </td>
+                                            <td>
+                                                @if (item.RESOURCE_LAT != null)
+                                                {
+                                                    <a id="mapit" href="#modal-form" class="mapit btn btn-xs btn-primary btn-rounded" data-toggle="modal"><i class="fa fa-globe fa-success"></i> Map</a>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                    }
+
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- END TAB 1 -->
+                        <!-- START TAB 2 -->
+                        <div class="tab-pane " id="mapper">
+                            <div id="map_canvas2" style="width: 100%; height: 500px;"></div>
+                        </div>
+                        <!-- END TAB 2 -->
+                    </div>
+
+                </div>
+            </section>
+            <p>
+                @if (Model.canAdd == true)
+                {
+                    @Html.ActionLink("Add Resource", "Add", "Resource", null, new { @class = "btn btn-s-md btn-primary" })
+                }
+            </p>
+        </section>
+    </section>
+</section>
+
+
+
+<!-- modal  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Resource Location</h3>
+                            <div class="panel-body" style="padding: 0px">
+                                <div id="map_canvas" style="width: 100%; height: 500px;"></div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            Latitude:
+                                            <input id="txtLat1" class="form-control" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            Longitude:
+                                            <input id="txtLong1" class="form-control" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            &nbsp;
+                                            <button type="submit" class="btn btn-sm btn-default text-uc form-control" data-dismiss="modal"><strong>Close</strong></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+@Scripts.Render("~/bundles/confirmdelete")
+

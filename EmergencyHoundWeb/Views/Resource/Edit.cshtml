@@ -1,0 +1,327 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmResourceEditViewModel
+
+@{
+    ViewBag.Title = "Edit Resource";
+}
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+<script type="text/javascript">
+    //script for placing and showing single resource on modal map
+    var map;
+    var marker;
+    var mapOptions = {
+        zoom: 10,
+        center: { lat: 35.479, lng: -95.510 },
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    $(document).ready(function () {
+
+        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+        });
+
+
+        //create an event when modal form is displayed to resize map and place marker
+        $("#modal-form").on("shown.bs.modal", function () {
+
+            //resize map so all tiles display properly
+            google.maps.event.trigger(map, "resize");
+
+            //place previously saved marker on the map
+            var iLat = $('#t_em_resource_RESOURCE_LAT').val();
+            var iLong = $('#t_em_resource_RESOURCE_LONG').val();
+
+            if (iLat.length > 0 && iLong.length > 0) {
+                placeMarker(new google.maps.LatLng(iLat, iLong));
+            }
+        });
+
+        //popuate textboxes when user selects a point on the map
+        $("#picLoc").click(function () {
+            $("#t_em_resource_RESOURCE_LAT").val($("#txtLat1").val());
+            $("#t_em_resource_RESOURCE_LONG").val($("#txtLong1").val());
+        });
+
+    });
+
+
+    //Adds marker to map and populates lat/long textboxes
+    function placeMarker(location) {
+        //clear any previous markers
+        if (marker) { marker.setMap(null) }
+
+        //add marker to map
+        marker = new google.maps.Marker({ position: location, map: map });
+
+        //center map on marker
+        map.setCenter(location);
+
+        //populate modal textboxes
+        $('#txtLat1').val(location.lat());
+        $('#txtLong1').val(location.lng());
+    }
+</script>
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="@Url.Action("Index", "Resource")">Resources</a></li>
+                <li class="active">Edit Resource</li>
+            </ul>
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.t_em_resource_RESOURCE_IDX)
+                @Html.HiddenFor(model => model.t_em_resource_RESOURCE_TYPE_IDX)
+
+                <section class="panel panel-default">
+                    <header class="panel-heading font-bold">Basic Resource Info</header>
+                    <div class="panel-body">
+                        <div class="row" style="padding-left: 15px">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Resource Type</label>
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(model => model.t_em_resource_t_em_ref_resource_type_name, new { @class = "form-control", @readonly="false" })
+                                        <span class="input-group-btn">
+                                            <a href="#details" class="btn btn-info form-control " data-toggle="collapse"><i class="fa fa-question-circle"></i></a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Count</label>
+                                    @Html.TextBoxFor(model => model.t_em_resource_RESOURCE_COUNT, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource_RESOURCE_COUNT)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Unit</label>
+                                    @Html.TextBoxFor(model => model.t_em_resource_RESOURCE_UNIT, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource_RESOURCE_UNIT)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FEMA RESOURCE DETAILS BOX BEGIN -->
+                        <div id="details" style="padding-left: 15px" class="row collapse">
+                            <div class="col-md-12">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading "><strong>What is: @Html.ValueFor(model => model.t_em_resource_t_em_ref_resource_type_name)?</strong></div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label text-primary text-right">Kind of Resource</label>
+                                                <div class="col-sm-10">
+                                                    @Html.ValueFor(model => model.t_em_resource_t_em_ref_resource_type_kind)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label text-primary text-right">Resource Category</label>
+                                                <div class="col-sm-10">
+                                                    @Html.ValueFor(model => model.t_em_resource_t_em_ref_resource_type_category)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label  text-primary text-right">Description</label>
+                                                <div class="col-sm-10">
+                                                    @Html.ValueFor(model => model.t_em_resource_t_em_ref_resource_type_desc)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- FEMA RESOURCE DETAILS BOX END -->
+
+                        <div class="row" style="padding-left: 15px">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    @Html.TextAreaFor(model => model.t_em_resource_RESOURCE_DESC, new { @class = "form-control", @placeholder = "" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-left: 15px">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    @Html.DropDownListFor(x => x.t_em_resource_RESOURCE_STATUS_CD, Model.StatusTypes, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource_RESOURCE_STATUS_CD)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Jurisdiction</label>
+                                    @Html.DropDownListFor(x => x.t_em_resource_ORG_IDX, Model.Jurisdictions, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource_ORG_IDX)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Data Sharing</label>
+                                    @Html.DropDownListFor(x => x.t_em_resource_SHARE_TYPE, Model.ShareTypes, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource_SHARE_TYPE)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-left: 15px">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Latitude</label>
+                                    <div class="input-group m-b">
+                                        <span class="input-group-btn">
+                                            <a id="mapit" href="#modal-form" class="btn btn-primary form-control" data-toggle="modal"><i class="fa fa-globe fa-success"></i> Map</a>
+                                        </span>
+                                        @Html.TextBoxFor(model => model.t_em_resource_RESOURCE_LAT, new { @class = "form-control", @placeholder = "xx.xxxxxx" })
+                                        @Html.ValidationMessageFor(model => model.t_em_resource_RESOURCE_LAT)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Longitude</label>
+                                    @Html.TextBoxFor(model => model.t_em_resource_RESOURCE_LONG, new { @class = "form-control", @placeholder = "-xxx.xxxxxx" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource_RESOURCE_LONG)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Last Verified</label>
+                                    <div class="input-group" style="font-size:12px" >
+                                        @(Model.t_em_resource_ver_hist.VERIFICATION_DT.HasValue ? Model.t_em_resource_ver_hist.VERIFICATION_DT.Value.ToString("MM/dd/yyyy hh:mm tt") : "--/--/----")
+                                        @Html.DisplayFor(model => model.t_em_resource_ver_hist.T_OE_USERS.FNAME)
+                                        @Html.DisplayFor(model => model.t_em_resource_ver_hist.T_OE_USERS.LNAME)
+                                        @if (Model.canEdit == true)
+                                        {
+                                            <span class="input-group-btn">
+                                                <button type="submit" name="submitButton" value="Verify" class="btn btn-warning">Verify</button>
+                                                <a href="@Url.Action("VerificationHistory", "Resource", new { id = Model.t_em_resource_RESOURCE_IDX })" class="btn btn-info">Show Verification History</a>
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                <section class="panel panel-default">
+                    <header class="panel-heading font-bold">Detailed Info</header>
+                    <div class="panel-body">
+                        @*<div class="row"  style="padding-left: 15px">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>FEMA NIMS Type</label>
+                                    <select class="form-control">
+                                        <option>Type 1</option>
+                                        <option selected="selected">Type 2</option>
+                                        <option>Type 3</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>*@
+                        <div class="row">
+                            @for (int i = 0; i < Model.sp_resource_dtl_result.Count(); i++)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label(Model.sp_resource_dtl_result[i].COMPONENT + " - " + Model.sp_resource_dtl_result[i].CAPABILITY + " " + ((Model.sp_resource_dtl_result[i].METRIC ?? "").Length > 0 ? "(" : "") + Model.sp_resource_dtl_result[i].METRIC + ((Model.sp_resource_dtl_result[i].METRIC ?? "").Length > 0 ? ")" : ""))
+                                        @Html.TextAreaFor(modelItem => Model.sp_resource_dtl_result[i].VALUE, new { @class = "form-control", @placeholder = "", @maxlength="1000" })
+                                        @Html.HiddenFor(modelItem => Model.sp_resource_dtl_result[i].RESOURCE_IDX)
+                                        @Html.HiddenFor(modelItem => Model.sp_resource_dtl_result[i].RESOURCE_DTL_IDX)
+                                        @Html.HiddenFor(modelItem => Model.sp_resource_dtl_result[i].RESOURCE_TYPE_DTL_IDX)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                </section>
+                <div class="form-group">
+                    <a href="@Url.Action("Index", "Resource")" class="btn btn-default">Close</a>
+                    @if (Model.canEdit == true)
+                    {
+                    <button type="submit" name="submitButton" value="Edit" class="btn btn-primary">Save</button>
+                    }
+                    <br/>
+                </div>
+            }
+
+        </section>
+    </section>
+</section>
+
+
+
+<!-- modal  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Select Resource Location on Map</h3>
+                        <p>Click on the map to locate your resource.</p>
+                        <form role="form">
+                            <div class="panel-body" style="padding: 0px">
+                                <div id="map_canvas" style="width: 100%; height: 500px;"></div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            Latitude:
+                                            <input id="txtLat1" class="form-control" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            Longitude:
+                                            <input id="txtLong1" class="form-control" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            &nbsp;
+                                            <button id="picLoc" type="submit" class="btn btn-sm btn-primary text-uc form-control" data-dismiss="modal"><strong>Continue</strong></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            &nbsp;
+                                            <button type="submit" class="btn btn-sm btn-default text-uc form-control" data-dismiss="modal"><strong>Cancel</strong></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+

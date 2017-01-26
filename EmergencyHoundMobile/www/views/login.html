@@ -1,0 +1,46 @@
+﻿<section id="content" class="m-t-lg wrapper-md">
+    <div class="container aside-xxl">
+        <section class="panel panel-default bg-white m-t-lg">
+            <header class="panel-heading text-center">
+                <strong>Sign in</strong>
+            </header>
+            <form class="panel-body wrapper-lg" role="form" name="loginForm" novalidate>
+                <div class="panel-body wrapper-lg">
+                    <div class="form-group">
+                        <label class="control-label">Email</label>
+                        <input type="email"
+                               class="form-control input-lg"
+                               data-ng-class="{'input-validation-error': (loginForm.$submitted || loginForm.loginData.userName.$touched) && (loginForm.userName.$error.required || loginForm.userName.$error.email)}"
+                               placeholder="test@example.com"
+                               name="userName"
+                               data-ng-model="loginData.userName"
+                               required="" autofocus />
+                        <div ng-show="loginForm.$submitted || loginForm.loginData.userName.$touched">
+                            <span class="field-validation-error" ng-show="loginForm.userName.$error.required">Please enter your email.</span>
+                            <span class="field-validation-error" ng-show="loginForm.userName.$error.email">This is not a valid email.</span>
+                        </div>
+
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Password</label>
+                        <input type="password"
+                               class="form-control input-lg"
+                               data-ng-class="{'input-validation-error': (loginForm.$submitted || loginForm.loginData.password.$touched) && loginForm.password.$error.required}"
+                               placeholder="Password"
+                               name="password"
+                               data-ng-model="loginData.password"
+                               required="">
+                        <div ng-show="loginForm.$submitted || loginForm.loginData.password.$touched">
+                            <span class="field-validation-error" ng-show="loginForm.password.$error.required">Please enter your password.</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-ng-click="login()">Sign in</button>
+                    <div data-ng-hide="message == ''" class="alert input-validation-error field-validation-error">
+                        {{message}}
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</section>

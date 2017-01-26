@@ -1,0 +1,209 @@
+﻿.fakeLink {
+    border: 0px;
+    background-color: transparent;
+    color: #2e3e4e;
+}
+
+.fakelink:hover {
+    text-decoration: underline;
+    color: white;
+    font-weight:bold;
+}
+
+.chosen-container {
+    display: block !important;
+    width: 100% !important;
+    height: 34px !important;
+    font-size: 14px !important;
+    line-height: 1.428571429 !important;
+    color: #555555 !important;
+    vertical-align: middle !important;
+   background: none !important;
+}
+
+.chosen-container-single .chosen-single {
+    border-radius:2px !important;
+    height: 34px !important;
+    padding-top: 2px !important;
+}
+
+@media (min-width: 768px) {
+    ::-webkit-scrollbar {
+        width: 12px !important;
+        height: 12px !important;
+    }
+}
+
+/*fix header not making ucase*/ 
+.navbar-nav > li > a {
+    text-transform: inherit;
+}
+
+@media (min-width: 768px) {
+  .navbar-fixed-top-xs {
+        max-height: 50px !important;
+    }
+}
+
+.cursorpointer {
+    cursor: pointer;
+}
+
+/* map styling  */
+
+.map-panel {
+         position: absolute;
+         top: 30px;
+         right: 15px;
+         margin-left: -180px;
+         z-index: 5;
+         background-color: #fff;
+         padding: 7px;
+         border: 1px solid #bcbcbc;
+         border-radius: 4px;
+         opacity: 0.9
+     }
+
+.map-panel-btm {
+         position: absolute;
+         bottom: 0px;
+         padding:5px;
+         left: 15px;
+         z-index: 5;
+         border-radius: 4px;
+         opacity: 0.9
+     }
+
+/* Wizard taken from FuelUX*/
+
+.wizard-steps{
+  font-size: 14px;
+  padding: 0;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e8e8e8;
+}
+.step-content {
+  padding: 15px;
+}
+.wizard-steps .badge {
+  margin-right: 4px;
+}
+
+.wizard-steps ul li.complete,
+.wizard-steps ul li.complete:hover {
+  cursor: pointer;
+  background: #f1f5f9;
+}
+.wizard-steps ul li.complete:after {
+  border-left-color: #f1f5f9;
+}
+.wizard-steps ul {
+  padding: 0;
+  margin: 0;
+  list-style: none outside none;
+}
+.wizard-steps ul li {
+  position: relative;
+  float: left;
+  padding: 0 5px 0 15px;
+  margin: 0;
+  color: #999999;
+  cursor: default;
+  height: 40px;
+  line-height: 40px;
+}
+.wizard-vertical {
+  float: left;
+  border-bottom: none;
+}
+.wizard-vertical + .step-content {
+  zoom: 1;
+  overflow: hidden;
+  padding-left: 40px;
+}
+.wizard-vertical ul li {
+  position: relative;
+  float: none;
+  border-bottom: 1px solid #e8e8e8;
+  padding-left: 15px;
+}
+.wizard-steps ul li:first-child {
+  padding-left: 15px;
+  border-radius: 4px 0 0 0;
+}
+.wizard .actions {
+  float: right;
+  margin: 8px 10px 0 0;
+}
+.wizard-steps ul li:before,
+.wizard-steps ul li:after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  border: 20px solid transparent;
+  border-right: 0;
+  border-left: 10px solid #e8e8e8;
+  border-left-color: rgba(0,0,0,0.05);
+  z-index: 1;
+}
+.wizard-steps ul li:after {
+  right: -9px;
+  border-left-color: #f5f5f5;
+  z-index: 2;
+}
+.wizard-steps ul li.active {
+  color: #3a87ad;
+  background: #fff;
+}
+.wizard-steps ul li.active:after {
+  border-left-color: #fff;
+}
+.step-content .step-pane {
+  display: none;
+}
+.step-content .step-pane.active {
+  display: inherit;
+}
+.wizard .badge-danger {
+  background-color: #fb6b5b;
+}
+.wizard .badge-info {
+  background-color: #4cc0c1;
+}
+.wizard .badge-success {
+  background-color: #8ec165;
+}
+.wizard ul li.active {
+  color: #4cc0c1;
+}
+
+
+
+
+/*   Styles for validation helpers (COPIED FROM ASP.NET MVC TEMPLATE )
+-----------------------------------------------------------*/
+.field-validation-error {
+    color: #ff0000;
+    font-weight: bold;
+    padding:10px;
+    display:block;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+

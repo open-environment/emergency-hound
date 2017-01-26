@@ -1,0 +1,244 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIncidentResourceModel
+@{
+    ViewBag.Title = "Incident Resources";
+}
+
+<script type="text/javascript">
+    var TempStatusIDX;
+    $(document).ready(function () {
+
+        TempStatusIDX = $('#newIncidentResource_INCIDENT_RESOURCE_IDX').val();   //store value of empty guid
+
+        //create an event when button is clicked to display modal
+        $(".modal-it").click(function () {
+            $('#newIncidentResource_INCIDENT_RESOURCE_IDX').val($(this).parent('td').find('#item_INCIDENT_RESOURCE_IDX').val());
+            $('#newIncidentResource_RESOURCE_IDX').val($(this).parent('td').find('#item_RESOURCE_IDX').val());
+            $('#newIncidentResource_RESOURCE_COUNT').val($(this).parent('td').find('#item_RESOURCE_COUNT').val());
+            $('#newIncidentResource_RESOURCE_ORDERED_DT').val($(this).parent('td').find('#item_RESOURCE_ORDERED_DT').val());
+            $('#newIncidentResource_RESOURCE_ETA_DT').val($(this).parent('td').find('#item_RESOURCE_ETA_DT').val());
+            $('#newIncidentResource_RESOURCE_ASSIGNED_TO').val($(this).parent('td').find('#item_RESOURCE_ASSIGNED_TO').val());
+            $('#newIncidentResource_RESOURCE_NOTES').val($(this).parent('td').find('#item_RESOURCE_NOTES').val());
+        });
+
+        //create an event when button is clicked to display modal
+        $(".add-it").click(function () {
+            $('#newIncidentResource_INCIDENT_RESOURCE_IDX').val(TempStatusIDX);
+            $('#newIncidentResource_RESOURCE_IDX').val(null);
+            $('#newIncidentResource_RESOURCE_COUNT').val(null);
+            $('#newIncidentResource_RESOURCE_ORDERED_DT').val(null);
+            $('#newIncidentResource_RESOURCE_ETA_DT').val(null);
+            $('#newIncidentResource_RESOURCE_ASSIGNED_TO').val(null);
+            $('#newIncidentResource_RESOURCE_NOTES').val(null);
+        });
+
+    });
+</script>
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i>Home</a></li>
+                <li><a href="#">Incident</a></li>
+                <li class="active">Edit</li>
+            </ul>
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+
+            <!-- START: INCIDENT WIZARD -->
+            <section class="panel panel-default wizard">
+                <div class="wizard-steps clearfix" id="form-wizard">
+                    <ul class="steps">
+                        <li><a href="@Url.Action("Edit", "Incident", new { id = Model.incident_idx })"><span class="badge badge-success">1</span>Basic Info</a></li>
+                        <li><a href="@Url.Action("Map", "Incident", new { id = Model.incident_idx })"><span class="badge badge-success">2</span>Location</a></li>
+                        <li><a href="@Url.Action("Team", "Incident", new { id = Model.incident_idx })"><span class="badge badge-success">3</span>Team</a></li>
+                        <li class="active"><a href="@Url.Action("IncResource", "Incident", new { id = Model.incident_idx })"><span class="badge badge-info">4</span>Resources</a></li>
+                        <li><a href="@Url.Action("Status", "Incident", new { id = Model.incident_idx })"><span class="badge badge-danger">5</span>Status</a></li>
+                        <li><a href="@Url.Action("OpPeriods", "Incident", new { id = Model.incident_idx })"><span class="badge badge-danger">6</span>Operational Periods</a></li>
+                    </ul>
+                </div>
+            </section>
+            <!-- END: INCIDENT WIZARD -->
+
+            <section class="panel panel-default">
+                <div class="panel-body">
+
+                    <!-- START RESOURCES TABLE -->
+                    <div class="table-responsive">
+                        <table class="table table-striped m-b-none" data-ride="datatables">
+                            <tr>
+                                <th>Editing</th>
+                                <th>Resource</th>
+                                <th>Count</th>
+                                <th>Ordered Date</th>
+                                <th>ETA</th>
+                                <th>Notes</th>
+                                <th>Assigned To</th>
+                            </tr>
+                            @if (Model.t_em_incident_resources != null)
+                            {
+                                foreach (var item in Model.t_em_incident_resources)
+                                {
+                                <tr>
+                                    <td style="min-width:78px">
+                                        <a href="#modal-form" class="btn btn-rounded btn-xs btn-default modal-it" data-toggle="modal"><i class="fa fa-pencil fa-success"></i></a>
+                                        <div class="delete-section" style="display:inline">
+                                            <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new { id = item.INCIDENT_RESOURCE_IDX })"><i class="fa fa-times "></i></a>
+                                            <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.INCIDENT_RESOURCE_IDX" data-delete-path="@(Url.Content("~/"))" data-delete-p="/Incident/DeleteIncResource"><b>Confirm Delete</b></div>
+                                        </div>
+                                        @Html.HiddenFor(modelItem => item.INCIDENT_RESOURCE_IDX)
+                                        @Html.HiddenFor(modelItem => item.RESOURCE_IDX)
+                                        @Html.HiddenFor(modelItem => item.RESOURCE_COUNT)
+                                        @Html.HiddenFor(modelItem => item.RESOURCE_ORDERED_DT)
+                                        @Html.HiddenFor(modelItem => item.RESOURCE_ETA_DT)
+                                        @Html.HiddenFor(modelItem => item.RESOURCE_ASSIGNED_TO)
+                                        @Html.HiddenFor(modelItem => item.RESOURCE_NOTES)
+                                    </td>
+                                    <td>
+                                        @if (item.T_EM_RESOURCE.RESOURCE_DESC != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.T_EM_RESOURCE.RESOURCE_DESC)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.T_EM_RESOURCE.T_EM_REF_RESOURCE_TYPE.RESOURCE_TYPE_NAME)
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RESOURCE_COUNT)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RESOURCE_ORDERED_DT)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RESOURCE_ETA_DT)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RESOURCE_NOTES)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RESOURCE_ASSIGNED_TO)
+                                    </td>
+                                </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                    <!-- END STATUS UPDATE TABLE -->
+                </div>
+            </section>
+            <p>
+                <a id="addit" href="#modal-form" class="btn btn-s-md btn-primary add-it" data-toggle="modal">Add Resource</a>
+            </p>
+        </section>
+    </section>
+</section>
+
+
+<!-- modal  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Add New Resource</h3>
+
+                        @using (Html.BeginForm("IncResource", "Incident", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(model => model.newIncidentResource.INCIDENT_RESOURCE_IDX)
+                            @Html.HiddenFor(model => model.newIncidentResource.INCIDENT_IDX)
+
+                            <div class="panel-body" style="padding: 0px">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            Resource:
+                                            @Html.DropDownListFor(x => x.newIncidentResource.RESOURCE_IDX, Model.ddl_Resource, "", new { @class = "form-control", @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.newIncidentResource.RESOURCE_IDX)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            Count:
+                                            @Html.TextBoxFor(model => model.newIncidentResource.RESOURCE_COUNT, new { @class = "form-control", @maxlength = "5" })
+                                            @Html.ValidationMessageFor(model => model.newIncidentResource.RESOURCE_COUNT)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            Ordered Date/Time:
+                                            @Html.TextBoxFor(model => model.newIncidentResource.RESOURCE_ORDERED_DT, new { @class = "form-control datetime-picker", @maxlength = "25" })
+                                            @Html.ValidationMessageFor(model => model.newIncidentResource.RESOURCE_ORDERED_DT)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            ETA Date/Time:
+                                            @Html.TextBoxFor(model => model.newIncidentResource.RESOURCE_ETA_DT, new { @class = "form-control datetime-picker", @maxlength = "25" })
+                                            @Html.ValidationMessageFor(model => model.newIncidentResource.RESOURCE_ETA_DT)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            Assigned To:
+                                            @Html.TextBoxFor(model => model.newIncidentResource.RESOURCE_ASSIGNED_TO, new { @class = "form-control", @maxlength = "50" })
+                                            @Html.ValidationMessageFor(model => model.newIncidentResource.RESOURCE_ASSIGNED_TO)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            Notes:
+                                            @Html.TextAreaFor(model => model.newIncidentResource.RESOURCE_NOTES, new { @class = "form-control", @maxlength = "400" })
+                                            @Html.ValidationMessageFor(model => model.newIncidentResource.RESOURCE_NOTES)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button id="picLoc" type="submit" class="btn btn-sm btn-primary ">Save</button>
+                                        <button type="submit" class="btn btn-sm btn-default " data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/confirmdelete")
+    @Scripts.Render("~/bundles/datetimepicker")
+    <script>
+        jQuery('.datetime-picker').datetimepicker({
+            format: 'm/d/Y h:i:s A'
+        });
+    </script>
+}
+
+
+
+
+
+

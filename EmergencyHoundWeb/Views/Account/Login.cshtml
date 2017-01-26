@@ -1,0 +1,40 @@
+﻿@model EmergencyHoundWeb.ViewModels.LoginModel
+@{
+    ViewBag.Title = "Sign in";
+}
+
+<section id="content" class="m-t-lg wrapper-md animated fadeInUp">
+    <div class="container aside-xxl">
+        <section class="panel panel-default bg-white m-t-lg">
+            <header class="panel-heading text-center">
+                <strong>Sign in</strong>
+            </header>
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "panel-body wrapper-lg" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <div class="form-group">
+                    <label class="control-label">Email</label>
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg ", @type = "email", @placeholder = "test@example.com", @data_required = "true" })
+                    @Html.ValidationMessageFor(m => m.UserName)
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Password</label>
+                    @Html.TextBoxFor(m => m.Password, new { @class = "form-control input-lg ", @type = "password", @placeholder = "Password" })
+                    @Html.ValidationMessageFor(m => m.Password)
+                </div>
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(m => m.RememberMe) Keep me logged in
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+                @Html.ActionLink("Forgot Password?", "ResetPassword", new object { }, new { @class = "pull-right m-t-xs" })
+                <div class="line line-dashed"></div>
+                <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                <a href="@Url.Action("Register", "Account") " class="btn btn-primary btn-block">Create an account</a>
+            }
+        </section>
+    </div>
+</section>

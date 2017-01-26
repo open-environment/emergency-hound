@@ -1,0 +1,211 @@
+﻿<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+    <li><a href="#dashboard"><i class="fa fa-home"></i>Home</a></li>
+    <li><a href="#resources">Resource Search</a></li>
+    <li class="active">Resource Details</li>
+</ul>
+
+<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+
+<!-- START: RESOURCE EDIT FORM -->
+<form name="submitForm" novalidate ng-submit="submitForm.$valid && resourceEdit.save()">
+    <div class="panel panel-default">
+        <header class="panel-heading font-bold">Basic Resource Info</header>
+        <div class="panel-body">
+            <div class="row" style="padding-left: 15px">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Resource Type</label>
+                        <div class="input-group">
+                            <select id="resourcE_TYPE_IDX" name="resourcE_TYPE_IDX" class="form-control"
+                                    data-ng-class="{'input-validation-error': (submitForm.$submitted) && (submitForm.resourcE_TYPE_IDX.$error.required) }"
+                                    data-ng-model="resource.resourcE_TYPE_IDX"
+                                    ng-options="r.resourcE_TYPE_IDX as r.resourcE_TYPE_NAME for r in ddlResourceType | orderBy:'resourcE_TYPE_NAME'" required=""></select>
+                            <span class="input-group-btn">
+                                <a href="details" class="btn btn-info form-control " data-toggle="collapse"><i class="fa fa-question-circle"></i></a>
+                            </span>
+                            <div ng-show="submitForm.$submitted || submitForm.resourcE_TYPE_IDX.$touched">
+                                <span class="field-validation-error" ng-show="submitForm.resourcE_TYPE_IDX.$error.required">Please enter Resource Type</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Count</label>
+                        <input type="text" name="resourcE_COUNT" class="form-control"
+                               data-ng-model="resource.resourcE_COUNT"
+                               value="{{resource.resourcE_COUNT}}" required />
+                        <div ng-show="submitForm.$submitted || submitForm.resourcE_COUNT.$touched">
+                            <span class="field-validation-error" ng-show="submitForm.resourcE_COUNT.$error.required">Please enter Resource Count</span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <input type="text" class="form-control"
+                               data-ng-model="resource.resourcE_UNIT"
+                               value="{{resource.resourcE_UNIT}}" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEMA RESOURCE DETAILS BOX BEGIN -->
+            <div id="details" style="padding-left: 15px" class="row collapse">
+                <div class="col-md-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading "><strong>What is: {{resource.resourcE_TYPE_NAME}}?</strong></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label text-primary text-right">Kind of Resource</label>
+                                    <div class="col-sm-10">
+                                        {{resource.resourcE_KIND}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label text-primary text-right">Resource Category</label>
+                                    <div class="col-sm-10">
+                                        {{resource.resourcE_CATEGORY}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label  text-primary text-right">Description</label>
+                                    <div class="col-sm-10">
+                                        {{resource.resourcE_TYPE_DESC}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FEMA RESOURCE DETAILS BOX END -->
+
+            <div class="row" style="padding-left: 15px">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="3"
+                                  id="description"
+                                  data-ng-model="resource.resourcE_DESC"
+                                  placeholder="Resource Description">
+                            {{resource.resourcE_DESC}}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-left: 15px">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Jurisdiction</label>
+                        <select class="form-control" id="sharing" name="orG_IDX"
+                                data-ng-model="resource.orG_IDX"
+                                ng-options="r.orG_IDX as r.orG_NAME for r in ddlOrganizations"
+                                data-ng-class="{'input-validation-error': (submitForm.$submitted) && (submitForm.orG_IDX.$error.required) }"
+                                required
+                                ng-show="resource.caN_EDIT==1"></select>
+                        <input type="text" class="form-control" data-ng-model="resource.orG_NAME" value="{{resource.orG_NAME}}" ng-show="resource.caN_EDIT==0" />
+                        <div ng-show="submitForm.$submitted || submitForm.orG_IDX.$touched">
+                            <span class="field-validation-error" ng-show="submitForm.orG_IDX.$error.required">Please enter Jurisdiction.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Data Sharing</label>
+                        <select class="form-control" id="sharing" data-ng-model="resource.sharE_TYPE" ng-options="r.sharE_TYPE as r.sharE_TYPE for r in ddlShareType"></select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" id="sharing" data-ng-model="resource.resourcE_STATUS_CD" ng-options="r.resourcE_STATUS_CD as r.resourcE_STATUS_NAME for r in ddlStatusType"></select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Expiration Date</label>
+                        <input type="text" class="form-control datetime-picker"
+                               data-ng-model="resource.resourcE_EXP_DT"
+                               value="{{resource.resourcE_EXP_DT}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-left: 15px">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Latitude</label>
+                        <div class="input-group m-b">
+                            <span class="input-group-btn">
+                                <a id="mapit" class="btn btn-primary form-control" ng-click="mapViz=!mapViz"><i class="fa fa-globe fa-success"></i> Map</a>
+                            </span>
+                            <input type="text" class="form-control "
+                                   data-ng-model="resource.resourcE_LAT"
+                                   value="{{resource.resourcE_LAT}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Longitude</label>
+                        <input type="text" class="form-control "
+                               data-ng-model="resource.resourcE_LONG"
+                               value="{{resource.resourcE_LONG}}" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Last Verified</label>
+                        <div class="input-group" style="font-size:12px">
+                            <span class="input-group-btn" ng-show="resource.caN_EDIT>0">
+                                <button type="submit" name="submitButton" value="Verify" class="btn btn-warning" data-ng-click="verify()" >Verify</button>
+                                <a href="#resourceVerify" class="btn btn-info">Show Verification History</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" ng-show="mapViz">
+                <div id="map_canvas" style="width: 100%; height:300px;"></div>
+            </div>
+        </div>
+
+
+    </div>
+    <section class="panel panel-default">
+        <header class="panel-heading font-bold">Detailed Info</header>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4" ng-repeat="resourcedtl in resourcedtls">
+                    <div class="form-group">
+                        <label>{{resourcedtl.component}} - {{resourcedtl.capability}} - {{resourcedtl.metric}}</label>
+                        <textarea class="form-control" rows="2"
+                                  id="value" maxlength="1000"
+                                  data-ng-model="resourcedtl.VALUE">
+                            {{resourcedtl.value}}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <div class="form-group">
+        <button type="submit" class="btn btn-sm btn-primary" data-ng-click="save()" ng-show="resource.caN_EDIT>0">Save</button>
+        <button class="btn btn-sm btn-default" data-ng-click="close()">Close</button>
+        <br />
+    </div>
+</form>
+

@@ -1,0 +1,28 @@
+﻿<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+    <li><a href="#dashboard"><i class="fa fa-home"></i>Home</a></li>
+    <li><a href="#incidents">Incident Search</a></li>
+    <li class="active">Incident Details</li>
+</ul>
+
+<!-- START: INCIDENT WIZARD -->
+<section class="panel panel-default wizard">
+    <div class="wizard-steps clearfix" id="form-wizard">
+        <ul class="steps">
+            <li><a href="#incidentEdit"><span class="badge badge-success">1</span>General</a></li>
+            <li><a href="#incidentMap2"><span class="badge badge-success">2</span>Map</a></li>
+            <li><a href=""><span class="badge badge-success">3</span>Team</a></li>
+            <li><a href="#incidentResources"><span class="badge badge-success">4</span>Resources</a></li>
+            <li><a href="#incidentStatus"><span class="badge badge-success">5</span>Status</a></li>
+            <li class="active"><a href="#incidentOpPeriods"><span class="badge badge-info">6</span>Periods</a></li>
+            <li><a href="#incidentAttach"><span class="badge badge-danger">7</span>Images</a></li>
+        </ul>
+    </div>
+</section>
+<!-- END: INCIDENT WIZARD -->
+<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+Will be available in future update.

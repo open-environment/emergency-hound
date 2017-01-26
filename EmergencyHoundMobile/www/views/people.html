@@ -1,0 +1,65 @@
+﻿<button type="submit" class="btn btn-sm btn-primary pull-right" data-ng-click="addPerson()">Add Person</button>
+<h3 class="m-b-md">People & Certifications</h3>
+
+<!-- START SEARCH PANEL -->
+<div class="panel panel-success">
+    <div class="panel-heading panel-success cursorpointer" data-toggle="collapse" href="#collapseOne">
+        <i class="fa fa-search text-default"></i>
+        Search Filter:<small class=" pull-right">(Click to expand)</small>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group col-sm-3">
+                    <label>Search:</label>
+                    <input type="text" class="form-control" placeholder="" ng-model="searchKind">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END SEARCH PANEL -->
+
+<section class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped m-b-none" data-ride="datatables">
+            <tr>
+                <th>Editing</th>
+                <th>Individual Name</th>
+                <th>Jurisdiction</th>
+                <th>Affiliation</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Address</th>
+            </tr>
+            <tr  ng-repeat="person in people | filter:searchKind">
+                <td style="min-width:78px">
+                    <a class="btn btn-rounded btn-xs btn-default" ng-click="editPerson(person.individuaL_IDX)" ><i class="fa fa-pencil fa-success"></i></a>
+                    <a class="btn btn-rounded btn-xs btn-dark" ng-show="!person.synced" ng-click="editPerson(person.individuaL_IDX)"><i class="fa fa-exclamation fa-dark"></i></a>
+                </td>
+                <td>
+                    {{person.indV_FIRST_NAME}}
+                    {{person.indV_LAST_NAME}}
+                </td>
+                <td>
+                    <div ng-repeat="org in orgs | filter: { orG_IDX: person.orG_IDX }">{{org.orG_NAME}} </div>
+                </td>
+                <td>
+                    {{person.indV_AFFILIATION}}                  
+                </td>
+                <td>
+                    {{person.indV_PHONE}}
+                </td>
+                <td>
+                    {{person.indV_EMAIL}}
+                </td>
+                <td>
+                    {{person.adD_LINE_ADR}}
+                    {{person.adD_CITY}}
+                    {{person.adD_STATE}}
+                    {{person.adD_ZIP}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</section>

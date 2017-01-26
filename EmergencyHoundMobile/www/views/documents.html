@@ -1,0 +1,39 @@
+﻿<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+    <li><a href="#dashboard"><i class="fa fa-home"></i> Home</a></li>
+    <li><a href="">Documents</a></li>
+</ul>
+<h3 class="">Documents</h3>
+
+<p>
+    <a href="" class="btn btn-s-md btn-primary">Add Document</a>
+</p>
+
+<section class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped m-b-none" data-ride="datatables">
+            <tr>
+                <th>Editing</th>
+                <th>Jurisdiction</th>
+                <th>Document Name</th>
+                <th>Doc Type</th>
+                <th>Description</th>
+                <th>Author</th>
+                <th>Status</th>
+            </tr>
+            <tr ng-repeat="document in documents">
+                <td style="min-width:106px">
+                    <a ng-click="editIncident(document.doC_IDX)" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                    <a href="" class="btn btn-rounded btn-xs btn-info"><i class="fa fa-download"></i></a>
+                </td>
+                <td>{{document.orG_NAME}}</td>
+                <td>{{document.doC_NAME}}</td>
+                <td>{{document.doC_TYPE}}</td>
+                <td>{{document.doC_COMMENT}}</td>
+                <td>{{document.doC_AUTHOR}}</td>
+                <td>{{document.doC_STATUS_TYPE}}</td>
+            </tr>
+
+        </table>
+    </div>
+
+</section>

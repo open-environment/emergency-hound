@@ -1,0 +1,156 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmReportfema201ViewModel
+@{
+    ViewBag.Title = "Incident Briefing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+<script type="text/javascript">
+    //global variables
+    var map;
+    var mapOptions = {
+        center: new google.maps.LatLng(35.982, -96.1473),
+        zoom: 13,
+        mapTypeId: google.maps.MapTypeId.HYBRID
+    };
+    var marker;  // incident location
+
+    var poly;       //polygon
+    var polyOptions = {
+        strokeWeight: 2,
+        fillColor: "#fb6b5b",
+        geodesic: true
+    };
+    var polyThreatened;       //polygon
+    var polyThreatenedOptions = {
+        strokeWeight: 2,
+        fillColor: "#ffc333",
+        geodesic: true
+    };
+
+    var handlerPolyAddVert;  //polygon add verticices event
+
+    $(document).ready(function () {
+
+        //create map using map options and populate to DIV
+        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+
+        //display initial marker if there is one
+        @if (Model.t_em_incident.INCIDENT_LAT != null && Model.t_em_incident.INCIDENT_LONG != null)
+        {
+            <text>
+                marker = new google.maps.Marker({
+                position: new google.maps.LatLng(@Model.t_em_incident.INCIDENT_LAT,@Model.t_em_incident.INCIDENT_LONG),
+                map: map,
+                title: '@Model.t_em_incident.INCIDENT_NAME'
+                });
+            </text>
+        }
+
+    });
+
+
+</script>
+
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<section id="content">
+    <section class="vbox bg-white">
+        <header class="header b-b b-light hidden-print">
+            <button href="#" class="btn btn-sm btn-danger pull-right m-l-sm" onclick="window.history.go(-1);"><i class="fa fa-close"></i> Close</button>
+            <button href="#" class="btn btn-sm btn-info pull-right  m-l-sm" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
+            <p>Incident Briefing (ICS 201)</p>
+        </header>
+        <section class="scrollable wrapper">
+            <h3 class="text-center font-bold m-t-none">INCIDENT BRIEFING (ICS 201)</h3>
+            <div class="well m-t">
+                <div class="row m-b-none">
+                    <div class="col-xs-4 well">
+                        <span class="font-bold">1. Incident Name</span><br/>
+                        @Html.DisplayFor(model => model.t_em_incident.INCIDENT_NAME)
+                    </div>
+                    <div class="col-xs-4 well">
+                        <span class="font-bold">2. Incident Number</span><br />
+                        @Html.DisplayFor(modelItem => Model.t_em_incident.INCIDENT_ID)
+                    </div>
+                    <div class="col-xs-4 well">
+                        <span class="font-bold">3. Date/Time Initiated</span><br />
+                        @Html.DisplayFor(modelItem => Model.t_em_incident.INCIDENT_START_DT)
+                    </div>
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">4. Map/Sketch</span> (include sketch, showing the total area of operations, the incident site/area, impacted and threatened 
+                    areas, overflight results, trajectories, impacted shorelines, or other graphics depicting situational status and resource assignment):
+
+                    <div id="map_canvas" style="width: 100%; height:100%; min-height:500px;"></div>
+
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">5. Situation Summary and Health and Safety Briefing</span> (for briefings or tranfer of command): Recognize potential 
+                    incident Health and Safety Hazards and develop necessary measures (remove hazard, provide personal protective equipment, warn people of the hazard) 
+                    to protect responders from those hazards.
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">6. Prepared by:</span> Name: 
+
+                    Position/Title: 
+
+                    Signature:
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">7. Current and Planned Objectives:</span> 
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th >Objective</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.t_em_incident_objectives)
+                            {
+                                <tr>
+                                    <td>@item.INCIDENT_OBJECTIVE</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">8. Current and Planned Actions, Strategies, and Tactics:</span>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="60">Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.t_em_incident_objectives)
+                            {
+
+                                <tr>
+                                    <td>@String.Format("{0:d}", @item.CREATE_DT) </td>
+                                    <td>@item.INCIDENT_OBJECTIVE</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">9. Current Organization</span> 
+
+                </div>
+                <div class="row well m-b-none m-t-none">
+                    <span class="font-bold">10. Resource Summary</span>
+
+                </div>
+
+            </div>
+        </section>
+    </section>
+    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen, open" data-target="#nav,html"></a>
+</section>

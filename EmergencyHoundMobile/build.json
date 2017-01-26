@@ -1,0 +1,11 @@
+{
+     "android": {
+         "release": {
+             "keystore": "Release.key",
+             "storePassword": "w@llet9",
+             "alias": "openenvi",
+             "password" : "w@llet9",
+             "keystoreType": ""
+         }
+     }
+ }

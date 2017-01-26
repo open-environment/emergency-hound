@@ -1,0 +1,259 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmResourceAddViewModel
+@{
+    ViewBag.Title = "Add Resource";
+}
+
+<script src="~/Scripts/chosen/chosen.jquery.js"></script>
+<link href="~/Scripts/chosen/chosen.css" rel="stylesheet" />
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+<script type="text/javascript">
+    var map;
+    var marker;
+
+    $(document).ready(function () {
+
+        $("#t_em_resource_RESOURCE_TYPE_IDX").chosen();
+
+        $("#picLoc").click(function () {
+            $("#t_em_resource_RESOURCE_LAT").val($("#txtLat1").val());
+            $("#t_em_resource_RESOURCE_LONG").val($("#txtLong1").val());
+        });
+
+        $("#modal-form").on("shown.bs.modal", function () {
+            google.maps.event.trigger(map, "resize");
+        });
+
+        $("#mapit").click(function () {
+            var iLat = $('#t_em_resource_RESOURCE_LAT').val();
+            var iLong = $('#t_em_resource_RESOURCE_LONG').val();
+
+            if (iLat.length > 0 && iLong.length > 0) {
+                var myLatLng = new google.maps.LatLng(iLat, iLong);
+
+                placeMarker(myLatLng);
+            }
+        });
+
+        getLocation(function (position) {
+            //do something cool with position
+            populateMap(position.coords.latitude, position.coords.longitude);
+        });
+
+
+    });
+
+    function getLocation(callback) {
+        var options = null;
+        if (navigator.geolocation) {
+            if (navigator.userAgent.search("Chrome") >= 0) //set this var looking for Chrome in user-agent header
+                options = { enableHighAccuracy: false, maximumAge: 15000, timeout: 30000 };
+            else
+                options = { maximumAge: Infinity, timeout: 0 };
+            navigator.geolocation.getCurrentPosition(callback, function () { }, options);
+        }
+    }
+
+
+    function populateMap(lat11, long11) {
+        //set map options
+        var mapOptions = {
+            center: new google.maps.LatLng(lat11, long11),
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+        };
+
+        //create map using map options and populate to DIV
+        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+        });
+    }
+
+    function placeMarker(location) {
+        //clear any previous markers
+        if (marker) { marker.setMap(null) }
+
+        //add marker to map
+        marker = new google.maps.Marker({ position: location, map: map });
+
+        //populate modal textboxes
+        $('#txtLat1').val(location.lat());
+        $('#txtLong1').val(location.lng());
+    }
+</script>
+
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content" style="width:100%">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i>Home</a></li>
+                <li><a href="@Url.Action("Index", "Resource")">Resources</a></li>
+                <li class="active">Add Resource</li>
+            </ul>
+            <div class="m-b-md">
+                <h3 class="m-b-none">Add Resource</h3>
+            </div>
+
+            <section class="panel panel-default">
+                <header class="panel-heading font-bold">Basic Resource Information</header>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="row" style="padding-left: 15px">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Resource Type</label>
+                                    <div class="input-group">
+                                        @Html.DropDownListFor(x => x.t_em_resource.RESOURCE_TYPE_IDX, Model.ResourceTypes, "", new { @class = "chosen-select " })
+                                        @Html.ValidationMessageFor(model => model.t_em_resource.RESOURCE_TYPE_IDX)
+                                        <span class="input-group-btn">
+                                            <a href="@Url.Action("ResourceTypeEdit", "Resource", new { s=1 })" class="btn btn-default" data-toggle="tooltip" title="Add new resource type"><i class="fa fa-plus-square"></i></a>
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Count</label>
+                                    @Html.TextBoxFor(model => model.t_em_resource.RESOURCE_COUNT, new { @class = "form-control focus", required = "required", @maxlength = "5" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource.RESOURCE_COUNT)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Unit</label>
+                                    @Html.TextBoxFor(model => model.t_em_resource.RESOURCE_UNIT, new { @class = "form-control", @Value ="count", @maxlength = "50" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource.RESOURCE_UNIT)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-left: 15px">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    @Html.TextAreaFor(model => model.t_em_resource.RESOURCE_DESC, new { @class = "form-control", @placeholder = "", @maxlength="200" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-left: 15px">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    @Html.DropDownListFor(x => x.t_em_resource.RESOURCE_STATUS_CD, Model.StatusTypes, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource.RESOURCE_STATUS_CD)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Jurisdiction</label>
+                                    @Html.DropDownListFor(x => x.t_em_resource.ORG_IDX, Model.Jurisdictions, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource.ORG_IDX)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Data Sharing</label>
+                                    @Html.DropDownListFor(x => x.t_em_resource.SHARE_TYPE, Model.ShareTypes, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource.SHARE_TYPE)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-left: 15px">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Latitude</label>
+                                    <div class="input-group m-b">
+                                        <span class="input-group-btn">
+                                            <a id="mapit" href="#modal-form" class="btn btn-primary form-control" data-toggle="modal"><i class="fa fa-globe fa-success"></i> Map</a>
+                                        </span>
+                                        @Html.TextBoxFor(model => model.t_em_resource.RESOURCE_LAT, new { @class = "form-control", @placeholder = "xx.xxxxxx" })
+                                        @Html.ValidationMessageFor(model => model.t_em_resource.RESOURCE_LAT)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Longitude</label>
+                                    @Html.TextBoxFor(model => model.t_em_resource.RESOURCE_LONG, new { @class = "form-control", @placeholder = "-xxx.xxxxxx" })
+                                    @Html.ValidationMessageFor(model => model.t_em_resource.RESOURCE_LONG)
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 ">
+                                <a href="@Url.Action("Index","Resource")" class="btn btn-default">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Continue >></button>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            </section>
+        </section>
+    </section>
+</section>
+
+
+<!-- modal  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Select Resource Location on Map</h3>
+                        <p>Click on the map to locate your resource.</p>
+                        <form role="form">
+                            <div class="panel-body" style="padding: 0px">
+                                <div id="map_canvas" style="width: 100%; height: 500px;"></div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            Latitude:
+                                            <input id="txtLat1" class="form-control" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            Longitude:
+                                            <input id="txtLong1" class="form-control" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            &nbsp;
+                                            <button id="picLoc" type="submit" class="btn btn-sm btn-primary text-uc form-control" data-dismiss="modal"><strong>Continue</strong></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            &nbsp;
+                                            <button type="submit" class="btn btn-sm btn-default text-uc form-control" data-dismiss="modal"><strong>Cancel</strong></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

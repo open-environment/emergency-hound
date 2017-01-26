@@ -1,0 +1,305 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIndividualEditViewModel
+
+@{
+    ViewBag.Title = "Edit Person";
+}
+<script src="~/Scripts/chosen/chosen.jquery.js"></script>
+<link href="~/Scripts/chosen/chosen.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#new_t_em_qualifications_QUAL_TYPE_IDX").chosen({ allow_single_deselect: true });
+    });
+</script>
+
+
+<script type="text/javascript">
+    var TempQualIDX;
+    $(document).ready(function () {
+
+        TempQualIDX = $('#newObjective_INCIDENT_OBJECTIVE_IDX').val();   //store value of empty guid
+
+        //create an event when button is clicked to display modal
+        $(".modal-it").click(function () {
+            $('#new_t_em_qualifications_QUALIFICATION_IDX').val($(this).parent('td').find('#item_QUALIFICATION_IDX').val());
+            $('#new_t_em_qualifications_QUAL_TYPE_IDX').val($(this).parent('td').find('#item_QUAL_TYPE_IDX').val());
+            $("#new_t_em_qualifications_QUAL_TYPE_IDX").trigger("chosen:updated");
+            $('#new_t_em_qualifications_EFF_DATE').val($(this).parent('td').find('#item_EFF_DATE').val());
+            $('#new_t_em_qualifications_EXP_DATE').val($(this).parent('td').find('#item_EXP_DATE').val());
+        });
+
+        //create an event when button is clicked to display modal
+        $(".add-it").click(function () {
+            $('#new_t_em_qualifications_QUAL_TYPE_IDX').val(null);
+            $("#new_t_em_qualifications_QUAL_TYPE_IDX").trigger("chosen:updated");
+            $('#new_t_em_qualifications_EFF_DATE').val(null);
+            $('#new_t_em_qualifications_EXP_DATE').val(null);
+        });
+
+    });
+</script>
+
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="@Url.Action("People", "Resource")">People</a></li>
+                <li class="active">Edit Person</li>
+            </ul>
+
+            <h3 class="m-b-md">@(Model.t_em_individual.CREATE_DT == null ? "Add New" : "Edit") Person</h3>
+            
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.t_em_individual.INDIVIDUAL_IDX)
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <section class="panel panel-default">
+                            <header class="panel-heading font-bold">Basic Person Info</header>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>First Name</label>
+                                            @Html.TextBoxFor(model => model.t_em_individual.INDV_FIRST_NAME, new { @class = "form-control", @maxlength = "40" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.INDV_FIRST_NAME)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Last Name</label>
+                                            @Html.TextBoxFor(model => model.t_em_individual.INDV_LAST_NAME, new { @class = "form-control", @maxlength = "40" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.INDV_LAST_NAME)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Jurisdiction</label>
+                                            @Html.DropDownListFor(x => x.t_em_individual.ORG_IDX, Model.ddl_jurisdiction, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.ORG_IDX)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Affiliation</label>
+                                            @Html.TextBoxFor(model => model.t_em_individual.INDV_AFFILIATION, new { @class = "form-control", @maxlength = "100" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.INDV_AFFILIATION)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <section class="panel panel-default">
+                            <header class="panel-heading font-bold">Contact Info</header>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Phone</label>
+                                            @Html.TextBoxFor(model => model.t_em_individual.INDV_PHONE, new { @class = "form-control", @maxlength = "13" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.INDV_PHONE)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            @Html.TextBoxFor(model => model.t_em_individual.INDV_EMAIL, new { @class = "form-control", @maxlength = "200" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.INDV_EMAIL)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Street Address</label>
+                                            @Html.TextBoxFor(model => model.t_em_individual.ADD_LINE_ADR, new { @class = "form-control", @maxlength = "40" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.ADD_LINE_ADR)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>City</label>
+                                            @Html.TextBoxFor(model => model.t_em_individual.ADD_CITY, new { @class = "form-control", @maxlength = "25" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.ADD_CITY)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label>State</label>
+                                            @Html.TextBoxFor(model => model.t_em_individual.ADD_STATE, new { @class = "form-control", @maxlength = "2" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.ADD_STATE)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>ZIP</label>
+                                            @Html.TextBoxFor(model => model.t_em_individual.ADD_ZIP, new { @class = "form-control", @maxlength = "10" })
+                                            @Html.ValidationMessageFor(model => model.t_em_individual.ADD_ZIP)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-md-12">
+                        <a href="@Url.Action("People", "Resource")" class="btn btn-default">Close</a>
+                        <button type="submit" name="submitButton" value="Edit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            }
+
+            <br/>
+
+            @if (Model.t_em_qualifications != null)
+            {
+            <!-- START CERTIFICATIONS LIST  -->
+            <section class="panel panel-default">
+                <div class="panel-heading font-bold">Certifications</div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped m-b-none" data-ride="datatables">
+                            <tr>
+                                <th></th>
+                                <th>Qualification</th>
+                                <th>Effective Date</th>
+                                <th>Expiration Date</th>
+                            </tr>
+                            @if (Model.t_em_qualifications != null)
+                            {
+                                foreach (var item in Model.t_em_qualifications)
+                                {
+                                    <tr>
+                                        <td style="min-width:78px">
+                                            <a href="#modal-form" class="btn btn-rounded btn-xs btn-default modal-it" data-toggle="modal"><i class="fa fa-pencil fa-success"></i></a>
+                                            <div class="delete-section" style="display:inline">
+                                                <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new { id = item.QUALIFICATION_IDX })"><i class="fa fa-times "></i></a>
+                                                <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.QUALIFICATION_IDX" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Resource/PeopleQualDelete"><b>Confirm Delete</b></div>
+                                            </div>
+                                            @Html.HiddenFor(modelItem => item.QUALIFICATION_IDX)
+                                            @Html.HiddenFor(modelItem => item.QUAL_TYPE_IDX)
+                                            @Html.HiddenFor(modelItem => item.EFF_DATE)
+                                            @Html.HiddenFor(modelItem => item.EXP_DATE)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.QUAL_TYPE_NAME)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EFF_DATE)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EXP_DATE)
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+            }
+            @if (Model.t_em_individual.ORG_IDX != Guid.Empty && Model.t_em_individual.ACT_IND == true)
+            {
+            <p>
+                <a href="#modal-form" class="btn btn-s-md btn-primary add-it" data-toggle="modal">Add Certification</a>
+            </p>
+            }
+
+        </section>
+    </section>
+</section>
+
+
+
+<!-- START MODAL CERTIFICATIONS  -->
+<div class="modal fade" id="modal-form" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">Add New Certification</h3>
+
+                        @using (Html.BeginForm("PersonQualEdit", "Resource", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(model => model.new_t_em_qualifications.QUALIFICATION_IDX)
+                            @Html.HiddenFor(model => model.new_t_em_qualifications.INDIVIDUAL_IDX)
+                            @Html.HiddenFor(model => model.t_em_individual.ORG_IDX)
+
+                            <input id="tempObjectiveIDX" type="hidden" value="">
+
+                            <div class="panel-body" style="padding: 0px">
+                                <div class="row" style="padding-left: 15px">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Qualification Type</label>
+                                            @Html.DropDownListFor(x => x.new_t_em_qualifications.QUAL_TYPE_IDX, Model.ddl_qualtypes, "", new { @class = "chosen-select", @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.new_t_em_qualifications.QUAL_TYPE_IDX)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Effective Date</label>
+                                            @Html.TextBoxFor(model => model.new_t_em_qualifications.EFF_DATE, new { @class = "form-control date-picker", @placeholder = "mm/dd/yyyy" })
+                                            @Html.ValidationMessageFor(model => model.new_t_em_qualifications.EFF_DATE)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Expiration Date</label>
+                                            @Html.TextBoxFor(model => model.new_t_em_qualifications.EXP_DATE, new { @class = "form-control date-picker", @placeholder = "mm/dd/yyyy" })
+                                            @Html.ValidationMessageFor(model => model.new_t_em_qualifications.EXP_DATE)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button id="picLoc" type="submit" class="btn btn-sm btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-sm btn-default" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- END MODAL CERTIFICATIONS -->
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/confirmdelete")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/datetimepicker")
+
+    <script>
+            jQuery('.date-picker').datetimepicker({
+                timepicker: false,
+                format: 'm/d/Y'
+            });
+    </script>
+
+}

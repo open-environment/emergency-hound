@@ -1,0 +1,163 @@
+﻿@model EmergencyHoundWeb.Controllers.Account_ProfileViewModel
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*@Styles.Render("~/Content/csscroppic")*@
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+@*<style>
+/*.cropImgWrapper  */ 
+#cropContainerHeader
+{
+			width: 200px;
+			height: 200px;
+			position:relative; /* or fixed or absolute */
+		}
+</style>*@
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i>Home</a></li>
+                <li class="active">Profile</li>
+            </ul>
+            
+            <h3 class="m-b-md">Profile</h3>
+
+            <section class="panel panel-default">
+                <header class="panel-heading font-bold">Basic Information</header>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm("MyProfile", "Account", FormMethod.Post, new { @class = "hbox stretch", enctype = "multipart/form-data" }))
+                    {
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(model => model.UserIDX)
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>First Name</label>
+                                            @Html.TextBoxFor(model => model.FName, new { @class = "form-control", @placeholder = "First Name" })
+                                            @Html.ValidationMessageFor(model => model.FName)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Last Name</label>
+                                            @Html.TextBoxFor(model => model.LName, new { @class = "form-control", @placeholder = "Last Name" })
+                                            @Html.ValidationMessageFor(model => model.LName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email" })
+                                            @Html.ValidationMessageFor(model => model.Email)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Phone</label>
+                                            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @placeholder = "Phone" })
+                                            @Html.ValidationMessageFor(model => model.Phone)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Phone Extension</label>
+                                            @Html.TextBoxFor(model => model.PhoneExt, new { @class = "form-control", @placeholder = "Extension" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Your Avatar (please use 100px x 100px)</label>
+                                        @if (Model.GetImage != null)
+                                        {
+                                            <img src="data:image;base64,@System.Convert.ToBase64String(Model.GetImage)" class="form-control" style="width:100px; height: 100px;" />
+                                        }
+                                        <input type="file" name="uploadImage" accept="image/*" class="form-control" />
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            @*<div id="croppic" style="width:200px; width:200px"></div>*@
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <a class=" btn btn-sm btn-warning" href="@Url.Action("SetPermPassword" )">Change Password</a>
+
+                    }
+                </div>
+            </section>
+            <section class="panel panel-default">
+                <header class="panel-heading font-bold">Contact Information</header>
+                <div class="panel-body">
+
+                </div>
+            </section>
+            <section class="panel panel-default">
+                <header class="panel-heading font-bold">Jurisdictions</header>
+                <div class="table-responsive">
+                    <table class="table table-striped m-b-none" data-ride="datatables">
+                        <tr>
+                            <th>Jurisdiction</th>
+                            <th>Role (A)dmin or (U)ser</th>
+                        </tr>
+                        @foreach (var item in Model.MyOrgs)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ORG_NAME)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ROLE_CD)
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+
+            </section>
+
+
+        </section>
+    </section>
+</section>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/croppic")
+
+    <script>
+
+
+        var cropperOptions = {
+            uploadUrl: "UploadOriginalImage",
+            cropUrl: "CroppedImage",
+            imgEyecandy: true,
+            imgEyecandyOpacity: 0.1,
+            rotateControls: false
+        }
+        var cropper = new Croppic('croppic', cropperOptions);
+
+    </script>
+}*@

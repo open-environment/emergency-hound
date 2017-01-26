@@ -1,0 +1,70 @@
+﻿<div >
+    <section class="panel panel-default m-t-sm m-b-small" ng-show="OrgCount>0">
+        <div class="row m-l-none m-r-none bg-light lter">
+            <div class="col-sm-6 col-md-3 padder-v b-r b-light">
+                <span class="fa-stack fa-2x pull-left m-r-sm">
+                    <i class="fa fa-circle fa-stack-2x text-info"></i>
+                    <i class="fa fa-male fa-stack-1x text-white"></i>
+                </span>
+                <a class="clear" href="#people">
+                    <span class="h3 block m-t-xs"><strong>{{PeopleCount}}</strong></span>
+                    <small class="text-muted text-uc">Responders</small>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-3 padder-v b-r b-light lt">
+                <span class="fa-stack fa-2x pull-left m-r-sm">
+                    <i class="fa fa-circle fa-stack-2x text-warning"></i>   
+                    <i class="fa fa-fire-extinguisher fa-stack-1x text-white"></i>
+                </span>
+                <a class="clear" href="#resources">
+                    <span class="h3 block m-t-xs"><strong id="bugs">{{ResourceCount}}</strong></span>
+                    <small class="text-muted text-uc">Available Resources</small>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-3 padder-v b-r b-light">
+                <span class="fa-stack fa-2x pull-left m-r-sm">
+                    <i class="fa fa-circle fa-stack-2x text-danger"></i>
+                    <i class="fa fa-ambulance fa-flip-horizontal fa-stack-1x text-white"></i>
+                </span>
+                <a class="clear" href="#incidents">
+                    <span class="h3 block m-t-xs"><strong id="firers">{{IncidentCount}}</strong></span>
+                    <small class="text-muted text-uc">Active Incidents</small>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-3 padder-v b-r b-light lt">
+                <span class="fa-stack fa-2x pull-left m-r-sm">
+                    <i class="fa fa-circle fa-stack-2x icon-muted"></i>
+                    <i class="fa fa-users fa-stack-1x text-white"></i>
+                </span>
+                <a class="clear" href="">
+                    <span class="h3 block m-t-xs"><strong>{{OrgCount}}</strong></span>
+                    <small class="text-muted text-uc">Agencies Sharing Data</small>
+                </a>
+            </div>
+        </div>
+    </section>
+    <div class="row" style="" ng-show="OrgCount==0">
+        <h3>Getting Started</h3>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-sm btn-primary " data-ng-click="sync()" >Click to Initialize Data Sync with Server</button>
+        </div>
+    </div>
+    <div class="" style="position:relative" ng-show="OrgCount>0">
+        <div class="row" style="">
+            <div class="col-md-12">
+
+                <!-- START MAP-->
+                <section class="panel b-light" style="">
+                    <header class="panel-heading font-bold bg-primary dker">Incidents and Resources
+                        <div class="btn-group m-b" style="padding: 0px; margin: 0px; float: right">
+                        </div>
+                    </header>
+                    <div class="panel-body" style="padding: 0px; height:100%">
+                        <div id="map_canvas" style="width: 100%; height:100%; min-height:550px;"></div>
+                    </div>
+                </section>
+                <!-- END MAP-->
+            </div>
+        </div>
+    </div>
+</div>

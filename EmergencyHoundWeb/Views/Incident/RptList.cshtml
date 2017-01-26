@@ -1,0 +1,59 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIncidentIndexViewModel
+@{
+    ViewBag.Title = "Incidents Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<section id="content">
+    <section class="vbox bg-white">
+        <header class="header b-b b-light hidden-print">
+            <button href="#" class="btn btn-sm btn-danger pull-right m-l-sm" onclick="window.history.go(-1);"><i class="fa fa-close"></i> Close</button>
+            <button href="#" class="btn btn-sm btn-info pull-right m-l-sm" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
+            <p>Resources Report</p>
+        </header>
+        <section class="scrollable wrapper">
+            <h3 class="text-center font-bold m-t-none">INCIDENT LISTING</h3>
+            <div class="well m-t">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Jurisdiction</th>
+                            <th>Incident Name</th>
+                            <th>Incident Description</th>
+                            <th>Shared With</th>
+                            <th>Start Date</th>
+                            <th>Location</th>
+                            <th>State</th>
+                            <th>County</th>
+                            <th>City</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.t_em_incident)
+                        {
+                            <tr>
+                                <td>@item.ORG_NAME</td>
+                                <td>@item.INCIDENT_NAME</td>
+                                <td>@item.INCIDENT_DESC</td>
+                                <td>@item.SHARE_TYPE</td>
+                                <td>@item.INCIDENT_START_DT</td>
+                                <td>@item.INCIDENT_LOC_DESC</td>
+                                <td>@item.INCIDENT_STATE</td>
+                                <td>@item.INCIDENT_CNTY</td>
+                                <td>@item.INCIDENT_CITY</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+    </section>
+    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen, open" data-target="#nav,html"></a>
+</section>
+
+

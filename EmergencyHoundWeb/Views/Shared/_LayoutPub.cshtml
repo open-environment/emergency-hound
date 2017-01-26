@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Emergency Hound</title>
+    <link rel="shortcut icon" sizes="16x16 32x32 48x48 64x64" href="@Url.Content("~/favicon.ico")">
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")">
+    <!--[if IE]><link rel="shortcut icon" href="~/favicon.ico"><![endif]-->
+    <meta name="description" content="Emergency Hound is a mobile and web tool that allows you to plan for and response to emergencies in the field ." />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <header id="header" class="navbar navbar-fixed-top bg-white box-shadow b-b b-light" data-spy="affix" data-offset-top="1">
+        <div class="container">
+            <div class="navbar-header">
+                <a href='@Url.Action("Index", "Home")' class="navbar-brand"><img src="~/Content/Images/logo-header.png" class="m-r-sm"></a>
+                <button class="btn btn-link visible-xs" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.ActionLink("Home", "Index", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Features", "Features", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Background", "About", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Sign In", "Login", "Account")
+                    </li>
+                    <li>
+                        <div class="m-t-sm">
+                            @Html.ActionLink("Create an Account", "Register", "Account", null, new {@class="btn btn-sm btn-success m-l" })
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+
+    @RenderBody()
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/app")
+    @Scripts.Render("~/bundles/appear")
+    @Scripts.Render("~/bundles/smoothscroll")
+    @Scripts.Render("~/bundles/landing")
+
+    <script type="text/javascript">
+        $(function () {
+            $(":input[type=text],[type=password],[type=email]:enabled:visible, textarea").first().focus();
+        });
+    </script>
+
+
+    @RenderSection("scripts", required: false)
+
+
+</body>
+</html>

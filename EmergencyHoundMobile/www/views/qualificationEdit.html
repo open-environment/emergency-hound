@@ -1,0 +1,50 @@
+﻿<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+
+<!-- START: PERSON EDIT FORM -->
+<form class="row" name="submitForm" novalidate ng-submit="submitForm.$valid && qualificationEdit.save()">
+    <div class="col-md-12">
+        <section class="panel panel-default" name="submitForm" >
+            <header class="panel-heading font-bold">Qualification Details</header>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Qualification Type</label>
+                            <select class="form-control" id="sharing" name="quaL_TYPE_IDX"
+                                    data-ng-model="qualification.quaL_TYPE_IDX"
+                                    ng-options="r.quaL_TYPE_IDX as r.quaL_TYPE_NAME for r in ddlQualType | orderBy: 'quaL_TYPE_NAME'"
+                                    data-ng-class="{'input-validation-error': (submitForm.$submitted) && (submitForm.quaL_TYPE_IDX.$error.required) }"
+                                    required></select>
+                            <div ng-show="submitForm.$submitted || submitForm.quaL_TYPE_IDX.$touched">
+                                <span class="field-validation-error" ng-show="submitForm.quaL_TYPE_IDX.$error.required">Please enter qualification type.</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Effective Date</label>
+                            <input type="text" class="form-control datetime-picker" data-ng-model="qualification.efF_DATE" value="{{qualification.efF_DATE}}"  />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Expiration Date</label>
+                            <input type="text" class="form-control datetime-picker" data-ng-model="qualification.exP_DATE" value="{{qualification.exP_DATE}}"  />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-sm btn-primary" data-ng-click="save()">Save</button>
+        <button class="btn btn-sm btn-default" data-ng-click="close()">Close</button>
+    </div>
+</form>

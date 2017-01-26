@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://www.ptaccenter.org/Rtlt.Core.Api.V2" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="WebService" targetNamespace="http://www.ptaccenter.org/Rtlt.Core.Api.V2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpBinding_WebService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://www.ptaccenter.org/Rtlt.Core.Api.V2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="GetCategories">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetCategoriesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetCategoriesResult" nillable="true" type="tns:ArrayOfCategory" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ArrayOfCategory">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Category" nillable="true" type="tns:Category" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfCategory" nillable="true" type="tns:ArrayOfCategory" />
+      <xs:complexType name="Category">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Category" nillable="true" type="tns:Category" />
+      <xs:element name="GetMissionAreas">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetMissionAreasResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetMissionAreasResult" nillable="true" type="tns:ArrayOfMissionArea" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ArrayOfMissionArea">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="MissionArea" nillable="true" type="tns:MissionArea" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfMissionArea" nillable="true" type="tns:ArrayOfMissionArea" />
+      <xs:complexType name="MissionArea">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CoreCapabilities" nillable="true" type="tns:ArrayOfMissionAreaCoreCapability" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="MissionArea" nillable="true" type="tns:MissionArea" />
+      <xs:complexType name="ArrayOfMissionAreaCoreCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="MissionAreaCoreCapability" nillable="true" type="tns:MissionAreaCoreCapability" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfMissionAreaCoreCapability" nillable="true" type="tns:ArrayOfMissionAreaCoreCapability" />
+      <xs:complexType name="MissionAreaCoreCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="MissionAreaCoreCapability" nillable="true" type="tns:MissionAreaCoreCapability" />
+      <xs:element name="GetCoreCapabilities">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetCoreCapabilitiesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetCoreCapabilitiesResult" nillable="true" type="tns:ArrayOfCoreCapability" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ArrayOfCoreCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="CoreCapability" nillable="true" type="tns:CoreCapability" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfCoreCapability" nillable="true" type="tns:ArrayOfCoreCapability" />
+      <xs:complexType name="CoreCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="CoreCapability" nillable="true" type="tns:CoreCapability" />
+      <xs:element name="GetResourceKinds">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetResourceKindsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetResourceKindsResult" nillable="true" type="tns:ArrayOfKind" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ArrayOfKind">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Kind" nillable="true" type="tns:Kind" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfKind" nillable="true" type="tns:ArrayOfKind" />
+      <xs:complexType name="Kind">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Kind" nillable="true" type="tns:Kind" />
+      <xs:element name="GetResourceHeaders">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="status" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="updatedFrom" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="updatedTo" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="category" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="missionArea" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="coreCapability" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="kind" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="page" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetResourceHeadersResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetResourceHeadersResult" nillable="true" type="tns:DefinitionHeaderSet" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="DefinitionHeaderSet">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:PagedResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="Headers" nillable="true" type="tns:ArrayOfDefinitionHeader" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="DefinitionHeaderSet" nillable="true" type="tns:DefinitionHeaderSet" />
+      <xs:complexType name="PagedResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ItemCount" type="xs:int" />
+          <xs:element minOccurs="0" name="PageCount" type="xs:int" />
+          <xs:element minOccurs="0" name="Page" type="xs:int" />
+          <xs:element minOccurs="0" name="PageItemCount" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PagedResult" nillable="true" type="tns:PagedResult" />
+      <xs:complexType name="ArrayOfDefinitionHeader">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="DefinitionHeader" nillable="true" type="tns:DefinitionHeader" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfDefinitionHeader" nillable="true" type="tns:ArrayOfDefinitionHeader" />
+      <xs:complexType name="DefinitionHeader">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Updated" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="DefinitionHeader" nillable="true" type="tns:DefinitionHeader" />
+      <xs:element name="GetResources">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="status" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="updatedFrom" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="updatedTo" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="category" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="missionArea" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="coreCapability" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="kind" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="page" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetResourcesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetResourcesResult" nillable="true" type="tns:ResourceDefinitionSet" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ResourceDefinitionSet">
+        <xs:annotation>
+          <xs:appinfo>
+            <GenericType Name="{0}Set" Namespace="http://www.ptaccenter.org/Rtlt.Core.Api.V2" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+              <GenericParameter Name="ResourceDefinition" Namespace="http://www.ptaccenter.org/Rtlt.Core.Api.V2" />
+            </GenericType>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:PagedResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="Definitions" nillable="true" type="tns:ArrayOfResourceDefinition" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="ResourceDefinitionSet" nillable="true" type="tns:ResourceDefinitionSet" />
+      <xs:complexType name="ArrayOfResourceDefinition">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResourceDefinition" nillable="true" type="tns:ResourceDefinition" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfResourceDefinition" nillable="true" type="tns:ArrayOfResourceDefinition" />
+      <xs:complexType name="ResourceDefinition">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:Definition">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="SupportingCoreCapabilities" nillable="true" type="tns:ArrayOfResourceSupportingCoreCapability" />
+              <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="Kind" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="OverallFunction" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="CompositionOrdering" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="Capabilities" nillable="true" type="tns:ArrayOfResourceCapability" />
+              <xs:element minOccurs="0" name="Comments" nillable="true" type="tns:ArrayOfResourceComment" />
+              <xs:element minOccurs="0" name="References" nillable="true" type="tns:ArrayOfResourceReference" />
+              <xs:element minOccurs="0" name="Notes" nillable="true" type="tns:ArrayOfResourceNote" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="ResourceDefinition" nillable="true" type="tns:ResourceDefinition" />
+      <xs:complexType name="Definition">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Tier" type="xs:int" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="StatusDescription" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Updated" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Released" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Category" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CategoryNumber" type="xs:int" />
+          <xs:element minOccurs="0" name="PrimaryCoreCapability" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SecondaryCoreCapability" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Definition" nillable="true" type="tns:Definition" />
+      <xs:complexType name="ArrayOfResourceSupportingCoreCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResourceSupportingCoreCapability" nillable="true" type="tns:ResourceSupportingCoreCapability" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfResourceSupportingCoreCapability" nillable="true" type="tns:ArrayOfResourceSupportingCoreCapability" />
+      <xs:complexType name="ResourceSupportingCoreCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ResourceSupportingCoreCapability" nillable="true" type="tns:ResourceSupportingCoreCapability" />
+      <xs:complexType name="ArrayOfResourceCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResourceCapability" nillable="true" type="tns:ResourceCapability" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfResourceCapability" nillable="true" type="tns:ArrayOfResourceCapability" />
+      <xs:complexType name="ResourceCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Component" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Metric" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Ability" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Types" nillable="true" type="tns:ArrayOfResourceCapabilityType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ResourceCapability" nillable="true" type="tns:ResourceCapability" />
+      <xs:complexType name="ArrayOfResourceCapabilityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResourceCapabilityType" nillable="true" type="tns:ResourceCapabilityType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfResourceCapabilityType" nillable="true" type="tns:ArrayOfResourceCapabilityType" />
+      <xs:complexType name="ResourceCapabilityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Attribute" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ResourceCapabilityType" nillable="true" type="tns:ResourceCapabilityType" />
+      <xs:complexType name="ArrayOfResourceComment">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResourceComment" nillable="true" type="tns:ResourceComment" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfResourceComment" nillable="true" type="tns:ArrayOfResourceComment" />
+      <xs:complexType name="ResourceComment">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ResourceComment" nillable="true" type="tns:ResourceComment" />
+      <xs:complexType name="ArrayOfResourceReference">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResourceReference" nillable="true" type="tns:ResourceReference" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfResourceReference" nillable="true" type="tns:ArrayOfResourceReference" />
+      <xs:complexType name="ResourceReference">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ResourceReference" nillable="true" type="tns:ResourceReference" />
+      <xs:complexType name="ArrayOfResourceNote">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResourceNote" nillable="true" type="tns:ResourceNote" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfResourceNote" nillable="true" type="tns:ArrayOfResourceNote" />
+      <xs:complexType name="ResourceNote">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Note" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ResourceNote" nillable="true" type="tns:ResourceNote" />
+      <xs:element name="GetResource">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="id" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetResourceResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetResourceResult" nillable="true" type="tns:ResourceDefinition" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetPositionHeaders">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="status" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="updatedFrom" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="updatedTo" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="category" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="missionArea" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="coreCapability" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="page" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetPositionHeadersResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetPositionHeadersResult" nillable="true" type="tns:DefinitionHeaderSet" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetPositions">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="status" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="updatedFrom" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="updatedTo" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="category" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="missionArea" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="coreCapability" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="page" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetPositionsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetPositionsResult" nillable="true" type="tns:PositionDefinitionSet" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="PositionDefinitionSet">
+        <xs:annotation>
+          <xs:appinfo>
+            <GenericType Name="{0}Set" Namespace="http://www.ptaccenter.org/Rtlt.Core.Api.V2" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+              <GenericParameter Name="PositionDefinition" Namespace="http://www.ptaccenter.org/Rtlt.Core.Api.V2" />
+            </GenericType>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:PagedResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="Definitions" nillable="true" type="tns:ArrayOfPositionDefinition" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="PositionDefinitionSet" nillable="true" type="tns:PositionDefinitionSet" />
+      <xs:complexType name="ArrayOfPositionDefinition">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PositionDefinition" nillable="true" type="tns:PositionDefinition" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPositionDefinition" nillable="true" type="tns:ArrayOfPositionDefinition" />
+      <xs:complexType name="PositionDefinition">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:Definition">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="SupportingCoreCapabilities" nillable="true" type="tns:ArrayOfPositionSupportingCoreCapability" />
+              <xs:element minOccurs="0" name="Types" nillable="true" type="tns:ArrayOfPositionType" />
+              <xs:element minOccurs="0" name="Categories" nillable="true" type="tns:ArrayOfPositionCategory" />
+              <xs:element minOccurs="0" name="IsIndividual" type="xs:boolean" />
+              <xs:element minOccurs="0" name="IsWithTeam" type="xs:boolean" />
+              <xs:element minOccurs="0" name="Team" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="IsWithUnit" type="xs:boolean" />
+              <xs:element minOccurs="0" name="Unit" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="OrderingSpecifications" nillable="true" type="tns:ArrayOfPositionOrdering" />
+              <xs:element minOccurs="0" name="References" nillable="true" type="tns:ArrayOfPositionReference" />
+              <xs:element minOccurs="0" name="Notes" nillable="true" type="tns:ArrayOfPositionNote" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="PositionDefinition" nillable="true" type="tns:PositionDefinition" />
+      <xs:complexType name="ArrayOfPositionSupportingCoreCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PositionSupportingCoreCapability" nillable="true" type="tns:PositionSupportingCoreCapability" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPositionSupportingCoreCapability" nillable="true" type="tns:ArrayOfPositionSupportingCoreCapability" />
+      <xs:complexType name="PositionSupportingCoreCapability">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PositionSupportingCoreCapability" nillable="true" type="tns:PositionSupportingCoreCapability" />
+      <xs:complexType name="ArrayOfPositionType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PositionType" nillable="true" type="tns:PositionType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPositionType" nillable="true" type="tns:ArrayOfPositionType" />
+      <xs:complexType name="PositionType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PositionType" nillable="true" type="tns:PositionType" />
+      <xs:complexType name="ArrayOfPositionCategory">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PositionCategory" nillable="true" type="tns:PositionCategory" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPositionCategory" nillable="true" type="tns:ArrayOfPositionCategory" />
+      <xs:complexType name="PositionCategory">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Category" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Types" nillable="true" type="tns:ArrayOfPositionCategoryType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PositionCategory" nillable="true" type="tns:PositionCategory" />
+      <xs:complexType name="ArrayOfPositionCategoryType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PositionCategoryType" nillable="true" type="tns:PositionCategoryType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPositionCategoryType" nillable="true" type="tns:ArrayOfPositionCategoryType" />
+      <xs:complexType name="PositionCategoryType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Criteria" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PositionCategoryType" nillable="true" type="tns:PositionCategoryType" />
+      <xs:complexType name="ArrayOfPositionOrdering">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PositionOrdering" nillable="true" type="tns:PositionOrdering" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPositionOrdering" nillable="true" type="tns:ArrayOfPositionOrdering" />
+      <xs:complexType name="PositionOrdering">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Specification" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PositionOrdering" nillable="true" type="tns:PositionOrdering" />
+      <xs:complexType name="ArrayOfPositionReference">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PositionReference" nillable="true" type="tns:PositionReference" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPositionReference" nillable="true" type="tns:ArrayOfPositionReference" />
+      <xs:complexType name="PositionReference">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PositionReference" nillable="true" type="tns:PositionReference" />
+      <xs:complexType name="ArrayOfPositionNote">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PositionNote" nillable="true" type="tns:PositionNote" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPositionNote" nillable="true" type="tns:ArrayOfPositionNote" />
+      <xs:complexType name="PositionNote">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Order" type="xs:int" />
+          <xs:element minOccurs="0" name="Note" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PositionNote" nillable="true" type="tns:PositionNote" />
+      <xs:element name="GetPosition">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="id" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetPositionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetPositionResult" nillable="true" type="tns:PositionDefinition" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="anyType" nillable="true" type="xs:anyType" />
+      <xs:element name="anyURI" nillable="true" type="xs:anyURI" />
+      <xs:element name="base64Binary" nillable="true" type="xs:base64Binary" />
+      <xs:element name="boolean" nillable="true" type="xs:boolean" />
+      <xs:element name="byte" nillable="true" type="xs:byte" />
+      <xs:element name="dateTime" nillable="true" type="xs:dateTime" />
+      <xs:element name="decimal" nillable="true" type="xs:decimal" />
+      <xs:element name="double" nillable="true" type="xs:double" />
+      <xs:element name="float" nillable="true" type="xs:float" />
+      <xs:element name="int" nillable="true" type="xs:int" />
+      <xs:element name="long" nillable="true" type="xs:long" />
+      <xs:element name="QName" nillable="true" type="xs:QName" />
+      <xs:element name="short" nillable="true" type="xs:short" />
+      <xs:element name="string" nillable="true" type="xs:string" />
+      <xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte" />
+      <xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt" />
+      <xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong" />
+      <xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort" />
+      <xs:element name="char" nillable="true" type="tns:char" />
+      <xs:simpleType name="char">
+        <xs:restriction base="xs:int" />
+      </xs:simpleType>
+      <xs:element name="duration" nillable="true" type="tns:duration" />
+      <xs:simpleType name="duration">
+        <xs:restriction base="xs:duration">
+          <xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?" />
+          <xs:minInclusive value="-P10675199DT2H48M5.4775808S" />
+          <xs:maxInclusive value="P10675199DT2H48M5.4775807S" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="guid" nillable="true" type="tns:guid" />
+      <xs:simpleType name="guid">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:attribute name="FactoryType" type="xs:QName" />
+      <xs:attribute name="Id" type="xs:ID" />
+      <xs:attribute name="Ref" type="xs:IDREF" />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="WebService_GetCategories_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCategories" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetCategories_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCategoriesResponse" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetMissionAreas_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMissionAreas" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetMissionAreas_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMissionAreasResponse" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetCoreCapabilities_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCoreCapabilities" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetCoreCapabilities_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCoreCapabilitiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetResourceKinds_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetResourceKinds" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetResourceKinds_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetResourceKindsResponse" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetResourceHeaders_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetResourceHeaders" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetResourceHeaders_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetResourceHeadersResponse" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetResources_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetResources" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetResources_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetResourcesResponse" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetResource_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetResource" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetResource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetResourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetPositionHeaders_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPositionHeaders" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetPositionHeaders_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPositionHeadersResponse" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetPositions_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPositions" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetPositions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPositionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetPosition_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPosition" />
+  </wsdl:message>
+  <wsdl:message name="WebService_GetPosition_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPositionResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WebService">
+    <wsdl:operation name="GetCategories">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetCategories" message="tns:WebService_GetCategories_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetCategoriesResponse" message="tns:WebService_GetCategories_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionAreas">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetMissionAreas" message="tns:WebService_GetMissionAreas_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetMissionAreasResponse" message="tns:WebService_GetMissionAreas_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCoreCapabilities">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetCoreCapabilities" message="tns:WebService_GetCoreCapabilities_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetCoreCapabilitiesResponse" message="tns:WebService_GetCoreCapabilities_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceKinds">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResourceKinds" message="tns:WebService_GetResourceKinds_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResourceKindsResponse" message="tns:WebService_GetResourceKinds_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceHeaders">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResourceHeaders" message="tns:WebService_GetResourceHeaders_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResourceHeadersResponse" message="tns:WebService_GetResourceHeaders_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResources">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResources" message="tns:WebService_GetResources_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResourcesResponse" message="tns:WebService_GetResources_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResource">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResource" message="tns:WebService_GetResource_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResourceResponse" message="tns:WebService_GetResource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPositionHeaders">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetPositionHeaders" message="tns:WebService_GetPositionHeaders_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetPositionHeadersResponse" message="tns:WebService_GetPositionHeaders_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPositions">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetPositions" message="tns:WebService_GetPositions_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetPositionsResponse" message="tns:WebService_GetPositions_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPosition">
+      <wsdl:input wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetPosition" message="tns:WebService_GetPosition_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetPositionResponse" message="tns:WebService_GetPosition_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_WebService" type="tns:WebService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_WebService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCategories">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetCategories" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionAreas">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetMissionAreas" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCoreCapabilities">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetCoreCapabilities" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceKinds">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResourceKinds" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceHeaders">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResourceHeaders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResources">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResources" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResource">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPositionHeaders">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetPositionHeaders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPositions">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetPositions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPosition">
+      <soap:operation soapAction="http://www.ptaccenter.org/Rtlt.Core.Api.V2/WebService/GetPosition" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebService">
+    <wsdl:port name="BasicHttpBinding_WebService" binding="tns:BasicHttpBinding_WebService">
+      <soap:address location="https://rtlt.preptoolkit.org/api/v2/soap" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

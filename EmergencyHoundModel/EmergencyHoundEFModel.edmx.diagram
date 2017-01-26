@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e34bd3c07ce34bccb655fb6d1d544706" Name="Diagram1" ZoomLevel="55">
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_DOCUMENTS" Width="1.5" PointX="3" PointY="33.375" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INCIDENT" Width="1.5" PointX="9" PointY="31.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INCIDENT_ACTIONS" Width="1.5" PointX="13.5" PointY="54.875" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INCIDENT_ATTACH" Width="1.5" PointX="11.25" PointY="41.375" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INCIDENT_LOC_AREA" Width="1.5" PointX="11.25" PointY="28.5" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INCIDENT_OBJECTIVES" Width="1.5" PointX="13.5" PointY="51.25" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INCIDENT_OP_PERIOD" Width="1.5" PointX="11.25" PointY="46.625" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INCIDENT_RESOURCES" Width="1.5" PointX="14.25" PointY="42" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INCIDENT_STATUS" Width="1.5" PointX="11.25" PointY="34.125" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INCIDENT_TEAM_DTL" Width="1.5" PointX="16.5" PointY="41.625" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_INDIVIDUALS" Width="1.5" PointX="6" PointY="33.25" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_QUALIFICATIONS" Width="1.5" PointX="8.25" PointY="40.625" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_COMPLEX_LVL" Width="1.5" PointX="6.75" PointY="29.875" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_DOC_STATUS_TYPE" Width="1.5" PointX="0.75" PointY="42.875" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_DOC_TYPE" Width="1.5" PointX="0.75" PointY="39.625" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_INC_STATUS_TYPE" Width="1.5" PointX="9" PointY="28.875" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_MANAGEMENT_ORG" Width="1.5" PointX="6.75" PointY="45.25" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_QUAL_CATEGORY" Width="1.5" PointX="0.75" PointY="49.25" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_QUAL_TYPE" Width="1.5" PointX="3" PointY="39.875" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_QUAL_TYPE_REQ" Width="1.5" PointX="5.25" PointY="40.25" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_RESOURCE_CAT" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_RESOURCE_CORE_CAP" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_RESOURCE_DISCIPLINE" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_RESOURCE_KIND" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_RESOURCE_TYPE" Width="1.5" PointX="3" PointY="69.125" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_RESOURCE_TYPE_DTL" Width="1.5" PointX="5.25" PointY="76" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_RESOURCE_TYPE_DTL_DATA" Width="1.5" PointX="7.5" PointY="76.5" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_SHARE_TYPE" Width="1.5" PointX="0.75" PointY="46" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_RESOURCE" Width="1.5" PointX="5.25" PointY="51" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_RESOURCE_DTL" Width="1.5" PointX="7.5" PointY="63.875" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_RESOURCE_VER_HIST" Width="1.5" PointX="7.5" PointY="52.375" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_USER_NOTIFICATION" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_USER_ORG" Width="1.5" PointX="3" PointY="29.125" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_OE_APP_SETTINGS" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_OE_ORGANIZATIONS" Width="1.5" PointX="0.75" PointY="33.625" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_OE_ROLES" Width="1.5" PointX="0.75" PointY="22.5" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_OE_SYS_EMAIL_LOG" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_OE_SYS_LOG" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_OE_USER_ROLES" Width="1.5" PointX="3" PointY="25.625" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_OE_USERS" Width="1.5" PointX="0.75" PointY="26.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.V_EM_INCIDENT_TEAM_DISPLAY" Width="1.5" PointX="6.75" PointY="7.75" />
+        <EntityTypeShape EntityType="EMERG_DBModel.V_EM_TIMELINE" Width="1.5" PointX="8.75" PointY="0.75" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_DOCU__DOC_S__3F115E1A" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_DOCU__DOC_T__3D2915A8" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_DOCU__ORG_I__3C34F16F" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_DOCU__SHARE__3E1D39E1" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INC_M__76969D2E" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__01142BA1" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__06CD04F7" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__0B91BA14" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__114A936A" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__22751F6C" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__75A278F5" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__7C4F7684" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__ORG_I__778AC167" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__1CBC4616" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__17F790F9" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__10566F31" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__RESOU__236943A5" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__STATU__02084FDA" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INDIV__123EB7A3" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__RESOU__1332DBDC" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INDI__LINKE__5DCAEF64" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INDI__ORG_I__5CD6CB2B" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_QUAL__INDIV__37703C52" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_QUAL__ORG_I__367C1819" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_QUAL__QUAL___3864608B" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_REF___QUAL___2CF2ADDF" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_REF___ORG_I__2BFE89A6" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_REF___QUAL___31B762FC" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_REF___ORG_I__4316F928" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_REF___RESOU__47DBAE45" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_RESO__RESOU__6383C8BA" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_REF___RESOU__4BAC3F29" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_RESO__RESOU__6B24EA82" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_RESO__SHARE__6477ECF3" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_RESO__ORG_I__628FA481" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_RESO__RESOU__6A30C649" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_RESO__RESOU__6FE99F9F" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_RESO__VERIF__70DDC3D8" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_USER__ORG_I__5535A963" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_USER__USER___5441852A" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_OE_USER__ROLE___1BFD2C07" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_OE_USER__USER___1CF15040" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_RESOURCE_STATUS" Width="1.5" PointX="0.75" PointY="10" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_RESO__RESOU__656C112C" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__SHARE__4D5F7D71" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_REF_INCIDENT_PRIORITY" Width="1.5" PointX="9.375" PointY="4" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_INCI__INCID__56E8E7AB" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_QUALIFICATION_ATTACH" Width="1.5" PointX="10.5" PointY="52.125" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_QUAL__QUALI__5BAD9CC8" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_OE_USER_TOKENS" Width="1.5" PointX="3" PointY="23" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_OE_USER__USER___625A9A57" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

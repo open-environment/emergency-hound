@@ -1,0 +1,73 @@
+﻿@model EmergencyHoundModel.T_OE_USERS
+
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Admin</a></li>
+                <li class="active">Users</li>
+            </ul>
+            <section class="panel panel-default">
+                <header class="panel-heading font-bold">User Details</header>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        if (Model != null)
+                        {
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Jurisdiction ID</label>
+                                        @Html.TextBoxFor(model => model.USER_IDX, new { @readonly = "readonly", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.USER_IDX)
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    @Html.TextBoxFor(model => model.FNAME, new { @class = "form-control", @placeholder = "First Name" })
+                                    @Html.ValidationMessageFor(model => model.FNAME)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    @Html.TextBoxFor(model => model.LNAME, new { @class = "form-control", @placeholder = "Last Name" })
+                                    @Html.ValidationMessageFor(model => model.LNAME)
+                                </div>
+                            </div>
+                        </div>
+
+                                <p>
+                                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                    <a class=" btn btn-sm btn-warning" href="@Url.Action("Users" )">Back to List</a>
+                                </p>
+
+                    }
+
+                </div>
+            </section>
+        </section>
+    </section>
+</section>
+
+
+

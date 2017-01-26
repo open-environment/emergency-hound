@@ -1,0 +1,140 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIndividualListViewModel
+@{
+    ViewBag.Title = "Certified Individuals ";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+
+            <form role="form" class="">
+
+                <!-- BREADCRUMBS -->
+                <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                    <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="#">Planning</a></li>
+                    <li class="active">People</li>
+                    <button type="submit" name="submitButton" value="Report" class="btn btn-xs btn-info pull-right">Report</button>
+                </ul>
+                <h3 class="m-b-md">People & Certifications</h3>
+
+                <!-- render the validation summary -->
+                @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+                <!-- START SEARCH PANEL -->
+                <div class="panel panel-success">
+                    <div class="panel-heading panel-success cursorpointer" data-toggle="collapse" href="#collapseOne">
+                        <i class="fa fa-search text-default"></i>
+                        Search Filter:<small class=" pull-right">(Click to expand)</small>
+                        @if (!String.IsNullOrEmpty(Model.selectName))
+                        {
+                            <button type="button" class="btn btn-danger btn-xs">
+                                Name: @Model.selectName
+                            </button>
+                        }
+                        @if (!String.IsNullOrEmpty(Model.selectQual))
+                        {
+                            <button type="button" class="btn btn-danger btn-xs">
+                                Qualification: @Model.selectQual
+                            </button>
+                        }
+
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-sm-3">
+                                    <label>Name:</label>
+                                    @Html.TextBoxFor(model => model.selectName, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label>Qualification:</label>
+                                    @Html.DropDownListFor(x => x.selectQual, Model.ddl_qualtypes, "", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <button type="submit" name="submitButton" value="Search" class="btn btn-primary">Search <i class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SEARCH PANEL -->
+            </form>
+
+            <section class="panel panel-default">
+                <div class="table-responsive">
+                    <table class="table table-striped m-b-none" data-ride="datatables">
+                        <tr>
+                            <th>Editing</th>
+                            <th>Individual Name</th>
+                            <th>Jurisdiction</th>
+                            <th>Affiliation</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                        </tr>
+                        @foreach (var item in Model.t_em_individuals)
+                        {
+                            <tr>
+                                <td style="min-width:78px">
+                                    <a href="@Url.Action("PeopleEdit", "Resource", new { id = item.INDIVIDUAL_IDX })" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                                    <div class="delete-section" style="display:inline">
+                                        <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = item.INDIVIDUAL_IDX})"><i class="fa fa-times "></i></a>
+                                        <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.INDIVIDUAL_IDX" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Resource/DeleteIndividual"><b>Confirm Delete</b></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.INDV_FIRST_NAME)
+                                    @Html.DisplayFor(modelItem => item.INDV_LAST_NAME)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.T_OE_ORGANIZATIONS.ORG_NAME)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.INDV_AFFILIATION)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.INDV_PHONE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.INDV_EMAIL)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ADD_LINE_ADR)
+                                    @Html.DisplayFor(modelItem => item.ADD_CITY)
+                                    @Html.DisplayFor(modelItem => item.ADD_STATE)
+                                    @Html.DisplayFor(modelItem => item.ADD_ZIP)
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+
+            </section>
+
+            <p>
+                @if (Model.canAdd == true)
+                {
+                    @Html.ActionLink("Add Person", "PeopleEdit", "Resource", new object { }, new { @class = "btn btn-s-md btn-primary" })
+                }
+            </p>
+
+        </section>
+    </section>
+</section>
+
+
+@Scripts.Render("~/bundles/confirmdelete")
+
+
+

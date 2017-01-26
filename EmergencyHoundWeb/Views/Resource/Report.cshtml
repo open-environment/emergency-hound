@@ -1,0 +1,55 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmResourceIndexViewModel
+@{
+    ViewBag.Title = "Resources Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<section id="content">
+    <section class="vbox bg-white">
+        <header class="header b-b b-light hidden-print">
+            <button href="#" class="btn btn-sm btn-danger pull-right m-l-sm" onclick="window.history.go(-1);"><i class="fa fa-close"></i> Close</button>
+            <button href="#" class="btn btn-sm btn-info pull-right m-l-sm" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
+            <p>Resources Report</p>
+        </header>
+        <section class="scrollable wrapper">
+            <h3 class="text-center font-bold m-t-none">RESOURCE LISTING</h3>
+            <div class="well m-t">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Jurisdiction</th>
+                                <th>Resource Type</th>
+                                <th>Resource Description</th>
+                                <th>Kind</th>
+                                <th>Count</th>
+                                <th>Units</th>
+                                <th>Status</th>
+                                <th>Last Verified</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.sp_resource_adv_search)
+                            {
+                                <tr>
+                                    <td>@item.ORG_NAME</td>
+                                    <td>@item.RESOURCE_TYPE_NAME</td>
+                                    <td>@item.RESOURCE_DESC</td>
+                                    <td>@item.RESOURCE_KIND</td>
+                                    <td>@item.RESOURCE_COUNT</td>
+                                    <td>@item.RESOURCE_UNIT</td>
+                                    <td>@item.RESOURCE_STATUS_NAME</td>
+                                    <td>@item.VERIFY_DT</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+            </div>
+        </section>
+    </section>
+    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen, open" data-target="#nav,html"></a>
+</section>

@@ -1,0 +1,365 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmDashboardViewModel
+@{
+    ViewBag.Title = "Dashboard";
+}
+<script src="~/Scripts/feedback-me/jquery.feedback_me.js"></script>
+<link href="~/Scripts/feedback-me/jquery.feedback_me.css" rel="stylesheet" />
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script type="text/javascript">
+    var poly;       //impacted area polygon
+    var polyOptions = {
+        strokeWeight: 2,
+        fillColor: "#fb6b5b",
+        geodesic: true
+    };
+    var polyThreatened;       //threatened area polygon
+    var polyThreatenedOptions = {
+        strokeWeight: 2,
+        fillColor: "#ffc333",
+        geodesic: true
+    };
+
+
+    function initialize() {
+        var bounds = new google.maps.LatLngBounds();
+        var map_options = {
+            center: new google.maps.LatLng(35.5403, -95.5463),
+            zoom: 9,
+            maxZoom: 14,
+            mapTypeId: google.maps.MapTypeId.HYBRID
+        }
+        var map = new google.maps.Map(document.getElementById('map_canvas'), map_options);
+        var info_window = new google.maps.InfoWindow({ content: '...loading' });   //initialize info window
+
+        //resource
+        @if (Model.sp_resource_adv_search != null)
+        {
+            foreach (var item in Model.sp_resource_adv_search)
+            {
+                if (item.RESOURCE_LAT != null)
+                {
+                <text>
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(@item.RESOURCE_LAT,@item.RESOURCE_LONG),
+                    map: map,
+                    title: '@item.RESOURCE_TYPE_NAME'
+                });
+
+                //extend the bounds to include each marker's position
+                bounds.extend(marker.position);
+
+                //marker click event
+                google.maps.event.addListener(marker, 'click', function () {
+                    info_window.setContent('<div id="content">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h4 id="firstHeading" class="firstHeading">' + '@item.ORG_NAME' + '</h4>' +
+                            '<div id="bodyContent">' +
+                            '<p><b>Resource: </b> @item.RESOURCE_TYPE_NAME' + '</p>' +
+                            '<p><b>Status: </b> @item.RESOURCE_STATUS_CD' + '</p>' +
+                            '<p>(last verified: @item.VERIFY_DT' + ')</p>' +
+                            '<a href="@Url.Action("Edit", "Resource", new { id = item.RESOURCE_IDX })" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>' +
+                            '</div>' +
+                            '</div>');
+                    info_window.open(map, this);
+                });
+
+                //add marker to bounds object
+                bounds.extend(marker.getPosition());
+                </text>
+                }
+            }
+        }
+
+        @if (Model.t_em_incident != null)
+        {
+            foreach (var item in Model.t_em_incident)
+            {
+                if (item.INCIDENT_LAT != null)
+                {
+
+                    <text>
+                        //add incident marker
+                        var marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(@item.INCIDENT_LAT,@item.INCIDENT_LONG),
+                            map: map,
+                            title: '@item.INCIDENT_NAME'
+                        });
+
+
+                        //display impacted area if there is one
+                        poly = new google.maps.Polygon(polyOptions);
+                        poly.setMap(map);
+                            @if (item.ImpactedArea != null)
+                            {
+                                <text>
+                                    var impactedCoords = [@item.ImpactedArea];
+                                poly.setPath(impactedCoords);
+                                </text>
+                            }
+
+                        //display threatened area if there is one
+                        polyThreatened = new google.maps.Polygon(polyThreatenedOptions);
+                        polyThreatened.setMap(map);
+                            @if (item.ThreatenedArea != null)
+                            {
+                                <text>
+                                    var impactedCoords = [@item.ThreatenedArea];
+                                polyThreatened.setPath(impactedCoords);
+                                </text>
+                            }
+
+
+                        //marker click event
+                        google.maps.event.addListener(marker, 'click', function () {
+                            info_window.setContent('<div id="content">' +
+                                    '<div id="siteNotice">' +
+                                    '</div>' +
+                                    '<h4 id="firstHeading" class="firstHeading">' + '@item.ORG_NAME' + '</h4>' +
+                                    '<div id="bodyContent">' +
+                                    '<p><b>Name: </b> @item.INCIDENT_NAME' + '</p>' +
+                                    '<p><b>Description: </b> @item.INCIDENT_DESC' + '</p>' +
+                                    '<a href="@Url.Action("Edit", "Incident", new { id = item.INCIDENT_IDX})" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>' +
+                                    '</div>' +
+                                    '</div>');
+                            info_window.open(map, this);
+                        });
+
+
+                        bounds.extend(marker.getPosition());
+                    </text>
+
+                }
+            }
+        }
+
+        //now fit the map to the newly inclusive bounds
+        if (bounds.contains(marker.getPosition()))
+            map.fitBounds(bounds);
+
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        //set up some minimal options for the feedback_me plugin
+        fm_options = {
+            position: "right-bottom",
+            bootstrap: false,
+            name_placeholder: "Name please",
+            name_required: true,
+            message_placeholder: "Go ahead, type your feedback here...",
+            feedback_url: "http://12.238.224.66/EmergencyHound/Dashboard/Feedback",
+            custom_params: {
+                csrf: "my_secret_token",
+                user_id: "john_doe",
+                feedback_type: "bootstarp"
+            },
+            delayed_options: {
+                success_color: "#5cb85c",
+                fail_color: "#5cb85c",
+                delay_success_milliseconds: 3500,
+                send_success : "Thanks for your feedback.",
+                send_fail : "Thanks for your feedback.", //This text will appear on the fail dialog
+            }
+        };
+ 
+        //init feedback_me plugin
+        fm.init(fm_options);
+     
+    });
+
+</script>
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox" >
+        <section class="scrollable padder">
+
+
+            @foreach (var item in Model.PendingUsers)
+            {
+                <div class="alert alert-danger alert-block ">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <h4><i class="fa fa-bell-alt"></i>Action Required!</h4>
+                    <p>
+                        @item.USER_NAME has requested access to join @item.ORG_NAME.
+                    </p>
+                    <p>
+                        @using (Html.BeginForm("AllowJuris", "Dashboard", FormMethod.Post, new { id = "iform", style = "display:inline" }))
+                    {
+                    @Html.Hidden("uidx", item.USER_IDX)
+                    @Html.Hidden("oidx", item.ORG_IDX)
+                    <label>Jurisdiction Role:</label>
+
+                    @Html.DropDownList("Role", new List<SelectListItem>
+                            {
+                            new SelectListItem{ Text="User", Value = "U" },
+                            new SelectListItem{ Text="Admin", Value = "A" }
+                            }, new { @class = "form-control", @style = "display: inline; width:100px;" })
+
+                    <button type="submit" class="btn btn-primary">Allow Access</button>
+                    }
+
+                        @using (Html.BeginForm("RejectJuris", "Dashboard", FormMethod.Post, new { id = "iform2", style = "display:inline" }))
+                    {
+                    @Html.Hidden("uidx", item.USER_IDX)
+                    @Html.Hidden("oidx", item.ORG_IDX)
+                    <button type="submit" class="btn btn-danger m-l-sm">Reject Access</button>
+                    }
+                    </p>
+                </div>
+            }
+            <section class="panel panel-default m-t-sm m-b-small">
+                <div class="row m-l-none m-r-none bg-light lter">
+                    <div class="col-sm-6 col-md-3 padder-v b-r b-light">
+                        <span class="fa-stack fa-2x pull-left m-r-sm">
+                            <i class="fa fa-circle fa-stack-2x text-info"></i>
+                            <i class="fa fa-male fa-stack-1x text-white"></i>
+                        </span>
+                        <a class="clear" href="@Url.Action("People", "Resource")">
+                            <span class="h3 block m-t-xs"><strong>@Model.DashboardCounts.ResponderCount</strong></span>
+                            <small class="text-muted text-uc">Responders</small>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-md-3 padder-v b-r b-light lt">
+                        <span class="fa-stack fa-2x pull-left m-r-sm">
+                            <i class="fa fa-circle fa-stack-2x text-warning"></i>
+                            <i class="fa fa-fire-extinguisher fa-stack-1x text-white"></i>
+                        </span>
+                        <a class="clear" href="@Url.Action("Index", "Resource")">
+                            <span class="h3 block m-t-xs"><strong id="bugs">@Model.DashboardCounts.ResourceCount</strong></span>
+                            <small class="text-muted text-uc">Available Resources</small>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-md-3 padder-v b-r b-light">
+                        <span class="fa-stack fa-2x pull-left m-r-sm">
+                            <i class="fa fa-circle fa-stack-2x text-danger"></i>
+                            <i class="fa fa-ambulance fa-flip-horizontal fa-stack-1x text-white"></i>
+                        </span>
+                        <a class="clear" href="@Url.Action("Index", "Incident")">
+                            <span class="h3 block m-t-xs"><strong id="firers">@Model.DashboardCounts.IncidentCount</strong></span>
+                            <small class="text-muted text-uc">Active Incidents</small>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-md-3 padder-v b-r b-light lt">
+                        <span class="fa-stack fa-2x pull-left m-r-sm">
+                            <i class="fa fa-circle fa-stack-2x icon-muted"></i>
+                            <i class="fa fa-users fa-stack-1x text-white"></i>
+                        </span>
+                        <a class="clear" href="#">
+                            <span class="h3 block m-t-xs"><strong>@Model.DashboardCounts.JurisCount</strong></span>
+                            <small class="text-muted text-uc">Agencies Sharing Data</small>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <div class="" style="position:relative">
+                <div class="row" style="">
+                    <div class="col-md-12">
+
+                        <!-- START MAP-->
+                        <section class="panel b-light" style="">
+                            <header class="panel-heading font-bold bg-primary dker">
+                                @(Model.MapType == "r" ? "Available Resources" : "Active Incidents")
+                                <div class="btn-group m-b" style="padding: 0px; margin: 0px; float: right">
+                                    @if (Model.MapType != "r")
+                                    {
+                                        <a href="@Url.Action("Index", "Dashboard", new { m = "r" })" class="btn btn-xs btn-warning">Switch to Resource View</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Index", "Dashboard")" class="btn btn-xs btn-warning">Switch to Incident View</a>
+                                    }
+                                </div>
+                            </header>
+                            <div class="panel-body" style="padding: 0px; height:100%">
+                                <div id="map_canvas" style="width: 100%; height:100%; min-height:700px;"></div>
+                            </div>
+                            @*<footer class="panel-footer bg-white no-padder">
+                                <div class="row text-center no-gutter">
+                                    <div class="col-xs-4 b-r b-light">
+                                        <span class="h4 font-bold m-t block">@Model.DashboardCounts.IncidentCount</span>
+                                        <small class="text-muted m-b block">Active Incidents</small>
+                                    </div>
+                                    <div class="col-xs-4 b-r b-light">
+                                        <span class="h4 font-bold m-t block">0</span>
+                                        <small class="text-muted m-b block">Status Updates This Week</small>
+                                    </div>
+                                    <div class="col-xs-4 b-r b-light">
+                                        <span class="h4 font-bold m-t block">@Model.DashboardCounts.ResponderCount</span>
+                                        <small class="text-muted m-b block">Active Responders</small>
+                                    </div>
+                                </div>
+                            </footer>*@
+                        </section>
+                        <!-- END MAP-->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- START TIMELINE-->
+            @{
+                if (Model.v_em_timeline != null)
+                {
+                    <!--
+                        <div class="col-md-4 ">
+                            <section class="panel panel-default b-light">
+                                <header class="panel-heading font-bold bg-warning dker">Incident Timeline</header>
+                                <div class="panel-body">
+                                    <div class="timeline">
+                                        <article class="timeline-item active ">
+                                            <div class="timeline-caption">
+                                                <div class="panel bg-warning lter ">
+                                                    <div class="panel-body font-bold text-center">
+                                                        <span style="color:black;">
+                                                            Incident Created<br />
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </article>
+
+                                        @{
+                                        var odd = false;
+                                        foreach (var item in Model.v_em_timeline)
+                                        {
+                                            odd = !odd;
+                                                <article class="timeline-item @(odd ? "alt" : "")">
+                                                    <div class="timeline-caption">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-body">
+                                                                <span class="arrow @(odd ? "right" : "left")"></span>
+                                                                <span class="timeline-icon"><i class="fa @(item.UPDATE_TYPE == "Attachment" ? "fa-camera" : "fa-file")  time-icon bg-dark"></i></span>
+                                                                <span class="timeline-date">@item.TIMELINE_DT</span>
+                                                                <h5>
+                                                                    <span>@item.UPDATE_TYPE</span>
+                                                                    @item.NME
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                        }
+                                        }
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                -->
+                }
+            }
+            <!-- END TIMELINE -->
+
+        </section>
+
+    </section>
+</section>
+    

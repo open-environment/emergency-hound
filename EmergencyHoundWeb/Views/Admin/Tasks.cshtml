@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Tasks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Admin</a></li>
+                <li class="active">Tasks</li>
+            </ul>
+            <div class="m-b-md">
+                <h3 class="m-b-none">Tasks</h3>
+            </div>
+
+            <!-- BEGIN: VALIDATION SUMMARY -->
+            @if (TempData["Error"] != null)
+            {
+                <div class="errorHandler alert alert-danger">
+                    <button data-dismiss="alert" class="close">×</button>
+                    <i class="fa fa-info-circle"></i> @TempData["Error"]
+                </div>
+            }
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    <a href="#" data-dismiss="alert"  class="close" >&times;</a>
+                    <strong>@TempData["Success"]</strong>
+                </div>
+            }
+            <!-- BEGIN: VALIDATION SUMMARY -->
+
+
+            <section class="panel panel-default">
+
+            </section>
+            <p>
+                @Html.ActionLink("Retrieve Data from RTLT", "TaskPullFromRTLT", "Admin", new object { }, new { @class = "btn btn-s-md btn-primary" })
+            </p>
+
+        </section>
+    </section>
+</section>
+
+

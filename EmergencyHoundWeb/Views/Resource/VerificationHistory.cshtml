@@ -1,0 +1,75 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmResourceVerificationHistoryViewModel
+
+@{
+    ViewBag.Title = "Verification History";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Planning</a></li>
+                <li class="active">Resources</li>
+            </ul>
+            <div class="m-b-md">
+                <h3 class="m-b-none">Resource Verification History</h3>
+            </div>
+
+            <!-- error or success messaging -->
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <strong>@TempData["Success"]</strong>
+                </div>
+            }
+
+            <section class="panel panel-default">
+
+                <div class="table-responsive">
+                    <table class="table table-striped m-b-none" data-ride="datatables">
+                        <tr>
+                            <th>Delete</th>
+                            <th>Verification Date</th>
+                            <th>Verified By</th>
+                        </tr>
+                        @foreach (var item in Model.t_em_resource_ver_hist)
+                        {
+                            <tr>
+                                @Html.HiddenFor(model => item.RESOURCE_VER_HIST_IDX)
+                                @Html.HiddenFor(model => item.RESOURCE_IDX)
+
+                                <td style="min-width:78px">
+                                    <div class="delete-section" style="display:inline">
+                                        <a class="btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = item.RESOURCE_VER_HIST_IDX})"><i class="fa fa-times "></i></a>
+                                        <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.RESOURCE_VER_HIST_IDX" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Resource/DeleteVerification"><b>Confirm Delete</b></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VERIFICATION_DT)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.T_OE_USERS.FNAME)
+                                    @Html.DisplayFor(modelItem => item.T_OE_USERS.LNAME)
+                                </td>
+                            </tr>
+
+                        }
+
+                    </table>
+                </div>
+            </section>
+            <p>
+                <a href="@Url.Action("Edit", "Resource", new { id = Model.ResourceIDX })" class="btn btn-primary">Close</a>
+            </p>
+        </section>
+    </section>
+</section>
+
+
+@Scripts.Render("~/bundles/confirmdelete")

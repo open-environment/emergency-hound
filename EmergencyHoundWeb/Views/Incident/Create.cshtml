@@ -1,0 +1,120 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmIncidentEditViewModel
+
+@{
+    ViewBag.Title = "Create Incident";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Response</a></li>
+                <li class="active"><a href="@Url.Action("Index", "Incident")">Incidents</a></li>
+            </ul>
+
+            <!-- render the validation summary -->
+            @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
+
+            <section class="panel panel-default">
+                <header class="panel-heading font-bold">Create New Incident</header>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "iform" })) {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                               
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Jurisdiction</label>
+                                    @Html.DropDownListFor(x => x.t_em_incident.ORG_IDX, Model.ddl_Jurisdictions, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_incident.ORG_IDX)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Incident ID</label>
+                                    @Html.TextBoxFor(model => model.t_em_incident.INCIDENT_ID, new { @class = "form-control", @placeholder = "" })
+                                    @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_ID)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Incident Name</label>
+                                    @Html.TextBoxFor(model => model.t_em_incident.INCIDENT_NAME, new { @class = "form-control", @placeholder = "", @required="required" })
+                                    @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_NAME)
+                                </div>
+                            </div>
+                        </div>                                
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Incident Desc</label>
+                                    @Html.TextBoxFor(model => model.t_em_incident.INCIDENT_DESC, new { @class = "form-control", @placeholder = "" })
+                                    @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_DESC)
+                                </div>
+                            </div>
+                        </div>                                
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    @Html.TextBoxFor(model => model.t_em_incident.INCIDENT_START_DT, new { @class = "form-control input-sm input-s datepicker-input", @placeholder = "mm/dd/yyyy", @data_date_format = "mm-dd-yyyy" })
+                                    @Html.ValidationMessageFor(model => model.t_em_incident.INCIDENT_START_DT)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Data Sharing</label>
+                                    @Html.DropDownListFor(x => x.t_em_incident.SHARE_TYPE, Model.ddl_ShareType, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.t_em_incident.SHARE_TYPE)
+                                </div>
+                            </div>
+
+                        </div>                                
+
+                        <p>
+                            <button type="submit" class="btn btn-sm btn-primary">Save & Continue</button>
+                            <a class=" btn btn-sm btn-warning" href="@Url.Action("Index" )">Cancel</a>
+                        </p>
+
+                    }
+
+
+                </div>
+            </section>
+
+        </section>
+    </section>
+</section>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/datetimepicker")
+
+    <script>
+        $('#iform').submit(function () {
+            if ($(this).valid()) {
+                $(this).find(':submit').attr('disabled', 'disabled');
+            }
+        });
+    </script>
+}
+
+<script>
+    //function to initiate datetimepicker
+    $(document).ready(function () {
+        $('#t_em_incident_INCIDENT_START_DT').datetimepicker({
+            format: 'm/d/Y H:i',
+            hours12: true
+        });
+    });
+</script>

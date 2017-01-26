@@ -1,0 +1,130 @@
+﻿@model EmergencyHoundWeb.ViewModels.vmAdminRoleEditViewModel 
+
+@{
+    ViewBag.Title = "Edit Role";
+}
+
+<!-- render the left menu -->
+@Html.Partial("~/Views/Shared/_LeftMenu.cshtml")
+
+
+<!-- render the main content -->
+<section id="content">
+    <section class="vbox">
+        <section class="scrollable padder">
+            <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+                <li><a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#">Admin</a></li>
+                <li class="active">Roles</li>
+            </ul>
+
+            <!-- begin: VALIDATION SUMMARY -->
+            @if (TempData["RoleEdit_Error"] != null)
+            {
+                <div class="errorHandler alert alert-danger">
+                    <button data-dismiss="alert" class="close">×</button>
+                    <i class="fa fa-info-circle"></i> @TempData["RoleEdit_Error"]
+                </div>
+            }
+
+            @if (TempData["RoleEdit_Success"] != null)
+            {
+                <div class="errorHandler alert alert-success">
+                    <button data-dismiss="alert" class="close">×</button>
+                    <i class="fa fa-info-circle"></i> @TempData["RoleEdit_Success"]
+                </div>
+            }
+            <!-- end: VALIDATION SUMMARY -->
+
+            <section class="panel panel-default">
+                <header class="panel-heading font-bold">Role Details</header>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm("RoleEdit", "Admin", FormMethod.Post, new { @class = "" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(model => model.T_OE_ROLES.ROLE_IDX)
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Role Name</label>
+                                    @Html.TextBoxFor(model => model.T_OE_ROLES.ROLE_NAME, new { @class = "form-control", @placeholder = "" })
+                                    @Html.ValidationMessageFor(model => model.T_OE_ROLES.ROLE_NAME)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Role Description</label>
+                                    @Html.TextBoxFor(model => model.T_OE_ROLES.ROLE_DESC, new { @class = "form-control", @placeholder = "" })
+                                    @Html.ValidationMessageFor(model => model.T_OE_ROLES.ROLE_DESC)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a href="@Url.Action("Roles", "Admin")" class="btn btn-success">Close</a>
+                                <button type="submit" name="submitButton" value="Edit" class="btn btn-success">Save</button>
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+                <!-- end: ROLE DETAILS -->
+
+                <!-- start: USER ROLE ASSIGNMENT -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-users"></i>
+                        User Role Assignment
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("RoleEdit", "Admin", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.T_OE_ROLES.ROLE_IDX)
+
+                            <div class="row" style="padding-left: 15px">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Users Not In Role</label>
+                                        @Html.ListBoxFor(model => model.Users_Not_In_Role_Selected, Model.Users_Not_In_Role, new { @class = "form-control", size = 10 })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <br /><br />
+                                        <button type="submit" name="submitButton" value="Add" class="btn btn-success btn-sm btn-block">
+                                            Add to Role <i class="fa fa-arrow-circle-right"></i>
+                                        </button>
+                                        <br />
+                                        <button type="submit" name="submitButton" value="Remove" class="btn btn-success btn-sm  btn-block">
+                                            <i class="fa fa-arrow-circle-left"></i> Remove from Role
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Users In Role</label>
+                                        @Html.ListBoxFor(model => model.Users_In_Role_Selected, Model.Users_In_Role, new { @class = "form-control", size = 10 })
+                                        @Html.ValidationMessageFor(model => model.Users_In_Role_Selected)
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!-- end: USER ROLE ASSIGNMENT -->
+
+
+            </section>
+        </section>
+    </section>
+</section>
+
+
+
+
