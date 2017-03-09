@@ -14,6 +14,7 @@ using System;
 using Newtonsoft.Json;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace EmergencyHoundWeb.Controllers
 {
@@ -26,6 +27,7 @@ namespace EmergencyHoundWeb.Controllers
         public string Email { get; set; }
         public string Phone { get; set; }
         public string PhoneExt { get; set; }
+        public bool TrackInd { get; set; }
         public HttpPostedFileBase UploadImage { get; set; }
         public byte[] GetImage { get; set; }
         public List<UserOrgDisplayType> MyOrgs { get; set; }
@@ -76,7 +78,7 @@ namespace EmergencyHoundWeb.Controllers
                         return RedirectToAction("SetPermPassword");
                     else
                     {
-                        db_Accounts.UpdateT_OE_USERS(u.USER_IDX, null, null, null, null, null, null, null, null, System.DateTime.Now, null, null, null, 0);
+                        db_Accounts.UpdateT_OE_USERS(u.USER_IDX, null, null, null, null, null, null, null, null, System.DateTime.Now, null, null, null, 0, null);
                         return RedirectToAction("Index", "Dashboard");
                     }
 
@@ -138,7 +140,7 @@ namespace EmergencyHoundWeb.Controllers
                             int UserIDX = (int)Membership.GetUser(model.UserName).ProviderUserKey;
 
                             //update first name, last name
-                            db_Accounts.UpdateT_OE_USERS(UserIDX, null, null, model.FirstName, model.LastName, model.UserName, null, null, null, null, null, null, null, null);
+                            db_Accounts.UpdateT_OE_USERS(UserIDX, null, null, model.FirstName, model.LastName, model.UserName, null, null, null, null, null, null, null, null, null);
 
                             //create an in-app notification
                             db_EmergencyHound.InsertUpdateT_EM_USER_NOTIFICATION(null, UserIDX, System.DateTime.Now, "EMAIL", "Welcome to Emergency Hound", "Welcome to Emergency Hound. This area displays notifications you may receive from the system or other users.", false, 0, true, 0);
@@ -215,6 +217,7 @@ namespace EmergencyHoundWeb.Controllers
                 model.Email = u.EMAIL;
                 model.Phone = u.PHONE;
                 model.PhoneExt = u.PHONE_EXT;
+                model.TrackInd = u.TRACK_IND;
                 model.GetImage = u.USER_AVATAR;
 
                 model.MyOrgs = db_EmergencyHound.GetT_EM_USER_ORG_byUSER_IDX(u.USER_IDX);
@@ -232,7 +235,9 @@ namespace EmergencyHoundWeb.Controllers
             {
                 if (model.UserIDX > 0)
                 {
-                    db_Accounts.UpdateT_OE_USERS(model.UserIDX, null, null, model.FName, model.LName, model.Email, null, null, null, null, model.Phone, model.PhoneExt, null, null);
+                    var strippedPhone = Regex.Replace(model.Phone, "[^0-9]", "");
+
+                    db_Accounts.UpdateT_OE_USERS(model.UserIDX, null, null, model.FName, model.LName, model.Email, null, null, null, null, strippedPhone, model.PhoneExt, null, null, model.TrackInd);
 
                     //avatar handling
                     if (model.UploadImage != null)

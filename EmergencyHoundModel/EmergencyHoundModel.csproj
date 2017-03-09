@@ -166,6 +166,9 @@
     <Compile Include="SP_INCIDENT_ADV_SEARCH_Result.cs">
       <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="SP_INCIDENT_RESOURCE_QUERY_Result.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="SP_INCIDENT_STATUS_QUERY_Result.cs">
       <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
     </Compile>
@@ -278,6 +281,9 @@
       <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
     </Compile>
     <Compile Include="T_EM_RESOURCE_VER_HIST.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_EM_USER_LOCATION.cs">
       <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
     </Compile>
     <Compile Include="T_EM_USER_NOTIFICATION.cs">

@@ -1,6 +1,7 @@
 ﻿
 $(function () {
     $("a.delete-link").click(function () {
+
         var deleteLink = $(this);
         deleteLink.hide();
         var confirmButton = deleteLink.siblings(".delete-confirm");
@@ -19,14 +20,19 @@ $(function () {
         else
             delPath = confirmButton.attr('data-delete-p');
 
+        console.log(confirmButton.attr('data-delete-path'));
+        console.log(confirmButton.attr('data-delete-p'));
 
         var deleteItem = function () {
             removeEvents();
             confirmButton.fadeOut(700);
+            console.log(delPath);
+            console.log(confirmButton.attr('data-delete-id'));
             $.post(
                 delPath,
                 AddAntiForgeryToken({ id: confirmButton.attr('data-delete-id'), id2: confirmButton.attr('data-delete-id2') }))
                .done(function () {
+                   console.log('d');
                    var idType = confirmButton.attr('data-delete-type');
 
                    if (idType == 'team') //special handling for team control

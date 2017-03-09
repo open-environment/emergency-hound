@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<widget xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps" id="org.openenvironment.emergencyhound" version="1.0.6" xmlns="http://www.w3.org/ns/widgets" defaultlocale="en-US">
+<widget xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps" id="org.openenvironment.emergencyhound" version="1.0.7" xmlns="http://www.w3.org/ns/widgets" defaultlocale="en-US">
   <name>Emergency Hound Muscogee</name>
-  <description>Emergency Hound Muscogee allows tribal emergency management personnel to prepare for and respond to emergencies in the field. Features include the ability to track and certify emergency responders, create incidents, and generate FEMA ICS reports.</description>
+  <description>Emergency Hound Muscogee allows tribal emergency management personnel to prepare for and respond to emergencies in the field. Features include the ability to track and certify emergency responders, create incidents, and generate reports.</description>
   <author href="http://cordova.io" email="dev@cordova.apache.org">open-environment.org</author>
   <content src="index.html" />
   <access origin="*.google.com" />

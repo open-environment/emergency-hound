@@ -96,7 +96,6 @@
                 <li class="active">Team</li>
             </ul>
 
-
             <!-- render the validation summary -->
             @Html.Partial("~/Views/Shared/_ValidationSummary.cshtml")
 
@@ -124,7 +123,9 @@
                         {
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(model => model.IncidentIDX)
+                        <p class="">Select Team Structure <span class="text-muted">(Don't worry - you can modify the structure later.)</span></p>
                         <div class="row">
+                            
                             <div class="col-sm-3">
                                 <img id="menuImg5" src="~/Content/Images/inc_type_5bw.png" onmouseover="this.src = '../../Content/Images/inc_type_5.png'" onmouseout="this.src = '../../Content/Images/inc_type_5bw.png'" onclick="clickTemplate(5);" />
                                 <br />
@@ -147,15 +148,8 @@
                             </div>
 
                         </div>
-                        <div class="row"><p></p></div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Selected Team</label>
-                                    @Html.TextBoxFor(model => model.TeamType, new { @class = "form-control", @placeholder = "" })
-                                </div>
-                            </div>
-                        </div>
+                        @Html.HiddenFor(model => model.TeamType)
+                        <div class="line line-dashed line-lg pull-in"></div>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -164,6 +158,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="line line-dashed line-lg pull-in"></div>
                         <div class="row">
                             <div class="col-md-3">
                                 <button type="submit" class="btn btn-s-md btn-primary">Next</button>
@@ -213,9 +208,8 @@
                                                                 <a href="#" class="btn btn-xs btn-info team-btn-edit"><i class="fa fa-pencil-square"></i> Edit</a>
                                                                 <div class="delete-section" style="display:inline">
                                                                     <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = element.INCIDENT_TEAM_DTL_IDX})"><i class="fa fa-times "></i></a>
-                                                                    <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@element.INCIDENT_TEAM_DTL_IDX" data-delete-type="team" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Incident/DeleteTeamDtl"><b>Confirm Delete</b></div>
+                                                                    <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@element.INCIDENT_TEAM_DTL_IDX" data-delete-type="team" data-delete-path="@(new Uri(Request.Url, Url.Content("~")))"  data-delete-p="/Incident/DeleteTeamDtl"><b>Confirm Delete</b></div>
                                                                 </div>
-
 
                                                                 @Html.HiddenFor(x => element.INCIDENT_TEAM_DTL_IDX)
                                                                 @Html.HiddenFor(x => element.REPORTS_TO_TEAM_DTL_IDX)
@@ -225,7 +219,6 @@
                                                                 @Html.HiddenFor(x => element.AGENCY)
                                                             </div>
                                                         </div>
-
 
                                                         @{
                                                             var children = Model.IncidentTeam.Where(e => e.REPORTS_TO_TEAM_DTL_IDX == element.INCIDENT_TEAM_DTL_IDX).OrderBy(e => e.SEQ_NO).ToList(); ;
@@ -266,7 +259,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Role Description</label>
-                                    @Html.TextBoxFor(model => model.editTeamMember.ROLE_NAME, new { @class = "form-control input-sm", @placeholder = "" })
+                                    @Html.TextBoxFor(model => model.editTeamMember.ROLE_NAME, new { @class = "form-control input-sm", @placeholder = "", @required = "required" })
                                     @Html.ValidationMessageFor(model => model.editTeamMember.ROLE_NAME)
                                 </div>
                                 <div class="form-group" id="editIndividual">

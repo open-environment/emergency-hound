@@ -263,6 +263,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Scripts\bootstrap-formhelpers\bootstrap-formhelpers.min.js" />
+    <Content Include="Scripts\datetimepicker\app-datetimepicker.js" />
     <Content Include="Scripts\feedback-me\jquery.feedback_me.css" />
     <Content Include="Scripts\feedback-me\jquery.feedback_me.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

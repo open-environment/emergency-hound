@@ -19,10 +19,50 @@
     </div>
 </section>
 <!-- END: INCIDENT WIZARD -->
-<!-- START: SAVE MESSAGE -->
-<div class="alert alert-success " ng-show="saveState">
-    <button data-dismiss="alert" class="close">×</button>
-    <i class="fa fa-check-circle"></i> {{saveState}}
-</div>
-<!-- END: SAVE MESSAGE -->
-Will be available in future update.
+
+<section class="panel panel-default">
+    <div class="panel-body">
+
+        <!-- START STATUS UPDATE TABLE -->
+        <div class="table-responsive">
+            <table class="table table-striped m-b-none" data-ride="datatables">
+                <tr>
+                    <th ng-show="incident.caN_EDIT==1">Editing</th>
+                    <th>Resource</th>
+                    <th>Count</th>
+                    <th>Ordered Date</th>
+                    <th>ETA</th>
+                    <th>Notes</th>
+                    <th>Assigned To</th>
+                </tr>
+                <tr ng-repeat="resource in resources">
+                    <td style="min-width:78px" ng-show="incident.caN_EDIT==1">
+                        <a ng-click="editIncidentResource(resource.incidenT_RESOURCE_IDX)" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                    </td>
+                    <td>
+                        {{resource.resourcE_IDX}}
+                    </td>
+                    <td>
+                        {{resource.resourcE_COUNT}}
+                    </td>
+                    <td>
+                        {{resource.resourcE_ORDERED_DT}}
+                    </td>
+                    <td>
+                        {{resource.resourcE_ETA_DT}}
+                    </td>
+                    <td>
+                        {{resource.resourcE_NOTES}}
+                    </td>
+                    <td>
+                        {{resource.resourcE_ASSIGNED_TO}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- END STATUS UPDATE TABLE -->
+    </div>
+</section>
+<p>
+    <a data-ng-click="addIncidentResource()" class="btn btn-s-md btn-primary " ng-show="incident.caN_EDIT==1">Assign Resource</a>
+</p>

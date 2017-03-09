@@ -91,7 +91,7 @@
                                         <a href="#modal-form" class="btn btn-rounded btn-xs btn-default modal-it" data-toggle="modal"><i class="fa fa-pencil fa-success"></i></a>
                                         <div class="delete-section" style="display:inline">
                                             <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new { id = item.INCIDENT_RESOURCE_IDX })"><i class="fa fa-times "></i></a>
-                                            <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.INCIDENT_RESOURCE_IDX" data-delete-path="@(Url.Content("~/"))" data-delete-p="/Incident/DeleteIncResource"><b>Confirm Delete</b></div>
+                                            <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.INCIDENT_RESOURCE_IDX" data-delete-path="@(new Uri(Request.Url, Url.Content("~")))" data-delete-p="/Incident/DeleteIncResource"><b>Confirm Delete</b></div>
                                         </div>
                                         @Html.HiddenFor(modelItem => item.INCIDENT_RESOURCE_IDX)
                                         @Html.HiddenFor(modelItem => item.RESOURCE_IDX)
@@ -102,13 +102,15 @@
                                         @Html.HiddenFor(modelItem => item.RESOURCE_NOTES)
                                     </td>
                                     <td>
-                                        @if (item.T_EM_RESOURCE.RESOURCE_DESC != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.T_EM_RESOURCE.RESOURCE_DESC)
-                                        }
-                                        else
+                                        @if (item.T_EM_RESOURCE.T_EM_REF_RESOURCE_TYPE.RESOURCE_TYPE_NAME != null)
                                         {
                                             @Html.DisplayFor(modelItem => item.T_EM_RESOURCE.T_EM_REF_RESOURCE_TYPE.RESOURCE_TYPE_NAME)
+                                        }
+                                        @if (item.T_EM_RESOURCE.RESOURCE_DESC != null)
+                                        {
+                                            <text>(</text>
+                                            @Html.DisplayFor(modelItem => item.T_EM_RESOURCE.RESOURCE_DESC)
+                                            <text>)</text>
                                         }
 
                                     </td>
@@ -136,7 +138,7 @@
                 </div>
             </section>
             <p>
-                <a id="addit" href="#modal-form" class="btn btn-s-md btn-primary add-it" data-toggle="modal">Add Resource</a>
+                <a id="addit" href="#modal-form" class="btn btn-s-md btn-primary add-it" data-toggle="modal">Assign Resource</a>
             </p>
         </section>
     </section>

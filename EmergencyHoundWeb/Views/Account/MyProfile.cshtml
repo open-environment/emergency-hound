@@ -68,8 +68,8 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Phone</label>
-                                            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @placeholder = "Phone" })
+                                            <label>Primary Phone</label>
+                                            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control bfh-phone", data_format = "(ddd) ddd-dddd" })
                                             @Html.ValidationMessageFor(model => model.Phone)
                                         </div>
                                     </div>
@@ -77,6 +77,12 @@
                                         <div class="form-group">
                                             <label>Phone Extension</label>
                                             @Html.TextBoxFor(model => model.PhoneExt, new { @class = "form-control", @placeholder = "Extension" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Allow Tracking</label>
+                                            @Html.CheckBoxFor(model => model.TrackInd, new { @class = "form-control", @style = "margin-left:0px" })
                                         </div>
                                     </div>
                                 </div>
@@ -91,9 +97,6 @@
                                             <img src="data:image;base64,@System.Convert.ToBase64String(Model.GetImage)" class="form-control" style="width:100px; height: 100px;" />
                                         }
                                         <input type="file" name="uploadImage" accept="image/*" class="form-control" />
-
-
-
                                     </div>
                                 </div>
                             </div>
@@ -106,12 +109,6 @@
                         <a class=" btn btn-sm btn-warning" href="@Url.Action("SetPermPassword" )">Change Password</a>
 
                     }
-                </div>
-            </section>
-            <section class="panel panel-default">
-                <header class="panel-heading font-bold">Contact Information</header>
-                <div class="panel-body">
-
                 </div>
             </section>
             <section class="panel panel-default">
@@ -143,6 +140,10 @@
         </section>
     </section>
 </section>
+
+@section Scripts {
+        @Scripts.Render("~/bundles/formhelpers")
+}
 
 @*@section Scripts {
     @Scripts.Render("~/bundles/croppic")

@@ -21,7 +21,7 @@ namespace EmergencyHoundApi.Controllers
             return db_EmergencyHound.GetSP_INCIDENT_ADV_SEARCH(UserIDX, null);
         }
 
-        // UPDATE THE INCIDENT INFORMATIOn
+        // UPDATE THE INCIDENT INFORMATION
         public string SetIncidents(string token, [FromBody]SP_INCIDENT_ADV_SEARCH_Result incident)
         {
             Guid tokenG = new Guid(token);
@@ -49,13 +49,14 @@ namespace EmergencyHoundApi.Controllers
             return "false";
         }
 
+        //INCIDENT STATUSES
+
         //GET LISTING OF INCIDENT STATUSES USER HAS ACCESS TO
         public IEnumerable<SP_INCIDENT_STATUS_QUERY_Result> GetAllIncidentStatuses(string token)
         {
             Guid tokenG = new Guid(token);
             if (tokenG != Guid.Empty)
             {
-
                 int UserIDX = db_Accounts.GetT_OE_USER_TOKEN_byToken(tokenG);
                 return db_EmergencyHound.GetSP_INCIDENT_STATUS_QUERY(UserIDX, null);
             }
@@ -88,10 +89,26 @@ namespace EmergencyHoundApi.Controllers
         }
 
 
+        //INCIDENT RESOURCES
+        public IEnumerable<SP_INCIDENT_RESOURCE_QUERY_Result> GetAllIncidentResources(string token)
+        {
+            Guid tokenG = new Guid(token);
+            if (tokenG != Guid.Empty)
+            {
+                int UserIDX = db_Accounts.GetT_OE_USER_TOKEN_byToken(tokenG);
+                return db_EmergencyHound.GetSP_INCIDENT_RESOURCE_QUERY(UserIDX, null);
+            }
+            else
+                return null;
+        }
 
         // ATTACHMENTS
 
-        // GET THE SELECTED INCIDENT ATTACHMENT
+        /// <summary>
+        /// GET THE SELECTED INCIDENT ATTACHMENT 
+        /// </summary>
+        /// <param name="AttachIDX"></param>
+        /// <returns></returns>
         public HttpResponseMessage GetIncImage(Guid AttachIDX) {
             var response = new HttpResponseMessage();
 
@@ -117,7 +134,12 @@ namespace EmergencyHoundApi.Controllers
             return response;
         }
 
-        // GET LISTING OF INCIDENT ATTACHMENTS
+        /// <summary>
+        /// Get Listing of Incident Attachments
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="IncidentIDX"></param>
+        /// <returns></returns>
         public IEnumerable<AttachDisplayType> GetIncidentAttaches(string token, Guid IncidentIDX)
         {
             Guid tokenG = new Guid(token);

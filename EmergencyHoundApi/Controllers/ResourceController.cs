@@ -80,7 +80,6 @@ namespace EmergencyHoundApi.Controllers
         }
 
 
-
         // SAVE RESOURCE TO SERVER
         public string SetResources(string token, [FromBody]SP_RESOURCE_ADV_SEARCH_Result resource)
         {
@@ -143,7 +142,7 @@ namespace EmergencyHoundApi.Controllers
             return "false";
         }
 
-        // SAVE PERSON TO SERVER
+        // SAVE QUALIFICATION TO SERVER
         public string SetQualification(string token, [FromBody]T_EM_QUALIFICATIONS qual)
         {
             try

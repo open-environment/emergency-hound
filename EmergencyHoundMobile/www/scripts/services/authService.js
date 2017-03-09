@@ -11,7 +11,12 @@
         var _authentication = {
             isAuth: false,
             userName: '',
-            token: ''
+            token: '',
+            userIDX: 0,
+            userFirstName: '',
+            userLastName: '',
+            userPhone: '',
+            trackInd: false
         };
 
         function _login(loginData) {
@@ -66,7 +71,7 @@
                     if (response.isValid == "true") {
                         // set current user in local storage
                         console.log('Authenticated to server succeeded');
-                        _setLocalStorage(response.authToken, loginData.userName);
+                        _setLocalStorage(response.authToken, loginData.userName, response.userIDX, response.userFirstName, response.userLastName, response.userPhone, response.trackInd);
                         deferred.resolve();
                     }
                     else {
@@ -76,6 +81,7 @@
                     }
                 }
             ).error(function (err) {
+                console.log(err);
                 authServiceFactory.logOut();
                 deferred.reject(err);
             });
@@ -84,17 +90,27 @@
         };
 
         // set current user in local storage
-        function _setLocalStorage(token, userName) {
+        function _setLocalStorage(token, userName, userIDX, userFirstName, userLastName, userPhone, trackInd) {
 
             localStorageService.set('authorizationData',
                 {
                     token: token,
-                    userName: userName
+                    userName: userName,
+                    userIDX: userIDX,
+                    userFirstName: userFirstName,
+                    userLastName: userLastName,
+                    userPhone: userPhone,
+                    trackInd: trackInd
                 }
             );
             _authentication.isAuth = true;
             _authentication.userName = userName;
             _authentication.token = token;
+            _authentication.userIDX = userIDX;
+            _authentication.userFirstName = userFirstName;
+            _authentication.userLastName = userLastName;
+            _authentication.userPhone = userPhone;
+            _authentication.trackInd = trackInd;
         };
 
         var _logOut = function () {
@@ -103,6 +119,11 @@
             _authentication.isAuth = false;
             _authentication.userName = '';
             _authentication.token = '';
+            _authentication.userIDX = 0;
+            _authentication.userFirstName = '';
+            _authentication.userLastName = '';
+            _authentication.userPhone = '';
+            _authentication.trackInd = false;
         };
 
         var _fillAuthData = function () {
@@ -111,6 +132,11 @@
                 _authentication.isAuth = true;
                 _authentication.userName = authData.userName;
                 _authentication.token = authData.token;
+                _authentication.userIDX = authData.userIDX;
+                _authentication.userFirstName = authData.userFirstName;
+                _authentication.userLastName = authData.userLastName;
+                _authentication.userPhone = authData.userPhone;
+                _authentication.trackInd = authData.trackInd;
             }
         };
 
@@ -118,7 +144,7 @@
         authServiceFactory.logOut = _logOut;
         authServiceFactory.fillAuthData = _fillAuthData;
         authServiceFactory.authentication = _authentication;
-
+        authServiceFactory.setLocalStorage = _setLocalStorage;
 
         return authServiceFactory;
 

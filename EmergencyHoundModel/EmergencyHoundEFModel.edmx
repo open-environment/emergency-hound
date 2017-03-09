@@ -532,6 +532,16 @@
           <Property Name="CREATE_USERIDX" Type="int" />
           <Property Name="CREATE_DT" Type="datetime2" Precision="0" />
         </EntityType>
+        <EntityType Name="T_EM_USER_LOCATION">
+          <Key>
+            <PropertyRef Name="USER_LOC_IDX" />
+          </Key>
+          <Property Name="USER_LOC_IDX" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="USER_IDX" Type="int" Nullable="false" />
+          <Property Name="LATITUDE" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="LONGITUDE" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="MODIFY_DT" Type="datetime2" Precision="0" />
+        </EntityType>
         <EntityType Name="T_EM_USER_NOTIFICATION">
           <Key>
             <PropertyRef Name="NOTIFICATION_IDX" />
@@ -671,6 +681,7 @@
           <Property Name="CREATE_DT" Type="datetime2" Precision="0" />
           <Property Name="MODIFY_USERIDX" Type="int" />
           <Property Name="MODIFY_DT" Type="datetime2" Precision="0" />
+          <Property Name="TRACK_IND" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'EMERG_DB.dbo.V_EM_INCIDENT_TEAM_DISPLAY' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1274,6 +1285,20 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__T_EM_USER__USER___1C873BEC">
+          <End Role="T_OE_USERS" Type="Self.T_OE_USERS" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="T_EM_USER_LOCATION" Type="Self.T_EM_USER_LOCATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_OE_USERS">
+              <PropertyRef Name="USER_IDX" />
+            </Principal>
+            <Dependent Role="T_EM_USER_LOCATION">
+              <PropertyRef Name="USER_IDX" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__T_EM_USER__USER___5441852A">
           <End Role="T_OE_USERS" Type="Self.T_OE_USERS" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1337,6 +1362,10 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <Parameter Name="UserIDX" Type="int" Mode="In" />
           <Parameter Name="OrgIDX" Type="uniqueidentifier" Mode="In" />
         </Function>
+        <Function Name="SP_INCIDENT_RESOURCE_QUERY" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserIDX" Type="int" Mode="In" />
+          <Parameter Name="OrgIDX" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <Function Name="SP_INCIDENT_STATUS_QUERY" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserIDX" Type="int" Mode="In" />
           <Parameter Name="OrgIDX" Type="uniqueidentifier" Mode="In" />
@@ -1393,6 +1422,7 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <EntitySet Name="T_EM_RESOURCE" EntityType="Self.T_EM_RESOURCE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_EM_RESOURCE_DTL" EntityType="Self.T_EM_RESOURCE_DTL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_EM_RESOURCE_VER_HIST" EntityType="Self.T_EM_RESOURCE_VER_HIST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_EM_USER_LOCATION" EntityType="Self.T_EM_USER_LOCATION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_EM_USER_NOTIFICATION" EntityType="Self.T_EM_USER_NOTIFICATION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_EM_USER_ORG" EntityType="Self.T_EM_USER_ORG" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_OE_APP_SETTINGS" EntityType="Self.T_OE_APP_SETTINGS" Schema="dbo" store:Type="Tables" />
@@ -1609,6 +1639,10 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <AssociationSet Name="FK__T_EM_USER__ORG_I__5535A963" Association="Self.FK__T_EM_USER__ORG_I__5535A963">
             <End Role="T_OE_ORGANIZATIONS" EntitySet="T_OE_ORGANIZATIONS" />
             <End Role="T_EM_USER_ORG" EntitySet="T_EM_USER_ORG" />
+          </AssociationSet>
+          <AssociationSet Name="FK__T_EM_USER__USER___1C873BEC" Association="Self.FK__T_EM_USER__USER___1C873BEC">
+            <End Role="T_OE_USERS" EntitySet="T_OE_USERS" />
+            <End Role="T_EM_USER_LOCATION" EntitySet="T_EM_USER_LOCATION" />
           </AssociationSet>
           <AssociationSet Name="FK__T_EM_USER__USER___5441852A" Association="Self.FK__T_EM_USER__USER___5441852A">
             <End Role="T_OE_USERS" EntitySet="T_OE_USERS" />
@@ -1893,6 +1927,15 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
             <Parameter Name="LongMin" Mode="In" Type="Decimal" />
             <Parameter Name="kind" Mode="In" Type="String" />
             <Parameter Name="statusCd" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="T_EM_USER_LOCATION" EntityType="EMERG_DBModel.T_EM_USER_LOCATION" />
+          <AssociationSet Name="FK__T_EM_USER__USER___1C873BEC" Association="EMERG_DBModel.FK__T_EM_USER__USER___1C873BEC">
+            <End Role="T_OE_USERS" EntitySet="T_OE_USERS" />
+            <End Role="T_EM_USER_LOCATION" EntitySet="T_EM_USER_LOCATION" />
+          </AssociationSet>
+          <FunctionImport Name="SP_INCIDENT_RESOURCE_QUERY" ReturnType="Collection(EMERG_DBModel.SP_INCIDENT_RESOURCE_QUERY_Result)">
+            <Parameter Name="UserIDX" Mode="In" Type="Int32" />
+            <Parameter Name="OrgIDX" Mode="In" Type="Guid" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="SP_DASHBOARD_COUNTS_Result">
@@ -2624,6 +2667,8 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <NavigationProperty Name="T_EM_USER_ORG" Relationship="EMERG_DBModel.FK__T_EM_USER__USER___5441852A" FromRole="T_OE_USERS" ToRole="T_EM_USER_ORG" />
           <NavigationProperty Name="T_OE_USER_ROLES" Relationship="EMERG_DBModel.FK__T_OE_USER__USER___1CF15040" FromRole="T_OE_USERS" ToRole="T_OE_USER_ROLES" />
           <NavigationProperty Name="T_OE_USER_TOKENS" Relationship="EMERG_DBModel.FK__T_OE_USER__USER___625A9A57" FromRole="T_OE_USERS" ToRole="T_OE_USER_TOKENS" />
+          <NavigationProperty Name="T_EM_USER_LOCATION" Relationship="EMERG_DBModel.FK__T_EM_USER__USER___1C873BEC" FromRole="T_OE_USERS" ToRole="T_EM_USER_LOCATION" />
+          <Property Name="TRACK_IND" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="V_EM_INCIDENT_TEAM_DISPLAY">
           <Key>
@@ -3417,6 +3462,49 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <Property Type="Int32" Name="CAN_EDIT" Nullable="true" />
           <Property Type="DateTime" Name="RESOURCE_EXP_DT" Nullable="true" Precision="23" />
         </ComplexType>
+        <EntityType Name="T_EM_USER_LOCATION">
+          <Key>
+            <PropertyRef Name="USER_LOC_IDX" />
+          </Key>
+          <Property Name="USER_LOC_IDX" Type="Guid" Nullable="false" />
+          <Property Name="USER_IDX" Type="Int32" Nullable="false" />
+          <Property Name="LATITUDE" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="LONGITUDE" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MODIFY_DT" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="T_OE_USERS" Relationship="EMERG_DBModel.FK__T_EM_USER__USER___1C873BEC" FromRole="T_EM_USER_LOCATION" ToRole="T_OE_USERS" />
+        </EntityType>
+        <Association Name="FK__T_EM_USER__USER___1C873BEC">
+          <End Type="EMERG_DBModel.T_OE_USERS" Role="T_OE_USERS" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="EMERG_DBModel.T_EM_USER_LOCATION" Role="T_EM_USER_LOCATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_OE_USERS">
+              <PropertyRef Name="USER_IDX" />
+            </Principal>
+            <Dependent Role="T_EM_USER_LOCATION">
+              <PropertyRef Name="USER_IDX" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="SP_INCIDENT_RESOURCE_QUERY_Result">
+          <Property Type="Guid" Name="INCIDENT_RESOURCE_IDX" Nullable="false" />
+          <Property Type="Guid" Name="INCIDENT_IDX" Nullable="false" />
+          <Property Type="Guid" Name="RESOURCE_IDX" Nullable="false" />
+          <Property Type="String" Name="RESOURCE_COUNT" Nullable="true" MaxLength="5" />
+          <Property Type="DateTime" Name="RESOURCE_ORDERED_DT" Nullable="true" />
+          <Property Type="DateTime" Name="RESOURCE_ETA_DT" Nullable="true" />
+          <Property Type="Boolean" Name="RESOURCE_ARRIVED_IND" Nullable="true" />
+          <Property Type="String" Name="RESOURCE_NOTES" Nullable="true" MaxLength="1000" />
+          <Property Type="String" Name="RESOURCE_ASSIGNED_TO" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="RESOURCE_ASSIGNED_PERSONS_COUNT" Nullable="true" />
+          <Property Type="Boolean" Name="ACT_IND" Nullable="false" />
+          <Property Type="Int32" Name="CREATE_USERIDX" Nullable="true" />
+          <Property Type="DateTime" Name="CREATE_DT" Nullable="true" />
+          <Property Type="Int32" Name="MODIFY_USERIDX" Nullable="true" />
+          <Property Type="DateTime" Name="MODIFY_DT" Nullable="true" />
+          <Property Type="Int32" Name="CAN_EDIT" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4084,6 +4172,7 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <EntitySetMapping Name="T_OE_USERS">
             <EntityTypeMapping TypeName="EMERG_DBModel.T_OE_USERS">
               <MappingFragment StoreEntitySet="T_OE_USERS">
+                <ScalarProperty Name="TRACK_IND" ColumnName="TRACK_IND" />
                 <ScalarProperty Name="MODIFY_DT" ColumnName="MODIFY_DT" />
                 <ScalarProperty Name="MODIFY_USERIDX" ColumnName="MODIFY_USERIDX" />
                 <ScalarProperty Name="CREATE_DT" ColumnName="CREATE_DT" />
@@ -4299,6 +4388,39 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
                 <ScalarProperty Name="RESOURCE_STATUS_NAME" ColumnName="RESOURCE_STATUS_NAME" />
                 <ScalarProperty Name="CAN_EDIT" ColumnName="CAN_EDIT" />
                 <ScalarProperty Name="RESOURCE_EXP_DT" ColumnName="RESOURCE_EXP_DT" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="T_EM_USER_LOCATION">
+            <EntityTypeMapping TypeName="EMERG_DBModel.T_EM_USER_LOCATION">
+              <MappingFragment StoreEntitySet="T_EM_USER_LOCATION">
+                <ScalarProperty Name="MODIFY_DT" ColumnName="MODIFY_DT" />
+                <ScalarProperty Name="LONGITUDE" ColumnName="LONGITUDE" />
+                <ScalarProperty Name="LATITUDE" ColumnName="LATITUDE" />
+                <ScalarProperty Name="USER_IDX" ColumnName="USER_IDX" />
+                <ScalarProperty Name="USER_LOC_IDX" ColumnName="USER_LOC_IDX" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_INCIDENT_RESOURCE_QUERY" FunctionName="EMERG_DBModel.Store.SP_INCIDENT_RESOURCE_QUERY">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="EMERG_DBModel.SP_INCIDENT_RESOURCE_QUERY_Result">
+                <ScalarProperty Name="INCIDENT_RESOURCE_IDX" ColumnName="INCIDENT_RESOURCE_IDX" />
+                <ScalarProperty Name="INCIDENT_IDX" ColumnName="INCIDENT_IDX" />
+                <ScalarProperty Name="RESOURCE_IDX" ColumnName="RESOURCE_IDX" />
+                <ScalarProperty Name="RESOURCE_COUNT" ColumnName="RESOURCE_COUNT" />
+                <ScalarProperty Name="RESOURCE_ORDERED_DT" ColumnName="RESOURCE_ORDERED_DT" />
+                <ScalarProperty Name="RESOURCE_ETA_DT" ColumnName="RESOURCE_ETA_DT" />
+                <ScalarProperty Name="RESOURCE_ARRIVED_IND" ColumnName="RESOURCE_ARRIVED_IND" />
+                <ScalarProperty Name="RESOURCE_NOTES" ColumnName="RESOURCE_NOTES" />
+                <ScalarProperty Name="RESOURCE_ASSIGNED_TO" ColumnName="RESOURCE_ASSIGNED_TO" />
+                <ScalarProperty Name="RESOURCE_ASSIGNED_PERSONS_COUNT" ColumnName="RESOURCE_ASSIGNED_PERSONS_COUNT" />
+                <ScalarProperty Name="ACT_IND" ColumnName="ACT_IND" />
+                <ScalarProperty Name="CREATE_USERIDX" ColumnName="CREATE_USERIDX" />
+                <ScalarProperty Name="CREATE_DT" ColumnName="CREATE_DT" />
+                <ScalarProperty Name="MODIFY_USERIDX" ColumnName="MODIFY_USERIDX" />
+                <ScalarProperty Name="MODIFY_DT" ColumnName="MODIFY_DT" />
+                <ScalarProperty Name="CAN_EDIT" ColumnName="CAN_EDIT" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

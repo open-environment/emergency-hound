@@ -13,12 +13,17 @@ namespace EmergencyHoundModel.DataAccessLayer
     {
         public int USER_IDX { get; set; }
         public string USER_NAME { get; set; }
+        public string USER_FNAME { get; set; }
+        public string USER_LNAME { get; set; }
+        public string USER_PHONE { get; set; }
+        public bool? TRACK_IND { get; set; }
     }
 
     public class db_Accounts
     {
         //*****************USERS **********************************
-        public static int CreateT_OE_USERS(global::System.String uSER_ID, global::System.String pWD_HASH, global::System.String pWD_SALT, global::System.String fNAME, global::System.String lNAME, global::System.String eMAIL, global::System.Boolean aCT_IND, global::System.Boolean iNITAL_PWD_FLAG, global::System.DateTime? lASTLOGIN_DT, global::System.String pHONE, global::System.String pHONE_EXT, int? cREATE_USERIDX)
+        public static int CreateT_OE_USERS(string uSER_ID, string pWD_HASH, string pWD_SALT, string fNAME, string lNAME, string eMAIL, bool aCT_IND, bool iNITAL_PWD_FLAG, 
+            DateTime? lASTLOGIN_DT, string pHONE, string pHONE_EXT, int? cREATE_USERIDX)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
             {
@@ -160,7 +165,7 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
         }
 
-        public static int UpdateT_OE_USERS(int idx, string newPWD_HASH, string newPWD_SALT, string newFNAME, string newLNAME, string newEMAIL, bool? newACT_IND, bool? newINIT_PWD_FLG, DateTime? newEFF_DATE, DateTime? newLAST_LOGIN_DT, string newPHONE, string newPHONE_EXT, int? newMODIFY_USR, int? LogAtmpt)
+        public static int UpdateT_OE_USERS(int idx, string newPWD_HASH, string newPWD_SALT, string newFNAME, string newLNAME, string newEMAIL, bool? newACT_IND, bool? newINIT_PWD_FLG, DateTime? newEFF_DATE, DateTime? newLAST_LOGIN_DT, string newPHONE, string newPHONE_EXT, int? newMODIFY_USR, int? LogAtmpt, bool? TrackInd)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
             {
@@ -182,6 +187,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                     if (newPHONE_EXT != null) row.PHONE_EXT = newPHONE_EXT;
                     if (newMODIFY_USR != null) row.MODIFY_USERIDX = newMODIFY_USR;
                     if (LogAtmpt != null) row.LOG_ATMPT = LogAtmpt;
+                    if (TrackInd != null) row.TRACK_IND = TrackInd.ConvertOrDefault<bool>();
 
                     row.MODIFY_DT = System.DateTime.Now;
 

@@ -25,7 +25,7 @@
 <body ng-app="ehApp">
     <section class="vbox" style="overflow-x:hidden;" ng-controller="indexController" >
         <!-- start page header -->
-        <header class="header bg-dark dk navbar navbar-fixed-top-xs">
+        <header class="header bg-dark dk navbar navbar-fixed-top-xs" style="max-height:50px">
             <div class="navbar-header aside-md">
                 <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
                     <i class="fa fa-bars"></i>
@@ -37,16 +37,9 @@
                     <i class="fa fa-cog"></i>
                 </a>
             </div>
-            <ul class="nav navbar-nav">
-                <li>
-                    <div class="m-t m-l">
-                        <button type="submit" class="btn btn-sm btn-warning " data-ng-click="pushSync()" ng-show="$root.needSync">Submit Pending Data to Server</button>
-                    </div>
-                </li>
-            </ul>
             <ul class="nav navbar-nav navbar-right hidden-xs nav-user">
                 <li class="dropdown">
-                    <a href="" class="dropdown-toggle" data-toggle="dropdown" style="padding-right: 25px;">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" style="padding-right: 25px; background-color: #25313e">
                         <!--<span class="thumb-sm avatar pull-left">
                             <img src='images/avatar_m.jpg'>
                         </span>-->
@@ -59,8 +52,8 @@
                         <!--<li>
                             <a href='#'>Profile</a>
                         </li>-->
-                        <li>
-                            <a href="#config">Mobile Config</a>
+                        <li> 
+                            <a href="#config">Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -84,8 +77,9 @@
                                 <button type="button" class="btn btn-sm btn-icon btn-dark" ><i class="fa fa-wifi" data-ng-class="{'text-primary': online, 'text-danger': !online}"></i></button>
                                 <div class="btn-group hidden-nav-xs">
                                     <div class="btn btn-sm " data-ng-class="{'btn-primary': online, 'btn-danger': !online}">
-                                        {{online == true ? "online mode" : "offline mode" }} 
+                                        {{online == true ? "online" : "offline" }} 
                                     </div>
+                                    <button type="submit" class="btn btn-sm btn-warning " data-ng-click="pushSync()" ng-show="$root.needSync">Send Pending</button>
                                 </div>
                             </div>
                         </header>
@@ -94,8 +88,8 @@
                                 <nav class="nav-primary hidden-xs" >
                                     <ul class="nav">
                                         <li class="active">
-                                            <a href="#dashboard">
-                                                <i class=" fa fa-dashboard icon">
+                                            <a href="#dashboard" data-toggle="class:nav-off-screen,open" data-target="#nav,html" >
+                                                <i class="fa fa-dashboard icon">
                                                     <b class="bg-danger"></b>
                                                 </i>
                                                 <span>Dashboard</span>
@@ -114,13 +108,13 @@
                                             </a>
                                             <ul class="nav lt">
                                                 <li>
-                                                    <a href="#resources">
+                                                    <a href="#resources" data-toggle="class:nav-off-screen,open" data-target="#nav,html" >
                                                         <i class="fa fa-angle-right"></i>
                                                         <span>Resources</span>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="#people">
+                                                    <a href="#people" data-toggle="class:nav-off-screen,open" data-target="#nav,html" >
                                                         <i class="fa fa-angle-right"></i>
                                                         <span>People / Certification</span>
                                                     </a>
@@ -140,13 +134,13 @@
                                             </a>
                                             <ul class="nav lt">
                                                 <li>
-                                                    <a href="#incidents">
+                                                    <a href="#incidents" data-toggle="class:nav-off-screen,open" data-target="#nav,html" >
                                                         <i class="fa fa-angle-right"></i>
                                                         <span>Incident Search</span>
                                                     </a>
                                                 </li>
                                                 <li class="active" ng-show="">
-                                                    <a href="" class="active">
+                                                    <a href="" class="active" data-toggle="class:nav-off-screen,open" data-target="#nav,html" >
                                                         <i class="fa fa-angle-down text"></i>
                                                         <i class="fa fa-angle-up text-active"></i>
                                                         <span>Incident Details</span>
@@ -200,6 +194,7 @@
                                                 </li>
                                             </ul>
                                         </li>
+
                                         <!--<li>
                                             <a href="#documents">
                                                 <i class=" fa fa-file-text icon">
@@ -226,6 +221,7 @@
                 <!-- end left menu -->
 
                 <!-- start specific view -->
+
                 <section id="content">
                     <section class="vbox">
                         <section class="scrollable padder">
@@ -267,6 +263,7 @@
     <script src="scripts/services/dbManagerService.js"></script>
     <script src="scripts/services/uuidService.js"></script>
     <script src="scripts/services/cameraService.js"></script>
+    <script src="scripts/services/geoLocService.js"></script>
 
     <!-- AngularJS controller scripts -->
     <script src="scripts/controllers/indexController.js"></script>
@@ -282,6 +279,7 @@
     <script src="scripts/controllers/incidentMap2Controller.js"></script>
     <script src="scripts/controllers/incidentTeamController.js"></script>
     <script src="scripts/controllers/incidentResourcesController.js"></script>
+    <script src="scripts/controllers/incidentResourceEditController.js"></script>
     <script src="scripts/controllers/incidentOpPeriodsController.js"></script>
     <script src="scripts/controllers/incidentStatusController.js"></script>
     <script src="scripts/controllers/incidentStatusEditController.js"></script>

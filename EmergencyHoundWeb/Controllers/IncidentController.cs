@@ -286,7 +286,7 @@ namespace EmergencyHoundWeb.Controllers
                 //************* validation ***************************
                 if (model.IncidentCommander == null || model.TeamType == null)
                 {
-                    TempData["Error"] = "You must supply all required information";
+                    TempData["Error"] = "You must supply an incident commander and click on a starting team structure";
                     return RedirectToAction("Team", "Incident", new { id = model.IncidentIDX });
                 }
 
@@ -366,24 +366,38 @@ namespace EmergencyHoundWeb.Controllers
         [HttpPost]
         public ActionResult Team(vmIncidentTeamModel model)
         {
-            if (ModelState.IsValid)
+            if (model.editTeamMember != null)
             {
-                if (model.editTeamMember != null)
+                //validation begin *************************
+                if (model.editTeamMember.ROLE_NAME == null)
                 {
-                    int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                    TempData["Error"] = "Role Description required";
+                    return RedirectToAction("Team", "Incident", new { id = model.IncidentIDX });
+                }
 
-                    Guid? EditTeamDtlIDX = db_EmergencyHound.InsertUpdateT_EM_INCIDENT_TEAM_DTL(model.editTeamMember.INCIDENT_TEAM_DTL_IDX, null, model.IncidentIDX,
-                        model.editTeamMember.REPORTS_TO_TEAM_DTL_IDX, model.editTeamMember.INDIVIDUAL_IDX, model.editTeamMember.RESOURCE_IDX,
-                        model.editTeamMember.ROLE_NAME, model.editTeamMember.AGENCY, 1, model.editTeamMember.TRAINEE_IND, model.editTeamMember.CONTACT_TYPE,
-                        model.editTeamMember.CONTACT_INFO, true, UserIDX);
+                if (model.editTeamMember.INDIVIDUAL_IDX == null && model.editTeamMember.RESOURCE_IDX == null)
+                {
+                    TempData["Error"] = "You must specify an individual or team.";
+                    return RedirectToAction("Team", "Incident", new { id = model.IncidentIDX });
+                }
 
-                    if (EditTeamDtlIDX != null)
-                    {
-                        TempData["Success"] = "Data saved";
-                        return RedirectToAction("Team", "Incident", new { id = model.IncidentIDX });
-                    }
+
+                //validation end *************************
+
+                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+
+                Guid? EditTeamDtlIDX = db_EmergencyHound.InsertUpdateT_EM_INCIDENT_TEAM_DTL(model.editTeamMember.INCIDENT_TEAM_DTL_IDX, null, model.IncidentIDX,
+                    model.editTeamMember.REPORTS_TO_TEAM_DTL_IDX, model.editTeamMember.INDIVIDUAL_IDX, model.editTeamMember.RESOURCE_IDX,
+                    model.editTeamMember.ROLE_NAME, model.editTeamMember.AGENCY, 1, model.editTeamMember.TRAINEE_IND, model.editTeamMember.CONTACT_TYPE,
+                    model.editTeamMember.CONTACT_INFO, true, UserIDX);
+
+                if (EditTeamDtlIDX != null)
+                {
+                    TempData["Success"] = "Data saved";
+                    return RedirectToAction("Team", "Incident", new { id = model.IncidentIDX });
                 }
             }
+
 
             //if got this far, something went wrong
             TempData["Error"] = "Unable to save data";
@@ -395,6 +409,8 @@ namespace EmergencyHoundWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteTeamDtl(Guid? id)
         {
+            T_EM_INCIDENT_TEAM_DTL d = db_EmergencyHound.GetT_EM_INCIDENT_TEAM_DTL_byID(id);
+
             //delete
             int SuccIDX = db_EmergencyHound.DeleteT_EM_INCIDENT_TEAM_DTL(id.ConvertOrDefault<Guid>());
 
@@ -403,10 +419,12 @@ namespace EmergencyHoundWeb.Controllers
                 TempData["Success"] = "Deleted successfully.";
                 ModelState.Clear();
             }
+            else if (SuccIDX == -1)
+                TempData["Error"] = "Cannot delete because people report to this role.";
             else
                 TempData["Error"] = "Unable to delete incident.";
 
-            return RedirectToAction("Team", "Incident");
+            return RedirectToAction("Team", "Incident", new { id = d.INCIDENT_IDX });
         }
 
 

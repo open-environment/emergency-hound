@@ -47,12 +47,12 @@
             <section class="panel panel-default wizard">
                 <div class="wizard-steps clearfix" id="form-wizard">
                     <ul class="steps">
-                        <li class="active"><a href="@Url.Action("Edit", "Incident", new { id=Model.t_em_incident_op_period.INCIDENT_IDX })"><span class="badge badge-success">1</span>Basic Info</a></li>
+                        <li><a href="@Url.Action("Edit", "Incident", new { id=Model.t_em_incident_op_period.INCIDENT_IDX })"><span class="badge badge-success">1</span>Basic Info</a></li>
                         <li><a href="@Url.Action("Map", "Incident", new { id=Model.t_em_incident_op_period.INCIDENT_IDX })"><span class="badge badge-success">2</span>Location</a></li>
                         <li><a href="@Url.Action("Team", "Incident", new { id=Model.t_em_incident_op_period.INCIDENT_IDX })"><span class="badge badge-success">3</span>Team</a></li>
-                        <li><a href="@Url.Action("Resources", "Incident", new { id=Model.t_em_incident_op_period.INCIDENT_IDX })"><span class="badge badge-success">4</span>Resources</a></li>
+                        <li><a href="@Url.Action("IncResource", "Incident", new { id=Model.t_em_incident_op_period.INCIDENT_IDX })"><span class="badge badge-success">4</span>Resources</a></li>
                         <li><a href="@Url.Action("Status", "Incident", new { id=Model.t_em_incident_op_period.INCIDENT_IDX })"><span class="badge badge-success">5</span>Status</a></li>
-                        <li><a href="@Url.Action("OpPeriods", "Incident", new { id=Model.t_em_incident_op_period.INCIDENT_IDX })"><span class="badge badge-info">6</span>Operational Periods</a></li>
+                        <li class="active"><a href="@Url.Action("OpPeriods", "Incident", new { id=Model.t_em_incident_op_period.INCIDENT_IDX })"><span class="badge badge-info">6</span>Operational Periods</a></li>
                     </ul>
                 </div>
             </section>

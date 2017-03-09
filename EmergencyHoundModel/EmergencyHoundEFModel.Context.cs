@@ -73,6 +73,7 @@ namespace EmergencyHoundModel
         public virtual DbSet<T_EM_REF_INCIDENT_PRIORITY> T_EM_REF_INCIDENT_PRIORITY { get; set; }
         public virtual DbSet<T_EM_QUALIFICATION_ATTACH> T_EM_QUALIFICATION_ATTACH { get; set; }
         public virtual DbSet<T_OE_USER_TOKENS> T_OE_USER_TOKENS { get; set; }
+        public virtual DbSet<T_EM_USER_LOCATION> T_EM_USER_LOCATION { get; set; }
     
         public virtual ObjectResult<SP_DASHBOARD_COUNTS_Result> SP_DASHBOARD_COUNTS(Nullable<int> userIDX)
         {
@@ -166,6 +167,19 @@ namespace EmergencyHoundModel
                 new ObjectParameter("statusCd", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RESOURCE_ADV_SEARCH_Result>("SP_RESOURCE_ADV_SEARCH", userIDXParameter, orgIDXParameter, resourceStrParameter, latMaxParameter, latMinParameter, longMaxParameter, longMinParameter, kindParameter, statusCdParameter);
+        }
+    
+        public virtual ObjectResult<SP_INCIDENT_RESOURCE_QUERY_Result> SP_INCIDENT_RESOURCE_QUERY(Nullable<int> userIDX, Nullable<System.Guid> orgIDX)
+        {
+            var userIDXParameter = userIDX.HasValue ?
+                new ObjectParameter("UserIDX", userIDX) :
+                new ObjectParameter("UserIDX", typeof(int));
+    
+            var orgIDXParameter = orgIDX.HasValue ?
+                new ObjectParameter("OrgIDX", orgIDX) :
+                new ObjectParameter("OrgIDX", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_INCIDENT_RESOURCE_QUERY_Result>("SP_INCIDENT_RESOURCE_QUERY", userIDXParameter, orgIDXParameter);
         }
     }
 }

@@ -17,6 +17,7 @@
         appId: 'ehApp',
         selectedIncident: null,
         selectedIncidentStatus: null,
+        selectedIncidentResource: null,
         selectedResource: null,
         selectedPerson: null,
         selectedQual: null
@@ -24,7 +25,7 @@
 
     app.constant('dbConstants', {
         name: 'emergency_hound',
-        version: 4
+        version: 6
     });
 
     //****************************************************************************
@@ -92,6 +93,10 @@
                 templateUrl: 'views/incidentResources.html',
                 controller: 'incidentResourcesController'
             })
+            .when('/incidentResourceEdit', {
+                templateUrl: 'views/incidentResourceEdit.html',
+                controller: 'incidentResourceEditController'
+            })
             .when('/incidentStatus', {
                 templateUrl: 'views/incidentStatus.html',
                 controller: 'incidentStatusController'
@@ -130,7 +135,7 @@
     //****************************************************************************
     //WHEN APPLICATION FIRST RUNS
     //****************************************************************************
-    app.run(function ($window, $rootScope, $location, authService, localStorageService, dbManagerService) {
+    app.run(function ($window, $rootScope, $location, authService, localStorageService, dbManagerService, geoLocService) {
 
         //window.shimIndexedDB.__useShim(); //only set this to force using WebSQL when debugging
 
@@ -167,6 +172,7 @@
         // define the online status and also create events for going online or offline
         //****************************************************************************
         $rootScope.token = '';
+        $rootScope.userIDX = 0;
         $rootScope.online = navigator.onLine;
         $rootScope.$apply();
 

@@ -200,6 +200,25 @@
                 _incidentstatuses.createIndex('synced', 'synced', { unique: false });
             }
 
+            //****************** CREATE INCIDENT RESOURCES TABLE *****************************************************
+            if (!db.objectStoreNames.contains('incidentresources')) {
+                var _incidentresources = db.createObjectStore('incidentresources', { keyPath: "incidenT_RESOURCE_IDX" });
+                _incidentresources.createIndex('incidenT_IDX', 'incidenT_IDX', { unique: false });
+                _incidentresources.createIndex('resourcE_IDX', 'resourcE_IDX', { unique: false });
+                _incidentresources.createIndex('resourcE_COUNT', 'resourcE_COUNT', { unique: false });
+                _incidentresources.createIndex('resourcE_ORDERED_DT', 'resourcE_ORDERED_DT', { unique: false });
+                _incidentresources.createIndex('resourcE_ETA_DT', 'resourcE_ETA_DT', { unique: false });
+                _incidentresources.createIndex('resourcE_NOTES', 'resourcE_NOTES', { unique: false });
+                _incidentresources.createIndex('resourcE_ASSIGNED_TO', 'resourcE_ASSIGNED_TO', { unique: false });
+                _incidentresources.createIndex('acT_IND', 'acT_IND', { unique: false });
+                _incidentresources.createIndex('creatE_USERIDX', 'creatE_USERIDX', { unique: false });
+                _incidentresources.createIndex('creatE_DT', 'creatE_DT', { unique: false });
+                _incidentresources.createIndex('modifY_USERIDX', 'modifY_USERIDX', { unique: false });
+                _incidentresources.createIndex('modifY_DT', 'modifY_DT', { unique: false });
+                _incidentresources.createIndex('caN_EDIT', 'caN_EDIT', { unique: false });
+                _incidentresources.createIndex('synced', 'synced', { unique: false });
+            }
+
 
             //****************** CREATE DOCUMENTS TABLE *****************************************************
             if (!db.objectStoreNames.contains('documents')) {
@@ -219,6 +238,21 @@
                 _documents.createIndex('canEdit', 'canEdit', { unique: false });
                 _documents.createIndex('synced', 'synced', { unique: false });
             }
+
+            //****************** CREATE USER LOCATIONS TABLE *****************************************************
+            if (!db.objectStoreNames.contains('user_locations')) {
+                var _user_locations = db.createObjectStore('user_locations', { keyPath: "uSER_IDX" });
+
+                _user_locations.createIndex('uSER_IDX', 'uSER_IDX', { unique: false });
+                _user_locations.createIndex('uSER_FULL_NAME', 'USER_FULL_NAME', { unique: false });
+                _user_locations.createIndex('useR_PHONE', 'useR_PHONE', { unique: false });
+                _user_locations.createIndex('lATITUDE', 'lATITUDE', { unique: false });
+                _user_locations.createIndex('lONGITUDE', 'lONGITUDE', { unique: false });
+                _user_locations.createIndex('lOC_DATE', 'lOC_DATE', { unique: false });
+                _user_locations.createIndex('canEdit', 'canEdit', { unique: false });
+                _user_locations.createIndex('synced', 'synced', { unique: false });
+            }
+
 
             //****************** CREATE REF SHARE TYPE TABLE ************************************************
             if (!db.objectStoreNames.contains('refShareType')) {
@@ -281,7 +315,6 @@
             }
 
 
-
             //after pulling everything, let's sync it all 
             //_sync();
 
@@ -336,9 +369,17 @@
         delRequest.onsuccess = function () {
             console.log("Database deleted");
         };
-
     }
 
+    //**********************************************
+        //method for deleting all records from a table
+        //**********************************************
+    function _clearTable(tblName) {
+            console.log('2');
+            var store = db.transaction([tblName], 'readwrite').objectStore(tblName);
+            var objectStoreRequest = store.clear();
+            console.log('3');
+        }
 
     //**********************************************
     //methods for retrieving syncing data from server
@@ -363,7 +404,9 @@
             _syncQualifications();
             _syncIncidents();
             _syncIncidentStatuses();
+            _syncIncidentResources();
             _syncDocuments();
+            //_syncUserLocations();
 
             _syncRefShareType();
             _syncRefIncidentPriority(dt);
@@ -772,6 +815,69 @@
         return deferred.promise;
     }
 
+    function _syncIncidentResources() {
+
+        console.log('sync inc resource start');
+
+        var deferred = $q.defer();
+        var data;
+        init2().then(function () {
+
+            $http.get($rootScope.serverBaseUrl + 'api/incident/GetAllIncidentResources?token=' + $rootScope.token)
+                .success(function (data) {
+                    var t = db.transaction(["incidentresources"], "readwrite");
+
+                    for (i = 0; i < data.length; i++) {
+                        //first grab local data if there is any
+                        var existingRec = t.objectStore("incidentresources").get(data[i].incidenT_RESOURCE_IDX);
+                        if (existingRec != null) {
+
+                            //only pull if server date 
+                            if (existingRec.synced != "false") {
+                                t.objectStore("incidentresources").put({
+                                    incidenT_RESOURCE_IDX: data[i].incidenT_RESOURCE_IDX,
+                                    incidenT_IDX: data[i].incidenT_IDX,
+                                    resourcE_IDX: data[i].resourcE_IDX,
+                                    resourcE_COUNT: data[i].resourcE_COUNT,
+                                    resourcE_ORDERED_DT: data[i].resourcE_ORDERED_DT,
+                                    resourcE_ETA_DT: data[i].resourcE_ETA_DT,
+                                    resourcE_NOTES: data[i].resourcE_NOTES,
+                                    resourcE_ASSIGNED_TO: data[i].resourcE_ASSIGNED_TO,
+                                    acT_IND: (data[i].acT_IND ? 1 : 0),
+                                    creatE_USERIDX: data[i].creatE_USERIDX,
+                                    creatE_DT: data[i].creatE_DT,
+                                    modifY_USERIDX: data[i].modifY_USERIDX,
+                                    modifY_DT: data[i].modifY_DT,
+                                    caN_EDIT: (data[i].caN_EDIT ? 1 : 0),
+                                    synced: 1
+                                });
+                                console.log('pulled inc resource: ' + data[i].incidenT_RESOURCE_IDX);
+                            }
+                            else {
+                                console.log('did not pull inc resource: ' + data[i].incidenT_RESOURCE_IDX);
+                            }
+                        }
+                    }
+
+                    t.onerror = function (event) {
+                        console.log(event.target.error.name);
+                    };
+
+                    t.oncomplete = function (event) {
+                        deferred.resolve();
+                    };
+                })
+                .error(function (data) {
+                    console.log('GET ALL INCIDENT RESOURCES FAILED');
+                });
+        });
+
+        console.log('sync incident resource end');
+
+        return deferred.promise;
+    }
+
+
     function _syncIncidentAttach(incIDX) {
         var deferred = $q.defer();
 
@@ -831,6 +937,56 @@
         });
 
         console.log('sync documents end');
+
+        return deferred.promise;
+
+    }
+
+    function _syncUserLocations() {
+
+        console.log('sync user locations start');
+
+        var deferred = $q.defer();
+        var data;
+        init2().then(function () {
+
+
+            $http.get($rootScope.serverBaseUrl + 'api/account/GetAllUserLocations?token=' + $rootScope.token)
+                .success(function (data) {
+
+                    var t = db.transaction(["user_locations"], "readwrite");
+
+                    //clear table first
+                    var store = t.objectStore('user_locations');
+                    var objectStoreRequest = store.clear();
+
+                    for (i = 0; i < data.length; i++) {
+                        t.objectStore("user_locations").put({
+                            uSER_IDX: data[i].useR_IDX,
+                            uSER_FULL_NAME: data[i].useR_FULL_NAME,
+                            useR_PHONE: data[i].useR_PHONE,
+                            lATITUDE: data[i].latitude,
+                            lONGITUDE: data[i].longitude,
+                            lOC_DATE: data[i].loC_DATE,
+                            canEdit: 1,
+                            synced: 1
+                        });
+                    }
+
+                    t.onerror = function (event) {
+                        console.log(event.target.error.name);
+                    };
+
+                    t.oncomplete = function (event) {
+                        deferred.resolve();
+                    };
+
+
+                });
+
+        });
+
+        console.log('sync user locations end');
 
         return deferred.promise;
 
@@ -1253,6 +1409,7 @@
     }
 
     function _getRefTable(tableName) {
+
         var deferred = $q.defer();
 
         init2().then(function () {
@@ -1280,6 +1437,35 @@
         return deferred.promise;
     }
 
+
+    function _getRefTable2(tableName) {
+
+
+        init2().then(function () {
+
+            var collection = [];
+
+            var handleResult = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    collection.push(cursor.value);
+                    cursor.continue();
+                }
+            };
+
+            var transaction = db.transaction([tableName], "readonly");
+            var objectStore = transaction.objectStore(tableName);
+            objectStore.openCursor().onsuccess = handleResult;
+
+            return collection;
+
+        });
+
+    }
+
+
+
+    //returns a list of data
     function _getDataByIndex(tableName, idx, val) {
         var deferred = $q.defer();
 
@@ -1350,6 +1536,9 @@
         return deferred.promise;
     }
 
+    //**********************************************
+    //methods for saving a row locally
+    //**********************************************
     function _saveTable(row, dbTable) {
         var deferred = $q.defer();
 
@@ -1407,6 +1596,29 @@
         return deferred.promise;
     }
 
+    //**********************************************
+    //methods for syncing data to remote server
+    //**********************************************
+    function _syncRowToServerOnly(recordObj, apiPath) {
+        var deferred = $q.defer();
+
+        $http.post($rootScope.serverBaseUrl + apiPath + '?token=' + $rootScope.token, JSON.stringify(recordObj),
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .success(function (data) {
+                console.log('SYNC RECORD TO SERVER SUCCESS');
+                deferred.resolve(recordObj);
+            })
+        .error(function (data) {
+            console.log('SYNC RECORD TO SERVER FAILED');
+        });
+
+        return deferred.promise;
+    }
+
     function _syncTableToServer(strTable) {
         console.log(strTable);
         var deferred = $q.defer();
@@ -1429,6 +1641,7 @@
     function _syncAllPendingToServer() {
         _syncTableToServer('people');
     };
+
 
     //**********************************************
     //methods for creating new records
@@ -1489,6 +1702,25 @@
         };
     };
 
+    function _newIncidentResource(incIDX) {
+        return {
+            incidenT_RESOURCE_IDX: uuidService.newuuid(),
+            incidenT_IDX: incIDX,
+            resourcE_IDX: null,
+            resourcE_COUNT: null,
+            resourcE_ORDERED_DT: null,
+            resourcE_ETA_DT: null,
+            resourcE_NOTES: null,
+            resourcE_ASSIGNED_TO: null,
+            acT_IND: 1,
+            creatE_USERIDX: null,
+            creatE_DT: null,
+            modifY_USERIDX: null,
+            modifY_DT: null,
+            caN_EDIT: 1,
+            synced: 0
+        };
+    };
 
 
     function _newResource() {
@@ -1590,8 +1822,10 @@
         syncQualifications: _syncQualifications,
         syncIncidents: _syncIncidents,
         syncIncidentStatuses: _syncIncidentStatuses,
+        syncIncidentResources: _syncIncidentResources,
         syncIncidentAttach: _syncIncidentAttach,
         syncDocuments: _syncDocuments,
+        syncUserLocations: _syncUserLocations,
         syncOrganizations: _syncOrganizations,
         syncRefShareType: _syncRefShareType,
         syncRefResourceStatus: _syncRefResourceStatus,
@@ -1603,6 +1837,7 @@
         getOrganizations: _getOrganizations,
         getDocuments: _getDocuments,
         getRefTable: _getRefTable,
+        getRefTable2: _getRefTable2,
         getDataByIndex: _getDataByIndex,
 
         saveIncident: _saveIncident,
@@ -1610,17 +1845,20 @@
         saveTable: _saveTable,
 
         deleteLocalRecord: _deleteLocalRecord,
+        clearTable: _clearTable,
 
         syncRowToServer: _syncRowToServer,
-        syncAllPendingToServer: _syncAllPendingToServer, 
+        syncRowToServerOnly: _syncRowToServerOnly,
+        syncAllPendingToServer: _syncAllPendingToServer,
 
         newResource: _newResource,
         newIncident: _newIncident,
         newIncidentStatus: _newIncidentStatus,
+        newIncidentResource: _newIncidentResource,
         newPerson: _newPerson,
         newQualification: _newQualification,
         init: init2 
-};
+    };
 
     console.log('dbManager exited');
 

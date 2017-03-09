@@ -1,7 +1,6 @@
-﻿(function () {
-    'use strict';
+﻿angular.module('ehApp').controller('loginController',
     
-    var loginController = function ($scope, $rootScope, authService, cfpLoadingBar, $location) {
+    function ($scope, $rootScope, authService, cfpLoadingBar, $location) {
 
         console.log('Start Login Controller');
 
@@ -11,6 +10,7 @@
             password: ''
         };
 
+        
         $scope.login = function () {
             //START VALIDATION
             if (!$scope.loginForm.$valid) {
@@ -28,13 +28,17 @@
                 var auth1 = authService.authentication;
                 console.log('user is ' + auth1.userName);
                 console.log('token ' + auth1.token);
+                console.log('useridx ' + auth1.userIDX);
+
                 $rootScope.token = auth1.token;
+                $rootScope.userIDX = auth1.userIDX;
 
                 //var syncPromise = dataSyncService.sync();
 
                 //syncPromise.then(function () {
                 //    console.log('initial sync success');
-                    $location.path('/dashboard');
+
+                $location.path('/dashboard');
                 //});
                 //syncPromise.catch(function () {
                 //    console.log('initial sync error');
@@ -42,14 +46,10 @@
                 //});
             });
             loginPromise.catch(function () {
-                console.log('login error');
                 $scope.message = 'Error logging in';
                 cfpLoadingBar.complete();
                 $location.path('/login');
-
             });
-
-            cfpLoadingBar.complete();
 
         };
 
@@ -61,8 +61,5 @@
 
         console.log('End Login Controller');
 
-    };
-
-    angular.module('ehApp').controller('loginController', ['$scope', '$rootScope', 'authService', 'cfpLoadingBar', '$location', loginController]);
-
-})();
+    }
+);

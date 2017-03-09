@@ -88,7 +88,7 @@ namespace EmergencyHoundWeb.App_Logic
                 string salt = GenerateSalt();
                 string hashpass = HashPassword(newPassword, _PasswordFormat, salt);
                 //save updated information
-                if (db_Accounts.UpdateT_OE_USERS(u.USER_IDX, hashpass, salt, null, null, null, null, false, null, null, null, null, 0, null) == 1)
+                if (db_Accounts.UpdateT_OE_USERS(u.USER_IDX, hashpass, salt, null, null, null, null, false, null, null, null, null, 0, null, null) == 1)
                     return true;
                 else
                     return false;
@@ -258,7 +258,7 @@ namespace EmergencyHoundWeb.App_Logic
                     string hashpass = HashPassword(newPass, _PasswordFormat, salt);
 
                     //save updated hashed password and salt
-                    if (db_Accounts.UpdateT_OE_USERS(u.USER_IDX, hashpass, salt, null, null, null, null, true, null, null, null, null, null, 0) == 1)
+                    if (db_Accounts.UpdateT_OE_USERS(u.USER_IDX, hashpass, salt, null, null, null, null, true, null, null, null, null, null, 0, null) == 1)
                     {
                         //encrypt username for email
                         string encryptOauth = new SimpleAES().Encrypt(newPass + "||" + username);
@@ -312,7 +312,7 @@ namespace EmergencyHoundWeb.App_Logic
                 }
                 else
                 {
-                    db_Accounts.UpdateT_OE_USERS(u.USER_IDX, null, null, null, null, null, u.LOG_ATMPT.ConvertOrDefault<int>() < MaxInvalidPasswordAttempts, null, null, null, null, null, null, u.LOG_ATMPT.ConvertOrDefault<int>() + 1);
+                    db_Accounts.UpdateT_OE_USERS(u.USER_IDX, null, null, null, null, null, u.LOG_ATMPT.ConvertOrDefault<int>() < MaxInvalidPasswordAttempts, null, null, null, null, null, null, u.LOG_ATMPT.ConvertOrDefault<int>() + 1, null);
 
                     //user account is locked due to too many invalid login attempts
                     if (u.LOG_ATMPT.ConvertOrDefault<int>() + 1 > MaxInvalidPasswordAttempts)

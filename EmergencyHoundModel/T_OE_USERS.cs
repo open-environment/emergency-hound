@@ -22,6 +22,7 @@ namespace EmergencyHoundModel
             this.T_EM_USER_ORG = new HashSet<T_EM_USER_ORG>();
             this.T_OE_USER_ROLES = new HashSet<T_OE_USER_ROLES>();
             this.T_OE_USER_TOKENS = new HashSet<T_OE_USER_TOKENS>();
+            this.T_EM_USER_LOCATION = new HashSet<T_EM_USER_LOCATION>();
         }
     
         public int USER_IDX { get; set; }
@@ -47,6 +48,7 @@ namespace EmergencyHoundModel
         public Nullable<System.DateTime> CREATE_DT { get; set; }
         public Nullable<int> MODIFY_USERIDX { get; set; }
         public Nullable<System.DateTime> MODIFY_DT { get; set; }
+        public bool TRACK_IND { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<T_EM_INDIVIDUALS> T_EM_INDIVIDUALS { get; set; }
@@ -58,5 +60,7 @@ namespace EmergencyHoundModel
         public virtual ICollection<T_OE_USER_ROLES> T_OE_USER_ROLES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<T_OE_USER_TOKENS> T_OE_USER_TOKENS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<T_EM_USER_LOCATION> T_EM_USER_LOCATION { get; set; }
     }
 }

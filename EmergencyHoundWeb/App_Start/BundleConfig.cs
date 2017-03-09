@@ -30,7 +30,9 @@ namespace EmergencyHoundWeb
             bundles.Add(new ScriptBundle("~/bundles/confirmdelete").Include("~/Scripts/confirm_delete.js"));
             bundles.Add(new ScriptBundle("~/bundles/croppic").Include("~/Scripts/croppic/croppic.js"));
             bundles.Add(new ScriptBundle("~/bundles/datepicker").Include("~/Scripts/bootstrap-datepicker/bootstrap-datepicker.js"));
-            bundles.Add(new ScriptBundle("~/bundles/datetimepicker").Include("~/Scripts/datetimepicker/jquery.datetimepicker.js"));
+            bundles.Add(new ScriptBundle("~/bundles/formhelpers").Include("~/Scripts/bootstrap-formhelpers/bootstrap-formhelpers.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/datetimepicker").Include("~/Scripts/datetimepicker/jquery.datetimepicker.js",
+                "~/Scripts/datetimepicker/app-datetimepicker.js"));
             bundles.Add(new ScriptBundle("~/bundles/team").Include(
                 "~/Scripts/team.js",
                 "~/Scripts/jquery.layout.js"));

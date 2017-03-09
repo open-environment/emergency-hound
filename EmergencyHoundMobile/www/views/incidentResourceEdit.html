@@ -1,0 +1,74 @@
+﻿<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+
+<section class="panel panel-default">
+    <header class="panel-heading font-bold ">Incident Resource</header>
+    <form class="panel-body" name="submitForm" novalidate ng-submit="submitForm.$valid && incidentEdit.save()">
+        <div class="hbox stretch">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Resource Type:</label>
+                        <select class="form-control" id="resourceType"
+                                data-ng-model="incidentresource.resourcE_IDX"
+                                ng-options="r.statuS_TYPE_CD as r.statuS_TYPE_CD for r in ddlStatusType"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Count:</label>
+                        <input type="text" class="form-control" data-ng-model="incidentresource.resourcE_COUNT"
+                               value="{{incidentresource.resourcE_COUNT}}" required="" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Assigned To</label>
+                        <input type="text" class="form-control" data-ng-model="incidentresource.resourcE_ASSIGNED_TO"
+                               value="{{incidentresource.resourcE_ASSIGNED_TO}}" required="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Ordered Date/Time</label>
+                        <input type="text" class="form-control datetime-picker" data-ng-model="incidentresource.resourcE_ORDERED_DT"
+                               value="{{incidentresource.resourcE_ORDERED_DT}}" required="" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ETA Date/Time:</label>
+                        <input type="text" class="form-control datetime-picker" data-ng-model="incidentresource.resourcE_ETA_DT"
+                               value="{{incidentresource.resourcE_ETA_DT}}" required="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Notes:</label>
+                        <textarea class="form-control" rows="3" id="statuS_DESC" maxlength="400"
+                                  data-ng-model="incidentresource.resourcE_NOTES" placeholder="Notes">
+                            {{incidentresource.resourcE_NOTES}}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-sm btn-primary " data-ng-click="save()" >Save</button>
+                    <button class="btn btn-sm btn-default " data-ng-click="close()">Close</button>
+                    <button class="btn btn-sm btn-danger pull-right" data-ng-click="delete()" >Delete</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

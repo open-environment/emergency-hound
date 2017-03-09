@@ -101,6 +101,18 @@ namespace EmergencyHoundModel.DataAccessLayer
         public string ATTACH_DESC { get; set; }
     }
 
+    public class LocationDisplayType
+    {
+        public int USER_IDX { get; set; }
+        public string USER_FULL_NAME { get; set; }
+        public string USER_PHONE { get; set; }
+        public decimal? LATITUDE { get; set; }
+        public decimal? LONGITUDE { get; set; }
+        public DateTime? LOC_DATE { get; set; }
+    }
+
+
+
     public class db_EmergencyHound
     {
         //********************T_EM_DOCUMENTS************************************
@@ -1115,6 +1127,46 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
         }
 
+        public static int GetT_EM_INCIDENT_TEAM_DTL_CountbyReportsToTeamDtlIDX(Guid? TeamDtlIDX)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    if (TeamDtlIDX == null)
+                        return 0;
+
+                    return (from a in ctx.T_EM_INCIDENT_TEAM_DTL
+                            where a.REPORTS_TO_TEAM_DTL_IDX == TeamDtlIDX
+                            select a).Count();
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    return 0;
+                }
+            }
+        }
+
+        public static T_EM_INCIDENT_TEAM_DTL GetT_EM_INCIDENT_TEAM_DTL_byID(Guid? TeamDtlIDX)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    return (from a in ctx.T_EM_INCIDENT_TEAM_DTL
+                            where a.INCIDENT_TEAM_DTL_IDX == TeamDtlIDX
+                            select a).FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    return null;
+                }
+            }
+        }
+
+
 
         public static Guid? InsertUpdateT_EM_INCIDENT_TEAM_DTL(Guid? iNCIDENT_TEAM_DTL_IDX, Guid? iNCIDENT_OP_PERIOD_IDX, Guid? iNCIDENT_IDX, Guid? rEPORTS_TO_TEAM_DTL_IDX,
             Guid? iNDIVIDUAL_IDX, Guid? rESOURCE_IDX, string rOLE_NAME, string aGENCY, int? sEQ_NO, string tRAINEE_IND, string cONTACT_TYPE, string cONTACT_INFO, Boolean aCT_IND, int? cREATE_USER)
@@ -1177,6 +1229,10 @@ namespace EmergencyHoundModel.DataAccessLayer
             {
                 try
                 {
+                    //first check if any other entities report to this one. If yes, then don't allow delete
+                    if (GetT_EM_INCIDENT_TEAM_DTL_CountbyReportsToTeamDtlIDX(id) > 0)
+                        return -1;
+
                     T_EM_INCIDENT_TEAM_DTL rec = ctx.T_EM_INCIDENT_TEAM_DTL.Find(id);
                     ctx.T_EM_INCIDENT_TEAM_DTL.Remove(rec);
                     ctx.SaveChanges();
@@ -1185,6 +1241,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
+                    db_Util.LogEFException(ex);
                     return 0;
                 }
             }
@@ -2150,6 +2207,76 @@ namespace EmergencyHoundModel.DataAccessLayer
         }
 
 
+        //******************T_EM_USER_LOCATION*******************************
+        public static List<LocationDisplayType> GetT_EM_USER_LOCATION()
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    DateTime x = System.DateTime.Now.AddHours(-24); //only grab records from the last 24 hours
+
+                    return (from a in ctx.T_EM_USER_LOCATION
+                            join u in ctx.T_OE_USERS on a.USER_IDX equals u.USER_IDX
+                            where a.MODIFY_DT >  x
+                            && u.TRACK_IND == true
+                            select new LocationDisplayType {
+                                USER_IDX = a.USER_IDX,
+                                USER_FULL_NAME = u.FNAME + " " + u.LNAME,
+                                USER_PHONE = u.PHONE,
+                                LATITUDE = a.LATITUDE,
+                                LONGITUDE = a.LONGITUDE,
+                                LOC_DATE = a.MODIFY_DT
+                            }
+                            ).ToList();
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    return null;
+                }
+            }
+        }
+
+        public static Guid? InsertUpdateT_EM_USER_LOCATION(int uSER_IDX, Decimal? lATITUDE, Decimal? lONGITUDE)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    Boolean insInd = false;
+
+                    T_EM_USER_LOCATION e = (from c in ctx.T_EM_USER_LOCATION
+                                                where c.USER_IDX == uSER_IDX
+                                                select c).FirstOrDefault();
+
+                    if (e == null)
+                    {
+                        insInd = true;
+                        e = new T_EM_USER_LOCATION();
+                        e.USER_LOC_IDX = Guid.NewGuid();
+                    }
+
+                    e.USER_IDX = uSER_IDX;
+                    e.MODIFY_DT = System.DateTime.Now;
+                    if (lATITUDE != null) e.LATITUDE = lATITUDE;
+                    if (lONGITUDE != null) e.LONGITUDE = lONGITUDE;
+
+                    if (insInd)
+                        ctx.T_EM_USER_LOCATION.Add(e);
+
+                    ctx.SaveChanges();
+                    return e.USER_LOC_IDX;
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    return null;
+                }
+            }
+        }
+
+
 
         //******************T_EM_USER_NOTIFICATION*******************************
         public static T_EM_USER_NOTIFICATION GetT_EM_USER_NOTIFICATION_byID(Guid? NotificationIDX)
@@ -2463,6 +2590,23 @@ namespace EmergencyHoundModel.DataAccessLayer
 
         }
 
+        //******************SP_INCIDENT_RESOURCE_QUERY*******************************
+        public static List<SP_INCIDENT_RESOURCE_QUERY_Result> GetSP_INCIDENT_RESOURCE_QUERY(int userIDX, Guid? orgIDX)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    return ctx.SP_INCIDENT_RESOURCE_QUERY(userIDX, orgIDX).ToList();
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    return null;
+                }
+            }
+
+        }
 
 
         //******************SP_RESOURCE_ADV_SEARCH*******************************

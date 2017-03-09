@@ -1,5 +1,5 @@
 ﻿<button type="submit" class="btn btn-sm btn-primary pull-right" data-ng-click="addResource()">Add New Resource</button>
-<h3 class="m-b-md">Search Resources</h3>
+<h3 class="m-b-md">Resources</h3>
 
 <!-- START SEARCH PANEL -->
 <div class="panel panel-success">
@@ -35,10 +35,10 @@
                 <div class="table-responsive">
                     <table class="table table-striped b-t b-light" data-ride="datatables">
                         <tr>
-                            <th>Editing</th>
-                            <th>Jurisdiction</th>
+                            <th>Edit</th>
                             <th>Resource Type</th>
                             <th>Resource Description</th>
+                            <th>Jurisdiction</th>
                             <th>Kind</th>
                             <th>Count</th>
                             <th>Units</th>
@@ -46,18 +46,18 @@
                             <th>Last Verified</th>
                         </tr>
                         <tr ng-repeat="resource in resources | filter:searchKind">
-                            <td style="min-width:85px">
+                            <td style="min-width:70px">
                                 <a ng-click="editResource(resource.resourcE_IDX)" class="btn btn-rounded btn-xs btn-default" ng-show="resource.caN_EDIT>0" title="Edit"><i class="fa fa-pencil fa-success"></i></a>
                                 <a ng-click="editResource(resource.resourcE_IDX)" class="btn btn-rounded btn-xs btn-default" ng-show="resource.caN_EDIT==0" title="View"><i class="fa fa-eye fa-success"></i></a>
                                 <a class="btn btn-rounded btn-xs btn-dark" ng-show="!resource.synced" ng-click="editResource(resource.resourcE_IDX)"><i class="fa fa-exclamation fa-dark" title="Not yet saved to server"></i></a>
                             </td>
                             <td>
-                                <div ng-repeat="org in orgs | filter: { orG_IDX: resource.orG_IDX }">{{org.orG_NAME}} </div>
-                            </td>
-                            <td>
                                 <div ng-repeat="resourcetype in resourcetypes | filter: { resourcE_TYPE_IDX: resource.resourcE_TYPE_IDX }">{{resourcetype.resourcE_TYPE_NAME}} </div>
                             </td>
                             <td>{{resource.resourcE_DESC}}</td>
+                            <td>
+                                <div ng-repeat="org in orgs | filter: { orG_IDX: resource.orG_IDX }">{{org.orG_NAME}} </div>
+                            </td>
                             <td>
                                 <div ng-repeat="resourcetype in resourcetypes | filter: { resourcE_TYPE_IDX: resource.resourcE_TYPE_IDX }">{{resourcetype.resourcE_KIND}} </div>
                             </td>

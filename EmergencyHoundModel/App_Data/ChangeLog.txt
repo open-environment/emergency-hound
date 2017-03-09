@@ -38,3 +38,18 @@ Mobile Change Log:
 1.0.5
 - Display EPA regulated facilities on map
 - *InProgress: (Web only) new field (resource expiration date) added to resource screen 
+
+1.0.7 (DB 5)
+- Add ability to track mobile users location
+- Add new option under settings to update user name and opt out of user tracking
+- Add ability to view nearby users on incident map and call or text them
+- Fix display issues for iphone 4/5
+
+1.0.8 (DB 6) (March 2017a)
+- Web: Incident Team forms: several enhancements including 
+          (A) fix bug - unable to add new roles to existing team structure
+		  (B) prevent deletion of team member if others report to him/her 
+		  (C) more informative error messages
+- Web: Make resource description mandatory
+- Web: fix navigation link when going from Operational Period to Resources page
+

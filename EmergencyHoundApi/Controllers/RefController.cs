@@ -46,8 +46,6 @@ namespace EmergencyHoundApi.Controllers
         }
 
 
-
-
         // GET LISTING OF SHARE TYPES
         public IEnumerable<T_EM_REF_SHARE_TYPE> GetRefShareTypes()
         {
@@ -78,8 +76,6 @@ namespace EmergencyHoundApi.Controllers
             int UserIDX = db_Accounts.GetT_OE_USER_TOKEN_byToken(tokenG);
             return db_EmergencyHound.GetT_OE_ORGANIZATIONS_ByUSERIDX_ORG(UserIDX, false);
         }
-
-
 
     }
 }

@@ -1,5 +1,5 @@
 ﻿<button type="submit" class="btn btn-sm btn-primary pull-right" data-ng-click="addIncident()">Add New Incident</button>
-<h3 class="m-b-md">Search Incidents</h3>
+<h3 class="m-b-md"> Incidents</h3>
 
 <!-- START SEARCH PANEL -->
 <div class="panel panel-success">
@@ -35,10 +35,10 @@
                 <div class="table-responsive">
                     <table class="table table-striped m-b-none" data-ride="datatables">
                         <tr>
-                            <th>Editing</th>
+                            <th>Edit</th>
                             <th>ID</th>
-                            <th>Jurisdiction</th>
                             <th>Incident Name</th>
+                            <th>Jurisdiction</th>
                             <th>Incident Description</th>
                             <th>Shared With</th>
                             <th>Start Date</th>
@@ -46,16 +46,16 @@
                         </tr>
 
                         <tr ng-repeat="incident in incidents  | filter:searchKind">
-                            <td style="min-width:108px">
+                            <td style="min-width:90px">
                                 <a ng-click="editIncident(incident.incidenT_IDX)" ng-show="incident.caN_EDIT==1" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
                                 <a ng-click="editIncident(incident.incidenT_IDX)" ng-show="incident.caN_EDIT!=1" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-eye fa-success"></i></a>
                                 <a class="btn btn-rounded btn-xs btn-dark" ng-show="!incident.synced" ng-click="editIncident(incident.incidenT_IDX)" ><i class="fa fa-exclamation fa-dark" title="Not yet saved to server"></i></a>
                             </td>
                             <td>{{incident.incidenT_ID}}</td>
+                            <td>{{incident.incidenT_NAME}}</td>
                             <td>
                                 <div ng-repeat="org in orgs | filter: { orG_IDX: incident.orG_IDX }">{{org.orG_NAME}} </div>
                             </td>
-                            <td>{{incident.incidenT_NAME}}</td>
                             <td>{{incident.incidenT_DESC}}</td>
                             <td>{{incident.sharE_TYPE}}</td>
                             <td>{{incident.incidenT_START_DT}}</td>

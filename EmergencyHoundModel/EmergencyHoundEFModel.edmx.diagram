@@ -98,6 +98,8 @@
         <AssociationConnector Association="EMERG_DBModel.FK__T_EM_QUAL__QUALI__5BAD9CC8" />
         <EntityTypeShape EntityType="EMERG_DBModel.T_OE_USER_TOKENS" Width="1.5" PointX="3" PointY="23" />
         <AssociationConnector Association="EMERG_DBModel.FK__T_OE_USER__USER___625A9A57" />
+        <EntityTypeShape EntityType="EMERG_DBModel.T_EM_USER_LOCATION" Width="1.5" PointX="3" PointY="20" />
+        <AssociationConnector Association="EMERG_DBModel.FK__T_EM_USER__USER___1C873BEC" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
