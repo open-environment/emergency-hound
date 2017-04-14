@@ -1362,11 +1362,19 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <Parameter Name="UserIDX" Type="int" Mode="In" />
           <Parameter Name="OrgIDX" Type="uniqueidentifier" Mode="In" />
         </Function>
+        <Function Name="SP_INCIDENT_OP_PERIOD_QUERY" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserIDX" Type="int" Mode="In" />
+          <Parameter Name="OrgIDX" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <Function Name="SP_INCIDENT_RESOURCE_QUERY" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserIDX" Type="int" Mode="In" />
           <Parameter Name="OrgIDX" Type="uniqueidentifier" Mode="In" />
         </Function>
         <Function Name="SP_INCIDENT_STATUS_QUERY" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserIDX" Type="int" Mode="In" />
+          <Parameter Name="OrgIDX" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="SP_INCIDENT_TEAM_QUERY" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserIDX" Type="int" Mode="In" />
           <Parameter Name="OrgIDX" Type="uniqueidentifier" Mode="In" />
         </Function>
@@ -1934,6 +1942,14 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
             <End Role="T_EM_USER_LOCATION" EntitySet="T_EM_USER_LOCATION" />
           </AssociationSet>
           <FunctionImport Name="SP_INCIDENT_RESOURCE_QUERY" ReturnType="Collection(EMERG_DBModel.SP_INCIDENT_RESOURCE_QUERY_Result)">
+            <Parameter Name="UserIDX" Mode="In" Type="Int32" />
+            <Parameter Name="OrgIDX" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="SP_INCIDENT_OP_PERIOD_QUERY" ReturnType="Collection(EMERG_DBModel.SP_INCIDENT_OP_PERIOD_QUERY_Result)">
+            <Parameter Name="UserIDX" Mode="In" Type="Int32" />
+            <Parameter Name="OrgIDX" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="SP_INCIDENT_TEAM_QUERY" ReturnType="Collection(EMERG_DBModel.SP_INCIDENT_TEAM_QUERY_Result)">
             <Parameter Name="UserIDX" Mode="In" Type="Int32" />
             <Parameter Name="OrgIDX" Mode="In" Type="Guid" />
           </FunctionImport>
@@ -3505,6 +3521,42 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <Property Type="DateTime" Name="MODIFY_DT" Nullable="true" />
           <Property Type="Int32" Name="CAN_EDIT" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="SP_INCIDENT_OP_PERIOD_QUERY_Result">
+          <Property Type="Guid" Name="INCIDENT_OP_PERIOD_IDX" Nullable="false" />
+          <Property Type="Guid" Name="INCIDENT_IDX" Nullable="false" />
+          <Property Type="String" Name="OP_PERIOD_NAME" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="OP_PERIOD_START_DT" Nullable="true" />
+          <Property Type="DateTime" Name="OP_PERIOD_END_DT" Nullable="true" />
+          <Property Type="String" Name="OP_PERIOD_COMMAND_EMPHASIS" Nullable="true" MaxLength="1000" />
+          <Property Type="String" Name="OP_PERIOD_SIT_AWARENESS" Nullable="true" MaxLength="1000" />
+          <Property Type="String" Name="OP_PERIOD_PLANNED_ACTION" Nullable="true" MaxLength="1000" />
+          <Property Type="Boolean" Name="ACT_IND" Nullable="false" />
+          <Property Type="Int32" Name="CREATE_USERIDX" Nullable="true" />
+          <Property Type="DateTime" Name="CREATE_DT" Nullable="true" />
+          <Property Type="Int32" Name="MODIFY_USERIDX" Nullable="true" />
+          <Property Type="DateTime" Name="MODIFY_DT" Nullable="true" />
+          <Property Type="Int32" Name="CAN_EDIT" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_INCIDENT_TEAM_QUERY_Result">
+          <Property Type="Guid" Name="INCIDENT_TEAM_DTL_IDX" Nullable="false" />
+          <Property Type="Guid" Name="INCIDENT_OP_PERIOD_IDX" Nullable="true" />
+          <Property Type="Guid" Name="INCIDENT_IDX" Nullable="true" />
+          <Property Type="Guid" Name="REPORTS_TO_TEAM_DTL_IDX" Nullable="true" />
+          <Property Type="Guid" Name="INDIVIDUAL_IDX" Nullable="true" />
+          <Property Type="Guid" Name="RESOURCE_IDX" Nullable="true" />
+          <Property Type="String" Name="ROLE_NAME" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="AGENCY" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="SEQ_NO" Nullable="true" />
+          <Property Type="String" Name="TRAINEE_IND" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="CONTACT_TYPE" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="CONTACT_INFO" Nullable="true" MaxLength="200" />
+          <Property Type="Boolean" Name="ACT_IND" Nullable="false" />
+          <Property Type="Int32" Name="CREATE_USERIDX" Nullable="true" />
+          <Property Type="DateTime" Name="CREATE_DT" Nullable="true" />
+          <Property Type="Int32" Name="MODIFY_USERIDX" Nullable="true" />
+          <Property Type="DateTime" Name="MODIFY_DT" Nullable="true" />
+          <Property Type="Int32" Name="CAN_EDIT" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4415,6 +4467,50 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
                 <ScalarProperty Name="RESOURCE_NOTES" ColumnName="RESOURCE_NOTES" />
                 <ScalarProperty Name="RESOURCE_ASSIGNED_TO" ColumnName="RESOURCE_ASSIGNED_TO" />
                 <ScalarProperty Name="RESOURCE_ASSIGNED_PERSONS_COUNT" ColumnName="RESOURCE_ASSIGNED_PERSONS_COUNT" />
+                <ScalarProperty Name="ACT_IND" ColumnName="ACT_IND" />
+                <ScalarProperty Name="CREATE_USERIDX" ColumnName="CREATE_USERIDX" />
+                <ScalarProperty Name="CREATE_DT" ColumnName="CREATE_DT" />
+                <ScalarProperty Name="MODIFY_USERIDX" ColumnName="MODIFY_USERIDX" />
+                <ScalarProperty Name="MODIFY_DT" ColumnName="MODIFY_DT" />
+                <ScalarProperty Name="CAN_EDIT" ColumnName="CAN_EDIT" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_INCIDENT_OP_PERIOD_QUERY" FunctionName="EMERG_DBModel.Store.SP_INCIDENT_OP_PERIOD_QUERY">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="EMERG_DBModel.SP_INCIDENT_OP_PERIOD_QUERY_Result">
+                <ScalarProperty Name="INCIDENT_OP_PERIOD_IDX" ColumnName="INCIDENT_OP_PERIOD_IDX" />
+                <ScalarProperty Name="INCIDENT_IDX" ColumnName="INCIDENT_IDX" />
+                <ScalarProperty Name="OP_PERIOD_NAME" ColumnName="OP_PERIOD_NAME" />
+                <ScalarProperty Name="OP_PERIOD_START_DT" ColumnName="OP_PERIOD_START_DT" />
+                <ScalarProperty Name="OP_PERIOD_END_DT" ColumnName="OP_PERIOD_END_DT" />
+                <ScalarProperty Name="OP_PERIOD_COMMAND_EMPHASIS" ColumnName="OP_PERIOD_COMMAND_EMPHASIS" />
+                <ScalarProperty Name="OP_PERIOD_SIT_AWARENESS" ColumnName="OP_PERIOD_SIT_AWARENESS" />
+                <ScalarProperty Name="OP_PERIOD_PLANNED_ACTION" ColumnName="OP_PERIOD_PLANNED_ACTION" />
+                <ScalarProperty Name="ACT_IND" ColumnName="ACT_IND" />
+                <ScalarProperty Name="CREATE_USERIDX" ColumnName="CREATE_USERIDX" />
+                <ScalarProperty Name="CREATE_DT" ColumnName="CREATE_DT" />
+                <ScalarProperty Name="MODIFY_USERIDX" ColumnName="MODIFY_USERIDX" />
+                <ScalarProperty Name="MODIFY_DT" ColumnName="MODIFY_DT" />
+                <ScalarProperty Name="CAN_EDIT" ColumnName="CAN_EDIT" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_INCIDENT_TEAM_QUERY" FunctionName="EMERG_DBModel.Store.SP_INCIDENT_TEAM_QUERY">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="EMERG_DBModel.SP_INCIDENT_TEAM_QUERY_Result">
+                <ScalarProperty Name="INCIDENT_TEAM_DTL_IDX" ColumnName="INCIDENT_TEAM_DTL_IDX" />
+                <ScalarProperty Name="INCIDENT_OP_PERIOD_IDX" ColumnName="INCIDENT_OP_PERIOD_IDX" />
+                <ScalarProperty Name="INCIDENT_IDX" ColumnName="INCIDENT_IDX" />
+                <ScalarProperty Name="REPORTS_TO_TEAM_DTL_IDX" ColumnName="REPORTS_TO_TEAM_DTL_IDX" />
+                <ScalarProperty Name="INDIVIDUAL_IDX" ColumnName="INDIVIDUAL_IDX" />
+                <ScalarProperty Name="RESOURCE_IDX" ColumnName="RESOURCE_IDX" />
+                <ScalarProperty Name="ROLE_NAME" ColumnName="ROLE_NAME" />
+                <ScalarProperty Name="AGENCY" ColumnName="AGENCY" />
+                <ScalarProperty Name="SEQ_NO" ColumnName="SEQ_NO" />
+                <ScalarProperty Name="TRAINEE_IND" ColumnName="TRAINEE_IND" />
+                <ScalarProperty Name="CONTACT_TYPE" ColumnName="CONTACT_TYPE" />
+                <ScalarProperty Name="CONTACT_INFO" ColumnName="CONTACT_INFO" />
                 <ScalarProperty Name="ACT_IND" ColumnName="ACT_IND" />
                 <ScalarProperty Name="CREATE_USERIDX" ColumnName="CREATE_USERIDX" />
                 <ScalarProperty Name="CREATE_DT" ColumnName="CREATE_DT" />

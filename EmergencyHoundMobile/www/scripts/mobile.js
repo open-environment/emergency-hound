@@ -17,7 +17,9 @@
         appId: 'ehApp',
         selectedIncident: null,
         selectedIncidentStatus: null,
+        selectedIncidentTeam: null,
         selectedIncidentResource: null,
+        selectedIncidentOpPeriod: null,
         selectedResource: null,
         selectedPerson: null,
         selectedQual: null
@@ -25,7 +27,7 @@
 
     app.constant('dbConstants', {
         name: 'emergency_hound',
-        version: 6
+        version: 7
     });
 
     //****************************************************************************
@@ -89,6 +91,10 @@
                 templateUrl: 'views/incidentTeam.html',
                 controller: 'incidentTeamController'
             })
+            .when('/incidentTeamEdit', {
+                templateUrl: 'views/incidentTeamEdit.html',
+                controller: 'incidentTeamEditController'
+            })
             .when('/incidentResources', {
                 templateUrl: 'views/incidentResources.html',
                 controller: 'incidentResourcesController'
@@ -101,13 +107,17 @@
                 templateUrl: 'views/incidentStatus.html',
                 controller: 'incidentStatusController'
             })
+            .when('/incidentStatusEdit', {
+                templateUrl: 'views/incidentStatusEdit.html',
+                controller: 'incidentStatusEditController'
+            })
             .when('/incidentOpPeriods', {
                 templateUrl: 'views/incidentOpPeriods.html',
                 controller: 'incidentOpPeriodsController'
             })
-            .when('/incidentStatusEdit', {
-                templateUrl: 'views/incidentStatusEdit.html',
-                controller: 'incidentStatusEditController'
+            .when('/incidentOpPeriodEdit', {
+                templateUrl: 'views/incidentOpPeriodEdit.html',
+                controller: 'incidentOpPeriodEditController'
             })
             .when('/incidentAttach', {
                 templateUrl: 'views/incidentAttach.html',
@@ -124,6 +134,9 @@
             .when('/config', {
                 templateUrl: 'views/config.html',
                 controller: 'configController'
+            })
+            .when('/help', {
+                templateUrl: 'views/help.html'
             })
             .otherwise({
                 redirectTo: '/'

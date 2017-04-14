@@ -181,5 +181,31 @@ namespace EmergencyHoundModel
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_INCIDENT_RESOURCE_QUERY_Result>("SP_INCIDENT_RESOURCE_QUERY", userIDXParameter, orgIDXParameter);
         }
+    
+        public virtual ObjectResult<SP_INCIDENT_OP_PERIOD_QUERY_Result> SP_INCIDENT_OP_PERIOD_QUERY(Nullable<int> userIDX, Nullable<System.Guid> orgIDX)
+        {
+            var userIDXParameter = userIDX.HasValue ?
+                new ObjectParameter("UserIDX", userIDX) :
+                new ObjectParameter("UserIDX", typeof(int));
+    
+            var orgIDXParameter = orgIDX.HasValue ?
+                new ObjectParameter("OrgIDX", orgIDX) :
+                new ObjectParameter("OrgIDX", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_INCIDENT_OP_PERIOD_QUERY_Result>("SP_INCIDENT_OP_PERIOD_QUERY", userIDXParameter, orgIDXParameter);
+        }
+    
+        public virtual ObjectResult<SP_INCIDENT_TEAM_QUERY_Result> SP_INCIDENT_TEAM_QUERY(Nullable<int> userIDX, Nullable<System.Guid> orgIDX)
+        {
+            var userIDXParameter = userIDX.HasValue ?
+                new ObjectParameter("UserIDX", userIDX) :
+                new ObjectParameter("UserIDX", typeof(int));
+    
+            var orgIDXParameter = orgIDX.HasValue ?
+                new ObjectParameter("OrgIDX", orgIDX) :
+                new ObjectParameter("OrgIDX", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_INCIDENT_TEAM_QUERY_Result>("SP_INCIDENT_TEAM_QUERY", userIDXParameter, orgIDXParameter);
+        }
     }
 }

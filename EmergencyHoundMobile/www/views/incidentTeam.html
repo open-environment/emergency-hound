@@ -1,7 +1,7 @@
 ﻿<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
     <li><a href="#dashboard"><i class="fa fa-home"></i>Home</a></li>
     <li><a href="#incidents">Incident Search</a></li>
-    <li class="active">Incident Details</li>
+    <li class="active">Incident Team</li>
 </ul>
 
 <!-- START: INCIDENT WIZARD -->
@@ -19,12 +19,45 @@
     </div>
 </section>
 <!-- END: INCIDENT WIZARD -->
-<!-- START: SAVE MESSAGE -->
-<div class="alert alert-success " ng-show="saveState">
-    <button data-dismiss="alert" class="close">×</button>
-    <i class="fa fa-check-circle"></i> {{saveState}}
-</div>
-<!-- END: SAVE MESSAGE -->
 
 
-Will be available in future update.
+
+<section class="panel panel-default">
+    <div class="panel-body">
+
+        <!-- START TEAM TABLE -->
+        <div class="table-responsive">
+            <table class="table table-striped m-b-none" data-ride="datatables">
+                <tr>
+                    <th ng-show="incident.caN_EDIT==1">Editing</th>
+                    <th>Role</th>
+                    <th>Person or Team</th>
+                    <th>Agency</th>
+                    <th>Reports To</th>
+                </tr>
+                <tr ng-repeat="team in teams">
+                    <td style="min-width:78px" ng-show="incident.caN_EDIT==1">
+                        <a ng-click="editIncidentTeam(team.incidenT_TEAM_DTL_IDX)" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                    </td>
+                    <td>
+                        {{team.rolE_NAME}}
+                    </td>
+                    <td>
+                        {{team.indv_name}}
+                        {{team.resourcE_DESC}}
+                    </td>
+                    <td>
+                        {{team.agency}}
+                    </td>
+                    <td>
+                        {{team.reportsToRole}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- END STATUS UPDATE TABLE -->
+    </div>
+</section>
+<p>
+    <a data-ng-click="addIncidentTeam()" class="btn btn-s-md btn-primary " ng-show="incident.caN_EDIT==1">Add Team Member</a>
+</p>

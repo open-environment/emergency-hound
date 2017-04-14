@@ -10,7 +10,7 @@
         <ul class="steps">
             <li><a href="#incidentEdit"><span class="badge badge-success">1</span>General</a></li>
             <li><a href="#incidentMap2"><span class="badge badge-success">2</span>Map</a></li>
-            <li><a href="#incidentTeam"><span class="badge badge-success">3</span>People</a></li>
+            <li><a href="#incidentTeam"><span class="badge badge-success">3</span>Team</a></li>
             <li><a href="#incidentResources"><span class="badge badge-success">4</span>Resources</a></li>
             <li class="active"><a ><span class="badge badge-info">5</span>Status</a></li>
             <li><a href="#incidentOpPeriods"><span class="badge badge-danger">6</span>Periods</a></li>
@@ -38,7 +38,7 @@
                         <a ng-click="editIncidentStatus(status.inC_STATUS_IDX)" class="btn btn-rounded btn-xs btn-default" ><i class="fa fa-pencil fa-success"></i></a>
                     </td>
                     <td>
-                        {{status.statuS_DT}}
+                        {{status.statuS_DT  | date : 'MM/dd/yyyy h:mma'}}
                     </td>
                     <td>
                         {{status.statuS_TYPE_CD}}

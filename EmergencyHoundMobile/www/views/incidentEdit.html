@@ -47,6 +47,7 @@
                                required=""/>
                         <div ng-show="submitForm.$submitted || submitForm.incidenT_ID.$touched">
                             <span class="field-validation-error" ng-show="submitForm.incidenT_ID.$error.required">Please enter Incident ID.</span>
+                            <span class="field-validation-error" ng-show="submitForm.incidenT_ID.$error.minlength">Incident ID must be 3 characters long.</span>
                         </div>
                     </div>
                 </div>

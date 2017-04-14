@@ -6,8 +6,16 @@
         $scope.incident = ehConstants.selectedIncident;
         $scope.resources = [];
 
-        dbManagerService.getDataByIndex('incidentresources', 'incidenT_IDX', $scope.incident.incidenT_IDX).then(function (resources) {
-            $scope.resources = resources;
+        dbManagerService.getDataByIndex('incidentresources', 'incidenT_IDX', $scope.incident.incidenT_IDX).then(function (incidentresources) {
+            dbManagerService.getRefTable('resources').then(function (resource_ref) {
+
+                //map the returned resource list with the resource type
+                $scope.resources = _.map(incidentresources, function (_temp) {
+                    var _linkedRT = _.find(resource_ref, function (q) { return _temp.resourcE_IDX == q.resourcE_IDX });
+                    _temp.resourcE_DESC = _linkedRT ? _linkedRT.resourcE_DESC : '';
+                    return _temp;
+                });
+            });
         });
 
 

@@ -65,7 +65,6 @@
 
                     //people display
                     if ($scope.user_locations) {
-                        console.log($scope.user_locations.length);
                         //place markers
                         for (i = 0; i < $scope.user_locations.length; i++) {
                             try {
@@ -167,13 +166,9 @@
                         //now fit the map to the newly inclusive bounds
                         if (bounds.contains(marker.getPosition()))
                             map2.fitBounds(bounds);
-
                     }
 
-
                 });
-
-
 
             }
             catch (err) {

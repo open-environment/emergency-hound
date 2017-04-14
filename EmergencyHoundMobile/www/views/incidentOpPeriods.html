@@ -10,19 +10,51 @@
         <ul class="steps">
             <li><a href="#incidentEdit"><span class="badge badge-success">1</span>General</a></li>
             <li><a href="#incidentMap2"><span class="badge badge-success">2</span>Map</a></li>
-            <li><a href=""><span class="badge badge-success">3</span>Team</a></li>
+            <li><a href="#incidentTeam"><span class="badge badge-success">3</span>Team</a></li>
             <li><a href="#incidentResources"><span class="badge badge-success">4</span>Resources</a></li>
             <li><a href="#incidentStatus"><span class="badge badge-success">5</span>Status</a></li>
-            <li class="active"><a href="#incidentOpPeriods"><span class="badge badge-info">6</span>Periods</a></li>
+            <li class="active"><a href=""><span class="badge badge-info">6</span>Periods</a></li>
             <li><a href="#incidentAttach"><span class="badge badge-danger">7</span>Images</a></li>
         </ul>
     </div>
 </section>
 <!-- END: INCIDENT WIZARD -->
-<!-- START: SAVE MESSAGE -->
-<div class="alert alert-success " ng-show="saveState">
-    <button data-dismiss="alert" class="close">×</button>
-    <i class="fa fa-check-circle"></i> {{saveState}}
-</div>
-<!-- END: SAVE MESSAGE -->
-Will be available in future update.
+
+<section class="panel panel-default">
+    <div class="panel-body">
+
+        <!-- START OP PERIOD TABLE -->
+        <div class="table-responsive">
+            <table class="table table-striped m-b-none" data-ride="datatables">
+                <tr>
+                    <th ng-show="incident.caN_EDIT==1">Editing</th>
+                    <th>Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Command Emphasis</th>
+                </tr>
+                <tr ng-repeat="period in periods">
+                    <td style="min-width:78px" ng-show="incident.caN_EDIT==1">
+                        <a ng-click="editOpPeriod(period.incidenT_OP_PERIOD_IDX)" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
+                    </td>
+                    <td>
+                        {{period.oP_PERIOD_NAME}}
+                    </td>
+                    <td>
+                        {{period.oP_PERIOD_START_DT  | date : 'MM/dd/yyyy h:mma'}}
+                    </td>
+                    <td>
+                        {{period.oP_PERIOD_END_DT  | date : 'MM/dd/yyyy h:mma'}}
+                    </td>
+                    <td>
+                        {{period.oP_PERIOD_COMMAND_EMPHASIS}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- END OP PERIOD TABLE -->
+    </div>
+</section>
+<p>
+    <a data-ng-click="addOpPeriod()" class="btn btn-s-md btn-primary " ng-show="incident.caN_EDIT==1">Add New</a>
+</p>

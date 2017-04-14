@@ -23,7 +23,7 @@
 <section class="panel panel-default">
     <div class="panel-body">
 
-        <!-- START STATUS UPDATE TABLE -->
+        <!-- START RESOURCE TABLE -->
         <div class="table-responsive">
             <table class="table table-striped m-b-none" data-ride="datatables">
                 <tr>
@@ -40,16 +40,16 @@
                         <a ng-click="editIncidentResource(resource.incidenT_RESOURCE_IDX)" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
                     </td>
                     <td>
-                        {{resource.resourcE_IDX}}
+                        {{resource.resourcE_DESC}}
                     </td>
                     <td>
                         {{resource.resourcE_COUNT}}
                     </td>
                     <td>
-                        {{resource.resourcE_ORDERED_DT}}
+                        {{resource.resourcE_ORDERED_DT  | date : 'MM/dd/yyyy h:mma'}}
                     </td>
                     <td>
-                        {{resource.resourcE_ETA_DT}}
+                        {{resource.resourcE_ETA_DT  | date : 'MM/dd/yyyy h:mma'}}
                     </td>
                     <td>
                         {{resource.resourcE_NOTES}}
@@ -60,7 +60,7 @@
                 </tr>
             </table>
         </div>
-        <!-- END STATUS UPDATE TABLE -->
+        <!-- END RESOURCE TABLE -->
     </div>
 </section>
 <p>

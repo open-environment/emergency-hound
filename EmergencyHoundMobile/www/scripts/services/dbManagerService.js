@@ -184,6 +184,29 @@
 
             }
 
+            //****************** CREATE INCIDENT TEAM TABLE *****************************************************
+            if (!db.objectStoreNames.contains('incidentteams')) {
+                var _incidentteam = db.createObjectStore('incidentteams', { keyPath: "incidenT_TEAM_DTL_IDX" });
+                _incidentteam.createIndex('incidenT_OP_PERIOD_IDX', 'incidenT_OP_PERIOD_IDX', { unique: false });
+                _incidentteam.createIndex('incidenT_IDX', 'incidenT_IDX', { unique: false });
+                _incidentteam.createIndex('reportS_TO_TEAM_DTL_IDX', 'reportS_TO_TEAM_DTL_IDX', { unique: false });
+                _incidentteam.createIndex('individuaL_IDX', 'individuaL_IDX', { unique: false });
+                _incidentteam.createIndex('resourcE_IDX', 'resourcE_IDX', { unique: false });
+                _incidentteam.createIndex('rolE_NAME', 'rolE_NAME', { unique: false });
+                _incidentteam.createIndex('agency', 'agency', { unique: false });
+                _incidentteam.createIndex('seQ_NO', 'seQ_NO', { unique: false });
+                _incidentteam.createIndex('traineE_IND', 'traineE_IND', { unique: false });
+                _incidentteam.createIndex('contacT_TYPE', 'contacT_TYPE', { unique: false });
+                _incidentteam.createIndex('contacT_INFO', 'contacT_INFO', { unique: false });
+                _incidentteam.createIndex('acT_IND', 'acT_IND', { unique: false });
+                _incidentteam.createIndex('creatE_USERIDX', 'creatE_USERIDX', { unique: false });
+                _incidentteam.createIndex('creatE_DT', 'creatE_DT', { unique: false });
+                _incidentteam.createIndex('modifY_USERIDX', 'modifY_USERIDX', { unique: false });
+                _incidentteam.createIndex('modifY_DT', 'modifY_DT', { unique: false });
+                _incidentteam.createIndex('caN_EDIT', 'caN_EDIT', { unique: false });
+                _incidentteam.createIndex('synced', 'synced', { unique: false });
+            }
+
             //****************** CREATE INCIDENT STATUSES TABLE *****************************************************
             if (!db.objectStoreNames.contains('incidentstatuses')) {
                 var _incidentstatuses = db.createObjectStore('incidentstatuses', { keyPath: "inC_STATUS_IDX" });
@@ -217,6 +240,25 @@
                 _incidentresources.createIndex('modifY_DT', 'modifY_DT', { unique: false });
                 _incidentresources.createIndex('caN_EDIT', 'caN_EDIT', { unique: false });
                 _incidentresources.createIndex('synced', 'synced', { unique: false });
+            }
+
+            //****************** CREATE INCIDENT RESOURCES TABLE *****************************************************
+            if (!db.objectStoreNames.contains('incidentopperiods')) {
+                var _incidentopperiods = db.createObjectStore('incidentopperiods', { keyPath: "incidenT_OP_PERIOD_IDX" });
+                _incidentopperiods.createIndex('incidenT_IDX', 'incidenT_IDX', { unique: false });
+                _incidentopperiods.createIndex('oP_PERIOD_NAME', 'oP_PERIOD_NAME', { unique: false });
+                _incidentopperiods.createIndex('oP_PERIOD_START_DT', 'oP_PERIOD_START_DT', { unique: false });
+                _incidentopperiods.createIndex('oP_PERIOD_END_DT', 'oP_PERIOD_END_DT', { unique: false });
+                _incidentopperiods.createIndex('oP_PERIOD_COMMAND_EMPHASIS', 'oP_PERIOD_COMMAND_EMPHASIS', { unique: false });
+                _incidentopperiods.createIndex('oP_PERIOD_SIT_AWARENESS', 'oP_PERIOD_SIT_AWARENESS', { unique: false });
+                _incidentopperiods.createIndex('oP_PERIOD_PLANNED_ACTION', 'oP_PERIOD_PLANNED_ACTION', { unique: false });
+                _incidentopperiods.createIndex('acT_IND', 'acT_IND', { unique: false });
+                _incidentopperiods.createIndex('creatE_USERIDX', 'creatE_USERIDX', { unique: false });
+                _incidentopperiods.createIndex('creatE_DT', 'creatE_DT', { unique: false });
+                _incidentopperiods.createIndex('modifY_USERIDX', 'modifY_USERIDX', { unique: false });
+                _incidentopperiods.createIndex('modifY_DT', 'modifY_DT', { unique: false });
+                _incidentopperiods.createIndex('caN_EDIT', 'caN_EDIT', { unique: false });
+                _incidentopperiods.createIndex('synced', 'synced', { unique: false });
             }
 
 
@@ -375,10 +417,8 @@
         //method for deleting all records from a table
         //**********************************************
     function _clearTable(tblName) {
-            console.log('2');
             var store = db.transaction([tblName], 'readwrite').objectStore(tblName);
             var objectStoreRequest = store.clear();
-            console.log('3');
         }
 
     //**********************************************
@@ -404,7 +444,9 @@
             _syncQualifications();
             _syncIncidents();
             _syncIncidentStatuses();
+            _syncIncidentTeams();
             _syncIncidentResources();
+            _syncIncidentOpPeriods();
             _syncDocuments();
             //_syncUserLocations();
 
@@ -815,6 +857,74 @@
         return deferred.promise;
     }
 
+    function _syncIncidentTeams() {
+
+        console.log('sync inc team start');
+
+        var deferred = $q.defer();
+        var data;
+        init2().then(function () {
+
+            $http.get($rootScope.serverBaseUrl + 'api/incident/GetAllIncidentTeamDtl?token=' + $rootScope.token)
+                .success(function (data) {
+                    var t = db.transaction(["incidentteams"], "readwrite");
+
+                    for (i = 0; i < data.length; i++) {
+
+                        //first grab local data if there is any
+                        var existingRec = t.objectStore("incidentteams").get(data[i].incidenT_TEAM_DTL_IDX);
+                        if (existingRec != null) {
+
+                            //only pull if server date 
+                            if (existingRec.synced != "false") {
+                                t.objectStore("incidentteams").put({
+                                    incidenT_TEAM_DTL_IDX: data[i].incidenT_TEAM_DTL_IDX,
+                                    incidenT_OP_PERIOD_IDX: data[i].incidenT_OP_PERIOD_IDX,
+                                    incidenT_IDX: data[i].incidenT_IDX,
+                                    reportS_TO_TEAM_DTL_IDX: data[i].reportS_TO_TEAM_DTL_IDX,
+                                    individuaL_IDX: data[i].individuaL_IDX,
+                                    resourcE_IDX: data[i].resourcE_IDX,
+                                    rolE_NAME: data[i].rolE_NAME,
+                                    agency: data[i].agency,
+                                    seQ_NO: data[i].seQ_NO,
+                                    traineE_IND: data[i].traineE_IND,
+                                    contacT_TYPE: data[i].contacT_TYPE,
+                                    contacT_INFO: data[i].contacT_INFO,
+                                    acT_IND: (data[i].acT_IND ? 1 : 0),
+                                    creatE_USERIDX: data[i].creatE_USERIDX,
+                                    creatE_DT: data[i].creatE_DT,
+                                    modifY_USERIDX: data[i].modifY_USERIDX,
+                                    modifY_DT: data[i].modifY_DT,
+                                    caN_EDIT: (data[i].caN_EDIT ? 1 : 0),
+                                    synced: 1
+                                });
+                                console.log('pulled inc team: ' + data[i].incidenT_TEAM_DTL_IDX);
+                            }
+                            else {
+                                console.log('did not pull inc team: ' + data[i].incidenT_TEAM_DTL_IDX);
+                            }
+                        }
+                    }
+
+                    t.onerror = function (event) {
+                        console.log(event.target.error.name);
+                    };
+
+                    t.oncomplete = function (event) {
+                        deferred.resolve();
+                    };
+                })
+                .error(function (data) {
+                    console.log('GET ALL INCIDENT TEAM FAILED');
+                });
+        });
+
+        console.log('sync incident team end');
+
+        return deferred.promise;
+    }
+
+
     function _syncIncidentResources() {
 
         console.log('sync inc resource start');
@@ -876,6 +986,69 @@
 
         return deferred.promise;
     }
+
+    function _syncIncidentOpPeriods() {
+
+        console.log('sync inc period start');
+
+        var deferred = $q.defer();
+        var data;
+        init2().then(function () {
+
+            $http.get($rootScope.serverBaseUrl + 'api/incident/GetAllIncidentOpPeriods?token=' + $rootScope.token)
+                .success(function (data) {
+                    var t = db.transaction(["incidentopperiods"], "readwrite");
+
+                    for (i = 0; i < data.length; i++) {
+                        //first grab local data if there is any
+                        var existingRec = t.objectStore("incidentopperiods").get(data[i].incidenT_OP_PERIOD_IDX);
+                        if (existingRec != null) {
+
+                            //only pull if server date 
+                            if (existingRec.synced != "false") {
+                                t.objectStore("incidentopperiods").put({
+                                    incidenT_OP_PERIOD_IDX: data[i].incidenT_OP_PERIOD_IDX,
+                                    incidenT_IDX: data[i].incidenT_IDX,
+                                    oP_PERIOD_NAME: data[i].oP_PERIOD_NAME,
+                                    oP_PERIOD_START_DT: data[i].oP_PERIOD_START_DT,
+                                    oP_PERIOD_END_DT: data[i].oP_PERIOD_END_DT,
+                                    oP_PERIOD_COMMAND_EMPHASIS: data[i].oP_PERIOD_COMMAND_EMPHASIS,
+                                    oP_PERIOD_SIT_AWARENESS: data[i].oP_PERIOD_SIT_AWARENESS,
+                                    oP_PERIOD_PLANNED_ACTION: data[i].oP_PERIOD_PLANNED_ACTION,
+                                    acT_IND: (data[i].acT_IND ? 1 : 0),
+                                    creatE_USERIDX: data[i].creatE_USERIDX,
+                                    creatE_DT: data[i].creatE_DT,
+                                    modifY_USERIDX: data[i].modifY_USERIDX,
+                                    modifY_DT: data[i].modifY_DT,
+                                    caN_EDIT: (data[i].caN_EDIT ? 1 : 0),
+                                    synced: 1
+                                });
+                                console.log('pulled inc periods: ' + data[i].incidenT_OP_PERIOD_IDX);
+                            }
+                            else {
+                                console.log('did not pull inc periods: ' + data[i].incidenT_OP_PERIOD_IDX);
+                            }
+                        }
+                    }
+
+                    t.onerror = function (event) {
+                        console.log(event.target.error.name);
+                    };
+
+                    t.oncomplete = function (event) {
+                        deferred.resolve();
+                    };
+                })
+                .error(function (data) {
+                    console.log('GET ALL INCIDENT OP PERIODS FAILED');
+                });
+        });
+
+        console.log('sync incident op periods end');
+
+        return deferred.promise;
+    }
+
 
 
     function _syncIncidentAttach(incIDX) {
@@ -1625,8 +1798,7 @@
         var newRecs = [];
         _getRefTable(strTable).then(function (res) {
 
-            newRecs =
-                    _.where(res, { synced: 0 });
+            newRecs = _.where(res, { synced: 0 });
 
         });
 
@@ -1702,6 +1874,30 @@
         };
     };
 
+    function _newIncidentTeam(incIDX) {
+        return {
+            incidenT_TEAM_DTL_IDX: uuidService.newuuid(),
+            incidenT_OP_PERIOD_IDX: null,
+            incidenT_IDX: incIDX,
+            reportS_TO_TEAM_DTL_IDX: null,
+            individuaL_IDX: null,
+            resourcE_IDX: null,
+            rolE_NAME: null,
+            agency: null,
+            seQ_NO: null,
+            traineE_IND: null,
+            contacT_TYPE: null,
+            contacT_INFO: null,
+            acT_IND: 1,
+            creatE_USERIDX: null,
+            creatE_DT: null,
+            modifY_USERIDX: null,
+            modifY_DT: null,
+            caN_EDIT: 1,
+            synced: 0
+        };
+    };
+
     function _newIncidentResource(incIDX) {
         return {
             incidenT_RESOURCE_IDX: uuidService.newuuid(),
@@ -1722,6 +1918,27 @@
         };
     };
 
+    function _newIncidentOpPeriod(incIDX) {
+        return {
+            incidenT_OP_PERIOD_IDX: uuidService.newuuid(),
+            incidenT_IDX: incIDX,
+            oP_PERIOD_NAME: null,
+            oP_PERIOD_START_DT: null,
+            oP_PERIOD_END_DT: null,
+            oP_PERIOD_COMMAND_EMPHASIS: null,
+            oP_PERIOD_SIT_AWARENESS: null,
+            oP_PERIOD_PLANNED_ACTION: null,
+            acT_IND: 1,
+            creatE_USERIDX: null,
+            creatE_DT: null,
+            modifY_USERIDX: null,
+            modifY_DT: null,
+            caN_EDIT: 1,
+            synced: 0
+        };
+    };
+
+    
 
     function _newResource() {
         return {
@@ -1822,7 +2039,9 @@
         syncQualifications: _syncQualifications,
         syncIncidents: _syncIncidents,
         syncIncidentStatuses: _syncIncidentStatuses,
+        syncIncidentTeams: _syncIncidentTeams, 
         syncIncidentResources: _syncIncidentResources,
+        syncIncidentOpPeriods: _syncIncidentOpPeriods,
         syncIncidentAttach: _syncIncidentAttach,
         syncDocuments: _syncDocuments,
         syncUserLocations: _syncUserLocations,
@@ -1854,7 +2073,9 @@
         newResource: _newResource,
         newIncident: _newIncident,
         newIncidentStatus: _newIncidentStatus,
+        newIncidentTeam: _newIncidentTeam,
         newIncidentResource: _newIncidentResource,
+        newIncidentOpPeriod: _newIncidentOpPeriod,
         newPerson: _newPerson,
         newQualification: _newQualification,
         init: init2 

@@ -49,6 +49,7 @@ namespace EmergencyHoundApi.Controllers
             return "false";
         }
 
+
         //INCIDENT STATUSES
 
         //GET LISTING OF INCIDENT STATUSES USER HAS ACCESS TO
@@ -89,7 +90,63 @@ namespace EmergencyHoundApi.Controllers
         }
 
 
+        //INCIDENT TEAM
+        /// <summary>
+        /// Return incident team that a user has access to
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public IEnumerable<SP_INCIDENT_TEAM_QUERY_Result> GetAllIncidentTeamDtl(string token)
+        {
+            Guid tokenG = new Guid(token);
+            if (tokenG != Guid.Empty)
+            {
+                int UserIDX = db_Accounts.GetT_OE_USER_TOKEN_byToken(tokenG);
+                return db_EmergencyHound.GetSP_INCIDENT_TEAM_QUERY(UserIDX, null);
+            }
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// Update the incident team detail
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="incResource"></param>
+        /// <returns></returns>
+        public string SetIncidentTeam(string token, [FromBody]SP_INCIDENT_TEAM_QUERY_Result incTeam)
+        {
+            Guid tokenG = new Guid(token);
+
+            if (tokenG != Guid.Empty)
+            {
+                int UserIDX = db_Accounts.GetT_OE_USER_TOKEN_byToken(tokenG);
+
+                if (UserIDX > 0)
+                {
+                    Guid? SuccID = db_EmergencyHound.InsertUpdateT_EM_INCIDENT_TEAM_DTL(incTeam.INCIDENT_TEAM_DTL_IDX, incTeam.INCIDENT_OP_PERIOD_IDX,
+                        incTeam.INCIDENT_IDX, incTeam.REPORTS_TO_TEAM_DTL_IDX, incTeam.INDIVIDUAL_IDX, incTeam.RESOURCE_IDX,
+                        incTeam.ROLE_NAME, incTeam.AGENCY, incTeam.SEQ_NO, incTeam.TRAINEE_IND, incTeam.CONTACT_TYPE, incTeam.CONTACT_INFO,
+                        incTeam.ACT_IND, UserIDX);
+
+                    if (SuccID != null)
+                        return "true";
+                    else
+                        return "false";
+                }
+            }
+
+            return "false";
+        }
+
+
         //INCIDENT RESOURCES
+
+        /// <summary>
+        /// Return incident resources that a user has access to
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public IEnumerable<SP_INCIDENT_RESOURCE_QUERY_Result> GetAllIncidentResources(string token)
         {
             Guid tokenG = new Guid(token);
@@ -101,6 +158,85 @@ namespace EmergencyHoundApi.Controllers
             else
                 return null;
         }
+
+        /// <summary>
+        /// Update the incident resource
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="incResource"></param>
+        /// <returns></returns>
+        public string SetIncidentResource(string token, [FromBody]SP_INCIDENT_RESOURCE_QUERY_Result incResource)
+        {
+            Guid tokenG = new Guid(token);
+
+            if (tokenG != Guid.Empty)
+            {
+                int UserIDX = db_Accounts.GetT_OE_USER_TOKEN_byToken(tokenG);
+
+                if (UserIDX > 0)
+                {
+                    Guid? SuccID = db_EmergencyHound.InsertUpdateT_EM_INCIDENT_RESOURCES(incResource.INCIDENT_RESOURCE_IDX, incResource.INCIDENT_IDX,
+                        incResource.RESOURCE_IDX, incResource.RESOURCE_COUNT, incResource.RESOURCE_ORDERED_DT, incResource.RESOURCE_ETA_DT, 
+                        incResource.RESOURCE_ARRIVED_IND, incResource.RESOURCE_NOTES, incResource.RESOURCE_ASSIGNED_TO, incResource.RESOURCE_ASSIGNED_PERSONS_COUNT,
+                        incResource.ACT_IND, UserIDX);
+
+                    if (SuccID != null)
+                        return "true";
+                    else
+                        return "false";
+                }
+            }
+
+            return "false";
+        }
+
+
+        //INCIDENT OP PERIODS
+
+        /// <summary>
+        /// Return incident operational periods that a user has access to
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public IEnumerable<SP_INCIDENT_OP_PERIOD_QUERY_Result> GetAllIncidentOpPeriods(string token)
+        {
+            Guid tokenG = new Guid(token);
+            if (tokenG != Guid.Empty)
+            {
+                int UserIDX = db_Accounts.GetT_OE_USER_TOKEN_byToken(tokenG);
+                return db_EmergencyHound.GetSP_INCIDENT_OP_PERIOD_QUERY(UserIDX, null);
+            }
+            else
+                return null;
+        }
+
+        // UPDATE THE OP PERIOD
+        public string SetIncidentOpPeriod(string token, [FromBody]SP_INCIDENT_OP_PERIOD_QUERY_Result rec)
+        {
+            Guid tokenG = new Guid(token);
+
+            if (tokenG != Guid.Empty)
+            {
+                int UserIDX = db_Accounts.GetT_OE_USER_TOKEN_byToken(tokenG);
+
+                if (UserIDX > 0)
+                {
+                    Guid? SuccID = db_EmergencyHound.InsertUpdateT_EM_INCIDENT_OP_PERIOD(rec.INCIDENT_OP_PERIOD_IDX, rec.INCIDENT_IDX,
+                        rec.OP_PERIOD_NAME, rec.OP_PERIOD_START_DT, rec.OP_PERIOD_END_DT, rec.OP_PERIOD_COMMAND_EMPHASIS, rec.OP_PERIOD_SIT_AWARENESS,
+                        rec.OP_PERIOD_PLANNED_ACTION, UserIDX, rec.ACT_IND);
+
+                    if (SuccID != null)
+                        return "true";
+                    else
+                        return "false";
+                }
+            }
+
+            return "false";
+        }
+
+
+
 
         // ATTACHMENTS
 

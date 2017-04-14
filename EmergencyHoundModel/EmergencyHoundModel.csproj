@@ -166,10 +166,16 @@
     <Compile Include="SP_INCIDENT_ADV_SEARCH_Result.cs">
       <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="SP_INCIDENT_OP_PERIOD_QUERY_Result.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="SP_INCIDENT_RESOURCE_QUERY_Result.cs">
       <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_INCIDENT_STATUS_QUERY_Result.cs">
+      <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_INCIDENT_TEAM_QUERY_Result.cs">
       <DependentUpon>EmergencyHoundEFModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_RESOURCE_ADV_SEARCH_Result.cs">

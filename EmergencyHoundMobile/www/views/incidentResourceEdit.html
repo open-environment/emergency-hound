@@ -13,9 +13,15 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Resource Type:</label>
-                        <select class="form-control" id="resourceType"
+                        <select class="form-control" id="sharing" name="resourcE_IDX"
                                 data-ng-model="incidentresource.resourcE_IDX"
-                                ng-options="r.statuS_TYPE_CD as r.statuS_TYPE_CD for r in ddlStatusType"></select>
+                                data-ng-class="{'input-validation-error': (submitForm.$submitted) && (submitForm.resourcE_IDX.$error.required) }"                               
+                                ng-options="r.resourcE_IDX as '(' + r.resourcE_TYPE_NAME + '): ' + r.resourcE_DESC for r in ddlResources"
+                                required>
+                        </select>
+                        <div ng-show="submitForm.$submitted || submitForm.resourcE_IDX.$touched">
+                            <span class="field-validation-error" ng-show="submitForm.resourcE_IDX.$error.required">Required</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -24,14 +30,14 @@
                     <div class="form-group">
                         <label>Count:</label>
                         <input type="text" class="form-control" data-ng-model="incidentresource.resourcE_COUNT"
-                               value="{{incidentresource.resourcE_COUNT}}" required="" />
+                               value="{{incidentresource.resourcE_COUNT}}"  />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Assigned To</label>
                         <input type="text" class="form-control" data-ng-model="incidentresource.resourcE_ASSIGNED_TO"
-                               value="{{incidentresource.resourcE_ASSIGNED_TO}}" required="" />
+                               value="{{incidentresource.resourcE_ASSIGNED_TO}}" />
                     </div>
                 </div>
             </div>
@@ -40,14 +46,14 @@
                     <div class="form-group">
                         <label>Ordered Date/Time</label>
                         <input type="text" class="form-control datetime-picker" data-ng-model="incidentresource.resourcE_ORDERED_DT"
-                               value="{{incidentresource.resourcE_ORDERED_DT}}" required="" />
+                               value="{{incidentresource.resourcE_ORDERED_DT  | date : 'MM/dd/yyyy h:mma'}}" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>ETA Date/Time:</label>
                         <input type="text" class="form-control datetime-picker" data-ng-model="incidentresource.resourcE_ETA_DT"
-                               value="{{incidentresource.resourcE_ETA_DT}}" required="" />
+                               value="{{incidentresource.resourcE_ETA_DT  | date : 'MM/dd/yyyy h:mma'}}" />
                     </div>
                 </div>
             </div>

@@ -1188,3 +1188,55 @@ BEGIN
 END 
 
 GO
+
+
+CREATE PROCEDURE [dbo].[SP_INCIDENT_OP_PERIOD_QUERY]
+@UserIDX int,
+@OrgIDX [uniqueidentifier]
+AS
+BEGIN
+	/*
+	DESCRIPTION: RETURNS INCIDENT OP PERIODS THAT ARE EITHER SET TO SHARED OR AMONGST THE USERS ORGS 
+	CHANGE LOG: 
+	*/
+	SET NOCOUNT ON;
+    
+	select IST.* 
+	,(select count(*) from T_EM_USER_ORG EUO where EUO.ORG_IDX = I.ORG_IDX and EUO.USER_IDX = @UserIDX and EUO.STATUS_CD = 'A') as CAN_EDIT
+	from T_EM_INCIDENT I, T_EM_INCIDENT_OP_PERIOD IST
+	where I.INCIDENT_IDX = IST.INCIDENT_IDX
+	and I.ACT_IND = 1
+	and IST.ACT_IND = 1
+	and (isnull(I.SHARE_TYPE,'') in ('All Jurisdictions','Public') or I.ORG_IDX in (select UO.ORG_IDX from T_EM_USER_ORG UO where UO.USER_IDX = @UserIDX and UO.STATUS_CD = 'A'))
+    and (@OrgIDX is null or I.ORG_IDX = @OrgIDX)  
+	;
+
+END 
+
+GO
+
+
+CREATE PROCEDURE [dbo].[SP_INCIDENT_TEAM_QUERY]
+@UserIDX int,
+@OrgIDX [uniqueidentifier]
+AS
+BEGIN
+	/*
+	DESCRIPTION: RETURNS INCIDENT TEAM DTL THAT ARE EITHER SET TO SHARED OR AMONGST THE USERS ORGS 
+	CHANGE LOG: 
+	*/
+	SET NOCOUNT ON;
+    
+	select IST.* 
+	,(select count(*) from T_EM_USER_ORG EUO where EUO.ORG_IDX = I.ORG_IDX and EUO.USER_IDX = @UserIDX and EUO.STATUS_CD = 'A') as CAN_EDIT
+	from T_EM_INCIDENT I, T_EM_INCIDENT_TEAM_DTL IST
+	where I.INCIDENT_IDX = IST.INCIDENT_IDX
+	and I.ACT_IND = 1
+	and IST.ACT_IND = 1
+	and (isnull(I.SHARE_TYPE,'') in ('All Jurisdictions','Public') or I.ORG_IDX in (select UO.ORG_IDX from T_EM_USER_ORG UO where UO.USER_IDX = @UserIDX and UO.STATUS_CD = 'A'))
+    and (@OrgIDX is null or I.ORG_IDX = @OrgIDX)  
+	;
+
+END 
+
+GO

@@ -19,19 +19,27 @@
                     <a class="btn btn-link pull-right visible-xs" data-toggle="class:show" data-target=".nav-primary">
                         <i class="fa fa-bars"></i>
                     </a>
-                    <a href="index.html" class="navbar-brand">Help</a>
+                    <a href="" class="navbar-brand">Help</a>
                 </header>
                 <section class="scrollable">
                     <nav class="nav-primary hidden-xs nav-docs">
                         <ul class="nav">
-                            <li class="dropdown-header b-b b-light"><em>Users</em></li>
+                            <li class="dropdown-header b-b b-dark bg-primary"><em>Users</em></li>
+                            <li><a href="#started">Getting Started</a></li>
                             <li><a href="#resources">Resources</a></li>
                             <li><a href="#certifications">Certifications</a></li>
                             <li><a href="#incidents">Incidents</a></li>
-                            <li class="dropdown-header b-b b-light"><em>Admin</em></li>
+                                <li class="padder"><a href="#incident_loc">Location</a></li>
+                                <li class="padder"><a href="#incident_team">Command Team</a></li>
+                                <li class="padder"><a href="#incident_resource">Inc. Resource</a></li>
+                                <li class="padder"><a href="#incident_status">Status Update</a></li>
+                                <li class="padder"><a href="#incident_period">Op Periods</a></li>
+                                <li class="padder"><a href="#incident_attach">Attachments</a></li>
+                            <li><a href="#con_resp">Notify Responders</a></li>
+                            <li class="dropdown-header b-b b-dark bg-primary"><em>Admins</em></li>
                             <li><a href="#adminusers">Manage Users</a></li>
+                            <li><a href="#adminsettings">App Settings</a></li>
                             <li><a href="#adminref">Reference Data</a></li>
-                            <li><a href="#admininstall">Installation</a></li>
                         </ul>
                     </nav>
                 </section>
@@ -56,126 +64,382 @@
                                 <li>Define the incident response team, including reporting relationships</li>
                                 <li>Track many incident details (e.g objectives, status updates, operational periods, safety plans, etc)</li>
                                 <li>View incidents, available resources and nearby environmental concerns on a map</li>
-                                <li>Generate FEMA compliant reports</li>
+                                <li>Generate some reports</li>
                             </ul>
+
+                            <!-- **************************************************** -->
+                            <!-- ***************** GETTING STARTED ******************* -->
+                            <!-- **************************************************** -->
+                            <h3 class="text-success" id="started">Getting Started</h3>
+                            <div class="line"></div>
+                            <p id="bootstrap">
+                                To begin using Emergency Hound, you must first register an account. When registering an account, you will
+                                be asked to select the Jurisdiction to which your account will be associated.
+                                If you do not see your jurisdiction listed, it may mean that your jurisdiction is set to "Private" 
+                                in Emergency Hound, and your Jurisdiction administrator will associate your account manually.
+                                Or it could mean that your jurisdiction is not setup to use Emergency Hound, in which case you will
+                                need to get in touch with an Emergency Hound administration for further instructions.
+                            </p>
+                            <p>
+                                When you register, the system will email you with an activation link. Only after you have activated this
+                                link will you be able to use the system.
+                            </p>
+                            <p>
+                                Note: account registration can currently only be done through the web application and NOT through the mobile app.
+                            </p>
 
                             <h3 class="text-success" id="resources">Resource Management</h3>
                             <div class="line"></div>
-                            <p id="bootstrap">This section describes how to manage resources in Emergency Hound.</p>
-                            <h4 id="icons" class="m-t-lg">Add Resource</h4>
-                            <p></p>
-                            <h4 id="icons" class="m-t-lg">Edit Resource</h4>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
+                            <p id="bootstrap">
+                                Emergency Hound allows emergency management personnel to maintain an inventory of emergency response resources. 
+                                Emergency Hound tracks three different categories of resources:
+                            </p>
+                            <h5>
+                                <strong>Categories of Resources</strong>
+                            </h5>                                
+                            <p>
+                                <ul>
+                                    <li>Equipment or supplies (e.g. Air Compressors, Track Dozers, or pallets of bottled water)</li>
+                                    <li>Responder Teams (e.g. Canine Search and Rescue Team, Rapid Needs Assessment Team)</li>
+                                    <li>Individual Responders</li>
+                                </ul>
+                            </p>
+                            <br/>
 
+                            <!-- **************************************************** -->
+                            <!-- ***************** VIEW RESOURCES ******************* -->
+                            <!-- **************************************************** -->
+                            <h4 id="icons" class="m-t-lg">View Resources</h4>
+                            <p>
+                                To view a listing of resources you have access to, click on the <strong>(Planning --> Resources)</strong> left menu item. An example screen is shown here: 
+                                <p>
+                                    <img src="Images/screen1.png" width="100%" />
+                                </p>
+                                This grid will display the following: 
+                                <ul>
+                                    <li>Resources maintained by your organization</li>
+                                    <li>Resources maintained by other organizations that have been set by the other organization as publicly viewable</li>
+                                </ul>
 
+                                Resources you can edit will display a "pencil" icon. Resources you only have read-only access to will display an "eye" icon.
+                            </p>
+
+                            <h4 id="icons" class="m-t-lg">Deleting a Resource</h4>
+                            <p>
+                                You can delete a resource by clicking the red X icon.
+                            </p>
+                            <br/>
+
+                            <!-- *********************************************************** -->
+                            <!-- ***************** ADD OR EDIT RESOURCES ******************* -->
+                            <!-- *********************************************************** -->
+                            <h4 id="icons" class="m-t-lg">Add or Edit Resource</h4>
+                            <p>
+                                To add a resource, click on the <strong>(Planning --> Resources)</strong> left menu item. 
+                                Then click the <strong>Add Resource</strong> button. 
+                                To edit an existing resource, click on the <strong>(Planning --> Resources)</strong> left menu item.
+                                Then click the <strong>pencil</strong> icon.
+                                You will be shown a screen like the following:
+                            </p>
+                            <p>
+                                <img src="Images/screen2.png" width="100%" />
+                            </p>
+                            <p>
+                                You can enter information about the resource such as resurce description, number of available resources,
+                                current resource status, resource location, and resource detailed information.                               
+                            </p>
+                            <p>
+                                Note: if you want to use a Resourc Type that is not included in the list, you must contact an 
+                                administrator, since only administrators can add new Resource Types.
+                            </p>
+                            <p>
+                                The detailed information available depends on the type of resource.
+                            </p>
+                            <p>
+                                <strong>Resource Verification</strong>
+                                <br/>
+                                Click on the Verify button to verify the resource. You can also click on the "Show Verification History"
+                                button to show a history of all times in which the resource has been verified.
+                            </p>
+                            <p>
+                                <img src="Images/screen3.png" width="100%" />
+                            </p>
+                            <!-- **************************************************** -->
+                            <!-- ***************** QUALIFICATIONS ******************* -->
+                            <!-- **************************************************** -->
                             <h3 class="text-success" id="certifications">Qualification/Certification Management</h3>
                             <div class="line"></div>
-                            <p id="bootstrap">This section describes how to manage individual certifications/qualifications in Emergency Hound.</p>
+                            <p>
+                                This section describes how to manage individual certifications/qualifications in Emergency Hound.
+                                To view a listing of people you can view or edit, click on the <strong>(Planning --> People/Certification)</strong> left menu item. 
+                                An example screen is shown here:
+                            <p>
+                                <img src="Images/screen4.png" width="100%" />
+                            </p>
                             <h4 id="icons" class="m-t-lg">Add Individual</h4>
-                            <p></p>
-                            <h4 id="icons" class="m-t-lg">Add Certification</h4>
-                            <p></p>
-                            <h4 id="icons" class="m-t-lg">Edit Certification</h4>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
+                            <p>
+                                To add an individual, click on the <strong>(Planning --> People/Certification)</strong> left menu item.
+                                Then click the <strong>Add Person</strong> button.
+                                To edit an existing person, click on the <strong>(Planning --> People/Certification)</strong> left menu item.
+                                Then click the <strong>pencil</strong> icon.
+                                You will be shown a screen like the following:
+                            </p>
+                            <p>
+                                <img src="Images/screen5.png" width="100%" />
+                            </p>
+
+                            <h4 id="icons" class="m-t-lg">Add/Edit Certification</h4>
+                            <p>
+                                After a responder record has been created, you can then maintain a listing of certifications that they hold.
+                                <br/>
+                                To do this, click on the "Add Certification" button, enter in a qualification type, effective and expiration dates, then click the Save button.
+                            </p>
+                            <p>
+                                <img src="Images/screen6.png" width="100%" />
+                            </p>
 
 
+                            <!-- **************************************************** -->
+                            <!-- ***************** VIEW INCIDENTS ******************* -->
+                            <!-- **************************************************** -->
                             <h3 class="text-success" id="incidents">Incident Management</h3>
                             <div class="line"></div>
-                            <p id="bootstrap">This section describes how to manage incidents.</p>
-                            <h4 id="icons" class="m-t-lg">Add Incident</h4>
-                            <p></p>
-                            <h4 id="icons" class="m-t-lg">Incident Location</h4>
-                            <p></p>
-                            <h4 id="icons" class="m-t-lg">Incident Team</h4>
-                            <p></p>
-                            <h4 id="icons" class="m-t-lg">Operational Periods</h4>
-                            <p></p>
-                            <h4 id="icons" class="m-t-lg">Status Updates</h4>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
+                            <p id="bootstrap">
+                                Emergency Hound allows emergency management personnel to keep track of incident response activities. 
+                            </p>
+                            <br />
 
+                            <!-- **************************************************** -->
+                            <!-- ***************** ADD OR EDIT INCIDENT ******************* -->
+                            <!-- **************************************************** -->
+                            <h4 id="icons" class="text-success">Add or Edit Incident</h4>
+                            <p>
+                                To add an incident, click on the <strong>(Response --> Incident Search)</strong> left menu item.
+                                Then click the <strong>Create New</strong> button.
+                                To edit an existing incident, click on the <strong>(Response --> Incident Search)</strong> left menu item.
+                                Then click the <strong>pencil</strong> icon for a particular incident.
+                                You will be shown a screen like the following:
+                            </p>
+                            <p>
+                                <img src="Images/screen7.png" width="100%" />
+                            </p>
+                            <p>
+                                You can enter information about the incident such as incident ID, name, priority, description, jurisdiction,
+                                weather conditions, and incident start date/time.
+                            </p>
+                            <p>
+                                <img src="Images/screen8.png" width="100%" />
+                            </p>
 
+                            <h4  id="incident_loc" class="text-success">Incident Location</h4>
+                            <p>
+                                Click on the Location tab to view or edit the incident location.
+                            </p>
+                            <p>
+                                <img src="Images/screen9.png" width="100%" />
+                            </p>
+                            <br />
+
+                            <!-- **************************************************** -->
+                            <!-- ***************** INCIDENT TEAM  ******************* -->
+                            <!-- **************************************************** -->
+                            <h4 class="text-success" id="incident_team">Incident Team</h4>
+                            <p>
+                                Click on the Team tab to view or edit the incident command team.
+                            </p>
+                            <p>
+                                <img src="Images/screen10.png" width="100%" />
+                            </p>
+                            <p>
+                                You can assign either an individual (created at the Planning>People page) or a team (created at the Planning>Resources page)
+                                to the incident.
+                            </p>
+                            <p>
+                                To create a new entry for the command team, click the "Add Team Member" button. Then provide a role description (mandatory)
+                                and either assign an individual or a team (not both).                                 
+                            </p>
+                            <p>
+                                It is possible to create a role for the command team (e.g. Incident Commander) and save the record without 
+                                yet assigning an individual or team member. When you eventually assign a person or team to the role, 
+                                the entry will change from red to green color.
+                            </p>
+                            <p>
+                                To edit an existing team role, hover over the entry and click the pencil icon.
+                            </p>
+                            <br/>
+
+                            <!-- **************************************************** -->
+                            <!-- ***************** INCIDENT RESOURCES**************** -->
+                            <!-- **************************************************** -->
+                            <h4 id="incident_resource" class="text-success">Incident Resources</h4>
+                            <p>
+                                You can assign resources from your master list of maintained resources to a particular incident. 
+                                To do this, click on the Resources tab to view or edit the incident resources.
+                            </p>
+                            <p>
+                                <img src="Images/screen11.png" width="100%" />
+                            </p>
+                            <br />
+
+                            <!-- **************************************************** -->
+                            <!-- ***************** STATUS UPDATES **************** -->
+                            <!-- **************************************************** -->
+                            <h4 id="incident_status" class="text-success">Status Updates</h4>
+                            <p>
+                                You can provide ongoing status updates for an incident. To do this, click on the "Status" tab.
+                            </p>
+                            <p>
+                                Click on the "Add Status" button to add a new status update. Currently three different types of status updates are allowed:
+                                <ul>
+                                    <li>Situation Summaries</li>
+                                    <li>Health and Safety Briefings</li>
+                                    <li>Significant Events</li>
+                                </ul>
+                            </p>
+                            <p>
+                                <img src="Images/screen11.png" width="100%" />
+                            </p>
+
+                            <p>
+                                You can also click on the "View Timeline" button to view a timeline of important events in the history of an incident.  This includes the
+                                following possible events: 
+                                <ul>
+                                    <li>Incident creation date/time</li>
+                                    <li>Status Updates</li>
+                                    <li>Resources added to an incident</li>
+                                    <li>Attachments added to an incident</li>
+                                    <li>Operation Period start date/times</li>
+                                </ul>
+                            </p>
+                            <br />
+
+                            <!-- **************************************************** -->
+                            <!-- ***************** OPERATIONAL PERIODS **************** -->
+                            <!-- **************************************************** -->
+                            <h4 id="incident_period" class="text-success">Operational Periods</h4>
+                            <p>
+                                Click on the Operational Periods tab to view or edit the operational periods defined for this incident.
+                            </p>
+                            <p>
+                                <img src="Images/screen12.png" width="100%" />
+                            </p>
+                            <p>
+                                Here you can edit the operational period name, start and end dates/times, command emphasis, situational awareness, 
+                                planned actions, and objectives for this period.
+                            </p>
+                            <p>
+                                <img src="Images/screen13.png" width="100%" />
+                            </p>
+                            <br />
+
+                            <!-- **************************************************** -->
+                            <!-- ***************** INCIDENT ATTACHMENTS**************** -->
+                            <!-- **************************************************** -->
+                            <h4 id="incident_attach" class="text-success">Add Incident Attachments</h4>
+                            <p>
+                                You can upload files for an incident. This can include items such as images or videos taken onsite at an incident.
+                            </p>
+                            <p>
+                                To add attachments to an incident, click on the Attachments menu item, then click on the "Add Attachment" button.
+                                If you are using this feature in the mobile version, your mobile device will ask whether you want to take a new picture or video, 
+                                or upload an existing one from your gallery.
+                            </p>
+                            <p>
+                                <img src="Images/screen14.png" width="100%" />
+                            </p>
+                            <br />
+
+                            <!-- **************************************************** -->
+                            <!-- ***************** Notify Responders ******************* -->
+                            <!-- **************************************************** -->
+                            <h4 id="con_resp" class="text-success">Notify Nearby Responders (Mobile only)</h4>
+                            <p>
+                                <strong>Note: </strong>
+                                In order to allow other users to notify you, you must go to the User Profile screen and enable the 
+                                "Allow Tracking" feature. Once you allow this, any time you are actively running the mobile app, your location will be tracked
+                                and other will be able to see your location and notify you via phone call or text message.
+                            </p>
+                            <p>
+                                To search for nearby responders, click on the incident you are currently working on, and go to the Map tab.
+                                <br/>
+                                If there are any responders nearby, you can see them on the map. This is only possible if the following conditions are met:
+                                <ul>
+                                    <li>The User is currently running Emergency Hound on their device</li>
+                                    <li>The User has enabled location tracking in Emergency Hound</li>
+                                </ul>
+                            </p>
+                            <p>
+                                If you see a responder on the map, you can click on their icon on the map, and then click the phone icon or text message
+                                icon to either call them or send them a text message.
+                            </p>
+                            <br />
+
+                            <!-- **************************************************** -->
+                            <!-- ***************** ADMIN USER MANAGEMENT ******************* -->
+                            <!-- **************************************************** -->
                             <h3 class="text-success" id="adminusers">Admin: User Management</h3>
                             <div class="line"></div>
                             <p id="bootstrap">This section describes how to manage user accounts and security rights.</p>
-                            <h4 id="icons" class="m-t-lg">Add User</h4>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
+                            <p>
+                                Although users will self register, association with a particular jurisdiction needs approval from an administrator.
+                            </p>
+                            <p>
+                                If you are already setup in the system as a jurisdiction administrator, when another user registers an account 
+                                and requests access to your jurisdiction, you will receive an email. You can then login to Emergency Hound, and on the dashboard
+                                see the association request as pending. You can then choose to either approve or deny the association.
+                            </p>
+                            <p>
+                                Note: this feature can only be done through the web application and cannot be done in the mobile app.
+                            </p>
+                            <p>
+                                <img src="Images/screen15.png" width="100%" />
+                            </p>
+                            <p>
+                                As an administrator, you may need to perform other administration tasks for user accounts, such as updating email address or inactivating accounts. 
+                                This can be done at the Admin --> Users screen
+                            </p>
+                            <br/>
+
+                            <!-- **************************************************** -->
+                            <!-- ***************** ADMIN APP SETTINGS******************* -->
+                            <!-- **************************************************** -->
+                            <h3 class="text-success" id="adminsettings">Admin: App Settings</h3>
+                            <div class="line"></div>
+                            <p id="bootstrap">
+                                Emergency Hound contains several application default settings, which can be modified by system administrators. These
+                                include: 
+                                <ul>
+                                    <li>Email Server settings</li>
+                                    <li>Public Application Path (used in emails)</li>
+                                </ul>
+
+                            </p>
 
 
+                            <!-- **************************************************** -->
+                            <!-- ***************** ADMIN REF DATA ******************* -->
+                            <!-- **************************************************** -->
                             <h3 class="text-success" id="adminref">Admin: Reference Data Management</h3>
                             <div class="line"></div>
                             <p id="bootstrap">This section describes how to manage reference data.</p>
                             <h4 id="icons" class="m-t-lg">Edit Reference Data</h4>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
+                            <p>
+                                Certain reference data can be updated through Administration screens, while others can only be updated directly in the database.
+                                The following reference data can be updated through user screens: 
+                                <ul>
+                                    <li>Jurisdictions</li>
+                                    <li>Resource Types</li>
+                                </ul>
+                            </p>
 
 
-                            <h3 class="text-success" id="admininstall">Admin: Installing Emergency Hound</h3>
+
+
+                            <!--<h3 class="text-success" id="admininstall">Admin: Installing Emergency Hound</h3>
                             <div class="line"></div>
                             <p id="bootstrap">This section describes how to install Emergency Hound.</p>
                             <h4 id="icons" class="m-t-lg">Installation Steps</h4>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
-                            <p>.</p>
+                            <p>.</p>-->
 
                         </div>
                     </section>

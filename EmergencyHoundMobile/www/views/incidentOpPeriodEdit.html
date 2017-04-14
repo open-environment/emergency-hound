@@ -1,0 +1,81 @@
+﻿<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+
+<section class="panel panel-default">
+    <header class="panel-heading font-bold ">Operational Period</header>
+    <form class="panel-body" name="submitForm" novalidate ng-submit="submitForm.$valid && incidentEdit.save()">
+        <div class="hbox stretch">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Period Name:</label>
+                        <input type="text" class="form-control" data-ng-model="incidentopperiod.oP_PERIOD_NAME" value="{{incidentopperiod.oP_PERIOD_NAME}}" />
+                        <div ng-show="submitForm.$submitted || submitForm.oP_PERIOD_NAME.$touched">
+                            <span class="field-validation-error" ng-show="submitForm.oP_PERIOD_NAME.$error.required">Required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Start Date/Time</label>
+                        <input type="text" class="form-control datetime-picker" data-ng-model="incidentopperiod.oP_PERIOD_START_DT"
+                               value="{{incidentopperiod.oP_PERIOD_START_DT  | date : 'MM/dd/yyyy h:mma'}}" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>End Date/Time:</label>
+                        <input type="text" class="form-control datetime-picker" data-ng-model="incidentopperiod.oP_PERIOD_END_DT"
+                               value="{{incidentopperiod.oP_PERIOD_END_DT  | date : 'MM/dd/yyyy h:mma'}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Command Emphasis:</label>
+                        <textarea class="form-control" rows="3" id="oP_PERIOD_COMMAND_EMPHASIS" maxlength="1000"
+                                  data-ng-model="incidentopperiod.oP_PERIOD_COMMAND_EMPHASIS" placeholder="Command Emphasis">
+                            {{incidentopperiod.oP_PERIOD_COMMAND_EMPHASIS}}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Situational Awareness:</label>
+                        <textarea class="form-control" rows="3" id="oP_PERIOD_SIT_AWARENESS" maxlength="1000"
+                                  data-ng-model="incidentopperiod.oP_PERIOD_SIT_AWARENESS" placeholder="Situational Awareness">
+                            {{incidentopperiod.oP_PERIOD_SIT_AWARENESS}}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Planned Actions:</label>
+                        <textarea class="form-control" rows="3" id="oP_PERIOD_PLANNED_ACTION" maxlength="1000"
+                                  data-ng-model="incidentopperiod.oP_PERIOD_PLANNED_ACTION" placeholder="Planned Actions">
+                            {{incidentopperiod.oP_PERIOD_PLANNED_ACTION}}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-sm btn-primary " data-ng-click="save()">Save</button>
+                    <button class="btn btn-sm btn-default " data-ng-click="close()">Close</button>
+                    <button class="btn btn-sm btn-danger pull-right" data-ng-click="delete()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

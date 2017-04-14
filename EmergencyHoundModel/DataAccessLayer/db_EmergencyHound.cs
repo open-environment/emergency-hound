@@ -455,6 +455,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                     if (aTTACH_TYPE != null) e.ATTACH_TYPE = aTTACH_TYPE;
                     if (aTTACH_NAME != null) e.ATTACH_NAME = aTTACH_NAME;
                     if (aTTACH_DESC != null) e.ATTACH_DESC = aTTACH_DESC;
+                    e.ACT_IND = true;
 
                     if (insInd)
                         ctx.T_EM_INCIDENT_ATTACH.Add(e);
@@ -481,6 +482,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_ATTACH
                             where a.INCIDENT_IDX == IncidentIDX
+                            && a.ACT_IND == true
                             select a).ToList();
                 }
                 catch (Exception ex)
@@ -502,6 +504,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_ATTACH
                             where a.INCIDENT_IDX == IncidentIDX
+                            && a.ACT_IND == true
                             select new AttachDisplayType
                             {
                                 ATTACH_IDX = a.ATTACH_IDX,
@@ -555,6 +558,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                     return (from a in ctx.T_EM_INCIDENT_LOC_AREA
                             where a.INCIDENT_IDX == IncidentIDX
                             && a.LOCATION_AREA_TYPE == LocAreaType
+                            && a.ACT_IND == true
                             select a).FirstOrDefault().LOCATION_PERIMETER;
                 }
                 catch (Exception ex)
@@ -632,6 +636,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_OBJECTIVES
                             where a.INCIDENT_OP_PERIOD_IDX == OpPeriodIDX
+
                             select a).ToList();
                 }
                 catch (Exception ex)
@@ -672,6 +677,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                     if (iNCIDENT_OP_PERIOD_IDX != null) e.INCIDENT_OP_PERIOD_IDX = iNCIDENT_OP_PERIOD_IDX;
                     if (iNCIDENT_OBJECTIVE != null) e.INCIDENT_OBJECTIVE = iNCIDENT_OBJECTIVE;
                     if (oBJECTIVE_PRIORITY != null) e.OBJECTIVE_PRIORITY = oBJECTIVE_PRIORITY;
+                    e.ACT_IND = aCT_IND;
 
                     if (insInd)
                         ctx.T_EM_INCIDENT_OBJECTIVES.Add(e);
@@ -701,6 +707,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_OP_PERIOD
                             where a.INCIDENT_IDX == IncidentIDX
+                            && a.ACT_IND == true
                             select a).ToList();
                 }
                 catch (Exception ex)
@@ -730,7 +737,7 @@ namespace EmergencyHoundModel.DataAccessLayer
         }
 
         public static Guid? InsertUpdateT_EM_INCIDENT_OP_PERIOD(Guid? iNC_OP_PERIOD_IDX, Guid? iNCIDENT_IDX, string oP_PERIOD_NAME, DateTime? oP_PERIOD_START_DT, DateTime? oP_PERIOD_END_DT, 
-            string oP_PERIOD_COMMAND_EMPHASIS, string oP_PERIOD_SIT_AWARENESS, string oP_PERIOD_PLANNED_ACTION, int? cREATE_USER)
+            string oP_PERIOD_COMMAND_EMPHASIS, string oP_PERIOD_SIT_AWARENESS, string oP_PERIOD_PLANNED_ACTION, int? cREATE_USER, bool aCT_IND = true)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
             {
@@ -746,7 +753,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                     {
                         insInd = true;
                         e = new T_EM_INCIDENT_OP_PERIOD();
-                        e.INCIDENT_OP_PERIOD_IDX = Guid.NewGuid();
+                        e.INCIDENT_OP_PERIOD_IDX = iNC_OP_PERIOD_IDX ?? Guid.NewGuid();
                         e.CREATE_DT = System.DateTime.Now;
                         e.CREATE_USERIDX = cREATE_USER;
                     }
@@ -763,6 +770,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                     if (oP_PERIOD_COMMAND_EMPHASIS != null) e.OP_PERIOD_COMMAND_EMPHASIS = oP_PERIOD_COMMAND_EMPHASIS;
                     if (oP_PERIOD_SIT_AWARENESS != null) e.OP_PERIOD_SIT_AWARENESS = oP_PERIOD_SIT_AWARENESS;
                     if (oP_PERIOD_PLANNED_ACTION != null) e.OP_PERIOD_PLANNED_ACTION = oP_PERIOD_PLANNED_ACTION;
+                    e.ACT_IND = aCT_IND;
 
                     if (insInd)
                         ctx.T_EM_INCIDENT_OP_PERIOD.Add(e);
@@ -791,6 +799,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_RESOURCES
                             where a.INCIDENT_IDX == IncidentIDX
+                            && a.ACT_IND == true
                             select a).Count();
                 }
                 catch (Exception ex)
@@ -812,6 +821,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_RESOURCES
                             where a.RESOURCE_IDX == ResourceIDX
+                            && a.ACT_IND == true
                             select a).Count();
                 }
                 catch (Exception ex)
@@ -1004,6 +1014,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_STATUS
                             where a.INCIDENT_IDX == IncidentIDX
+                            && a.ACT_IND == true
                             select a).Count();
                 }
                 catch (Exception ex)
@@ -1047,6 +1058,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.V_EM_INCIDENT_TEAM_DISPLAY
                             where a.INCIDENT_IDX == IncidentIDX
+                            && a.ACT_IND == true
                             select a).ToList();
                 }
                 catch (Exception ex)
@@ -1069,6 +1081,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                     var x = (from a in ctx.T_EM_INCIDENT_TEAM_DTL
                              join b in ctx.T_EM_INDIVIDUALS on a.INCIDENT_IDX equals b.INDIVIDUAL_IDX
                              where a.INCIDENT_IDX == IncidentIDX
+                             && a.ACT_IND==true
                              && a.REPORTS_TO_TEAM_DTL_IDX == null
                              select b).FirstOrDefault();
 
@@ -1096,6 +1109,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_TEAM_DTL
                             where a.INCIDENT_IDX == IncidentIDX
+                            && a.ACT_IND == true
                             select a).Count();
                 }
                 catch (Exception ex)
@@ -1117,6 +1131,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_TEAM_DTL
                             where a.RESOURCE_IDX == ResourceIDX
+                            && a.ACT_IND == true
                             select a).Count();
                 }
                 catch (Exception ex)
@@ -1138,6 +1153,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
                     return (from a in ctx.T_EM_INCIDENT_TEAM_DTL
                             where a.REPORTS_TO_TEAM_DTL_IDX == TeamDtlIDX
+                            && a.ACT_IND == true
                             select a).Count();
                 }
                 catch (Exception ex)
@@ -1166,8 +1182,6 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
         }
 
-
-
         public static Guid? InsertUpdateT_EM_INCIDENT_TEAM_DTL(Guid? iNCIDENT_TEAM_DTL_IDX, Guid? iNCIDENT_OP_PERIOD_IDX, Guid? iNCIDENT_IDX, Guid? rEPORTS_TO_TEAM_DTL_IDX,
             Guid? iNDIVIDUAL_IDX, Guid? rESOURCE_IDX, string rOLE_NAME, string aGENCY, int? sEQ_NO, string tRAINEE_IND, string cONTACT_TYPE, string cONTACT_INFO, Boolean aCT_IND, int? cREATE_USER)
         {
@@ -1186,7 +1200,10 @@ namespace EmergencyHoundModel.DataAccessLayer
                     {
                         insInd = true;
                         e = new T_EM_INCIDENT_TEAM_DTL();
-                        e.INCIDENT_TEAM_DTL_IDX = Guid.NewGuid();
+                        if (iNCIDENT_TEAM_DTL_IDX == Guid.Empty)
+                            e.INCIDENT_TEAM_DTL_IDX = Guid.NewGuid();
+                        else
+                            e.INCIDENT_TEAM_DTL_IDX = iNCIDENT_TEAM_DTL_IDX.ConvertOrDefault<Guid>();
                         e.CREATE_DT = System.DateTime.Now;
                         e.CREATE_USERIDX = cREATE_USER;
                     }
@@ -1337,8 +1354,6 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
         }
 
-
-
         public static T_EM_INDIVIDUALS GetT_EM_INDIVIDUAL_ByID(Guid? id)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
@@ -1439,6 +1454,8 @@ namespace EmergencyHoundModel.DataAccessLayer
                             join i in ctx.T_EM_INDIVIDUALS on a.INDIVIDUAL_IDX equals i.INDIVIDUAL_IDX
                             join qt in ctx.T_EM_REF_QUAL_TYPE on a.QUAL_TYPE_IDX equals qt.QUAL_TYPE_IDX
                             where uo.USER_IDX == UserIDX
+                            && i.ACT_IND == true
+                            && a.ACT_IND == true
                             select new QualificationDisplayType
                             {
                                 ORG_IDX = a.ORG_IDX,
@@ -1746,7 +1763,6 @@ namespace EmergencyHoundModel.DataAccessLayer
                         e.RESOURCE_TYPE_DTL_IDX = rESOURCE_TYPE_DTL_IDX.ConvertOrDefault<Guid>();
                         e.CREATE_USERIDX = cREATE_USER;
                         e.CREATE_DT = System.DateTime.Now;
-                        e.ACT_IND = aCT_IND;
                     }
                     else
                     {
@@ -1754,6 +1770,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                         e.MODIFY_USERIDX = cREATE_USER;
                     }
 
+                    e.ACT_IND = aCT_IND;
                     if (vALUE != null) e.VALUE = vALUE;
 
                     if (insInd)
@@ -2485,8 +2502,6 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
         }
 
-
-
         public static T_OE_ORGANIZATIONS GetT_OE_ORGANIZATIONS_ByOrgIDX(Guid? OrgIDX)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
@@ -2572,6 +2587,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
         }
 
+
         //******************SP_INCIDENT_STATUS_QUERY*******************************
         public static List<SP_INCIDENT_STATUS_QUERY_Result> GetSP_INCIDENT_STATUS_QUERY(int userIDX, Guid? orgIDX)
         {
@@ -2590,6 +2606,7 @@ namespace EmergencyHoundModel.DataAccessLayer
 
         }
 
+
         //******************SP_INCIDENT_RESOURCE_QUERY*******************************
         public static List<SP_INCIDENT_RESOURCE_QUERY_Result> GetSP_INCIDENT_RESOURCE_QUERY(int userIDX, Guid? orgIDX)
         {
@@ -2607,6 +2624,44 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
 
         }
+
+
+        //******************SP_INCIDENT_OP_PERIOD_QUERY*******************************
+        public static List<SP_INCIDENT_OP_PERIOD_QUERY_Result> GetSP_INCIDENT_OP_PERIOD_QUERY(int userIDX, Guid? orgIDX)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    return ctx.SP_INCIDENT_OP_PERIOD_QUERY(userIDX, orgIDX).ToList();
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    return null;
+                }
+            }
+
+        }
+
+        //******************SP_INCIDENT_TEAM_QUERY*******************************
+        public static List<SP_INCIDENT_TEAM_QUERY_Result> GetSP_INCIDENT_TEAM_QUERY(int userIDX, Guid? orgIDX)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    return ctx.SP_INCIDENT_TEAM_QUERY(userIDX, orgIDX).ToList();
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    return null;
+                }
+            }
+
+        }
+
 
 
         //******************SP_RESOURCE_ADV_SEARCH*******************************
@@ -2645,7 +2700,6 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
 
         }
-
 
 
         ////******************SP_RESOURCE_DTL*******************************

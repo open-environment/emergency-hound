@@ -52,4 +52,13 @@ Mobile Change Log:
 		  (C) more informative error messages
 - Web: Make resource description mandatory
 - Web: fix navigation link when going from Operational Period to Resources page
+- Web: fix bug saving operation periods & attachments always inactive & fix display of inactive records
+- Mobile: add ability to assign resources to incidents
+- Mobile: add ability to define operational periods for an incident
+- Mobile: fix validation of incident ID minlength
+- Mobile: fix date formatting on incident, incident edit, incident status update, resource, and resource edit pages
 
+1.0.9 (DB 7) (March 2017b)
+- Mobile: fix display of resource name on incident resource page
+- Mobile: add ability to view and edit incident command team
+- Mobile: fix bug deleting incident statuses not yet synced to server

@@ -53,7 +53,7 @@
                                     <td style="min-width:78px">
                                         <a href="@Url.Action("OpPeriodEdit", "Incident", new { id = item.INCIDENT_OP_PERIOD_IDX })" class="btn btn-rounded btn-xs btn-default"><i class="fa fa-pencil fa-success"></i></a>
                                         <div class="delete-section" style="display:inline">
-                                            <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = item.INCIDENT_OP_PERIOD_IDX})"><i class="fa fa-times "></i></a>
+                                            <a class="btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = item.INCIDENT_OP_PERIOD_IDX})"><i class="fa fa-times "></i></a>
                                             <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.INCIDENT_OP_PERIOD_IDX" data-delete-path="@(Url.Content("~/"))"  data-delete-p="/Incident/DeleteOpPeriod"><b>Confirm Delete</b></div>
                                         </div>
                                     </td>

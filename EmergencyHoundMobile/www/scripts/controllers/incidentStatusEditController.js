@@ -3,6 +3,7 @@
     function ($scope, $location, $rootScope, cfpLoadingBar, ehConstants, dbManagerService) {
 
         //******************* VIEW INITIALIZATION  *************************
+        $scope.incident = ehConstants.selectedIncident;
         $scope.incidentstatus = ehConstants.selectedIncidentStatus;
         $scope.ddlStatusType = [{ statuS_TYPE_CD: "Health/Safety Brief", id: 1 }, { statuS_TYPE_CD: "Significant Event", id: 2 }, { statuS_TYPE_CD: "Situation Summary", id: 3 }];
 

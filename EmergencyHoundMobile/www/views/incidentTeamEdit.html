@@ -1,0 +1,84 @@
+﻿<!-- START: SAVE MESSAGE -->
+<div class="alert alert-success " ng-show="saveState">
+    <button data-dismiss="alert" class="close">×</button>
+    <i class="fa fa-check-circle"></i> {{saveState}}
+</div>
+<!-- END: SAVE MESSAGE -->
+<section class="panel panel-default">
+    <header class="panel-heading font-bold ">Edit Team Member</header>
+    <form class="panel-body" name="submitForm" novalidate ng-submit="submitForm.$valid && incidentTeamEdit.save()">
+        <div class="hbox stretch">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Role Description</label>
+                        <input type="text" 
+                               class="form-control"
+                               data-ng-class="{'input-validation-error': (submitForm.$submitted) && (submitForm.rolE_NAME.$error.required) }"
+                               placeholder="Role Description"
+                               data-ng-model="incidentteam.rolE_NAME"
+                               ng-minlength="3"
+                               value="{{incidentteam.rolE_NAME}}" 
+                               name="rolE_NAME"
+                               required="" />
+                        <div ng-show="submitForm.$submitted || submitForm.rolE_NAME.$touched">
+                            <span class="field-validation-error" ng-show="submitForm.rolE_NAME.$error.required">Please enter Role.</span>
+                            <span class="field-validation-error" ng-show="submitForm.rolE_NAME.$error.minlength">Role must be 3 characters long.</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Individual:</label>
+                        <select class="form-control" id="individuaL_IDX"
+                                data-ng-model="incidentteam.individuaL_IDX"
+                                ng-options="r.individuaL_IDX as r.indV_FIRST_NAME + ' ' + r.indV_LAST_NAME for r in ddlIndividual"></select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>...or Team:</label>
+                        <select class="form-control" id="resourcE_IDX"
+                                data-ng-model="incidentteam.resourcE_IDX"
+                                ng-options="r.resourcE_IDX as r.resourcE_TYPE_NAME + ' (' + r.resourcE_DESC + ')' for r in ddlTeams"></select>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Agency:</label>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Agency"
+                               data-ng-model="incidentteam.agency"
+                               value="{{incidentteam.agency}}"
+                               name="agency" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Reports To:</label>
+                        <select class="form-control" id="reportS_TO_TEAM_DTL_IDX"
+                                data-ng-model="incidentteam.reportS_TO_TEAM_DTL_IDX"
+                                ng-options="r.incidenT_TEAM_DTL_IDX as r.rolE_NAME for r in ddlReportsTo"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-sm btn-primary " data-ng-click="save()">Save</button>
+                    <button class="btn btn-sm btn-default " data-ng-click="close()">Close</button>
+                    <button class="btn btn-sm btn-danger pull-right" data-ng-click="delete()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
