@@ -1,5 +1,4 @@
-﻿//using System.Threading.Tasks;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.IO;
@@ -7,14 +6,12 @@ using EmergencyHoundModel;
 using EmergencyHoundModel.DataAccessLayer;
 using EmergencyHoundWeb.ViewModels;
 using EmergencyHoundWeb.App_Logic;
-//using Microsoft.AspNet.Identity;
-//using Microsoft.AspNet.Identity.Owin;
-//using Microsoft.Owin.Security;
 using System;
-using Newtonsoft.Json;
-using System.Drawing;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+
+using Microsoft.AspNet.Identity;
+using System.Web.Configuration;
 
 namespace EmergencyHoundWeb.Controllers
 {
@@ -41,6 +38,10 @@ namespace EmergencyHoundWeb.Controllers
         // GET: /Account/Login
         public ActionResult Login(string returnUrl)
         {
+            string UserIDX = User.Identity.GetUserId();
+            string UserName = User.Identity.Name;
+            System.Security.Principal.IIdentity ii = User.Identity; 
+
             //auto pass forward to dashboard if logged in
             if (User.Identity.Name != "")
             {
@@ -91,22 +92,27 @@ namespace EmergencyHoundWeb.Controllers
         }
 
 
-        // GET: /Account/LogOff
-        public ActionResult LogOff(string dummy)
-        {
-            Session.Clear();
-            System.Web.Security.FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Home");
-        }
-
 
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            FormsAuthentication.SignOut();
             Session.Clear();
-            System.Web.Security.FormsAuthentication.SignOut();
+            Session.Abandon();
+
+            // clear authentication cookie
+            HttpCookie cookie1 = new HttpCookie(FormsAuthentication.FormsCookieName, "");
+            cookie1.Expires = DateTime.Now.AddYears(-1);
+            Response.Cookies.Add(cookie1);
+
+            Request.GetOwinContext().Authentication.SignOut();
+
+            // Invalidate the Cache on the Client Side
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -114,6 +120,8 @@ namespace EmergencyHoundWeb.Controllers
         // GET: /Account/Register
         public ActionResult Register()
         {
+            //if using IdentityServer, then redirect to 
+
             var model = new vmAccountRegisterModel();
             return View("Register", "_LayoutPub", model);
         }
@@ -418,7 +426,7 @@ namespace EmergencyHoundWeb.Controllers
         }
 
 
-        // POST: /Incident/Delete/5
+        // POST: /Account/Delete/5
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -429,76 +437,7 @@ namespace EmergencyHoundWeb.Controllers
         }
 
 
-
-        //[HttpPost]
-        //public string UploadOriginalImage(HttpPostedFileBase img)
-        //{
-        //    string folder = Server.MapPath("~/Temp");
-        //    string extension = Path.GetExtension(img.FileName);
-        //    string pic = System.IO.Path.GetFileName(Guid.NewGuid().ToString());
-        //    var tempPath = Path.ChangeExtension(pic, extension);
-        //    string tempFilePath = System.IO.Path.Combine(folder, tempPath);
-        //    img.SaveAs(tempFilePath);
-        //    var image = System.Drawing.Image.FromFile(tempFilePath);
-        //    var result = new
-        //    {
-        //        status = "success",
-        //        width = image.Width,
-        //        height = image.Height,
-        //        url = "../Temp/" + tempPath
-        //    };
-        //    return JsonConvert.SerializeObject(result);
-        //}
-
-        //[HttpPost]
-        //public string CroppedImage(string imgUrl, int imgInitW, int imgInitH, double imgW, double imgH, int imgY1, int imgX1, int cropH, int cropW)
-        //{
-        //    var originalFilePath = Server.MapPath(imgUrl);
-        //    //var fileName = CropImage(originalFilePath, imgInitW, imgInitH, (int)imgW, (int)imgH, imgY1, imgX1, cropH, cropW);
-        //    var fileName = CropImage(originalFilePath, imgInitW, imgInitH, (int)imgW, (int)imgH, imgY1, imgX1, cropW, cropH);
-        //    var result = new
-        //    {
-        //        status = "success",
-        //        url = "../Cropped/" + fileName
-        //    };
-        //    return JsonConvert.SerializeObject(result);
-        //}
-
-        //private string CropImage(string originalFilePath, int origW, int origH, int targetW, int targetH, int cropStartY, int cropStartX, int cropW, int cropH)
-        //{
-        //    var originalImage = Image.FromFile(originalFilePath);
-
-        //    var resizedOriginalImage = new Bitmap(originalImage, targetW, targetH);
-        //    var targetImage = new Bitmap(cropW, cropH);
-
-        //    using (var g = Graphics.FromImage(targetImage))
-        //    {
-        //        g.DrawImage(resizedOriginalImage, new Rectangle(0, 0, cropW, cropH), new Rectangle(cropStartX, cropStartY, cropW, cropH), GraphicsUnit.Pixel);
-        //    }
-        //    string fileName = Path.GetFileName(originalFilePath);
-        //    var folder = Server.MapPath("~/Cropped");
-        //    string croppedPath = Path.Combine(folder, fileName);
-        //    targetImage.Save(croppedPath);
-
-        //    return fileName;
-
-        //}
-
-
-
-
-        // GET: /Account/ResetPassword
-
-
         #region Helpers
-        public enum ManageMessageId
-        {
-            ChangePasswordSuccess,
-            SetPasswordSuccess,
-            RemoveLoginSuccess,
-        }
-
-
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {
             switch (createStatus)

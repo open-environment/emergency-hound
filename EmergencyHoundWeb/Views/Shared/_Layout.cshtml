@@ -90,6 +90,12 @@
                             <a href="~/Content/help.html" target="_blank">Help</a>
                         </li>
                         <li class="divider"></li>
+                        @if (@System.Configuration.ConfigurationManager.AppSettings["UseIdentityServer"] == "true")
+                        {
+                            <li>
+                                <a href="@System.Configuration.ConfigurationManager.AppSettings["IdentityServerAuthority"]">Return to Portal</a>
+                            </li>
+                        }
                         <li>
                             @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                             {

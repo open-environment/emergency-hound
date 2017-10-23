@@ -23,7 +23,7 @@ namespace EmergencyHoundModel.DataAccessLayer
     {
         //*****************USERS **********************************
         public static int CreateT_OE_USERS(string uSER_ID, string pWD_HASH, string pWD_SALT, string fNAME, string lNAME, string eMAIL, bool aCT_IND, bool iNITAL_PWD_FLAG, 
-            DateTime? lASTLOGIN_DT, string pHONE, string pHONE_EXT, int? cREATE_USERIDX)
+            DateTime? lASTLOGIN_DT, string pHONE, string pHONE_EXT, int? cREATE_USERIDX, string pORTAL_ID = null)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
             {
@@ -44,6 +44,8 @@ namespace EmergencyHoundModel.DataAccessLayer
                     u.PHONE_EXT = pHONE_EXT;
                     u.CREATE_DT = System.DateTime.Now;
                     u.CREATE_USERIDX = cREATE_USERIDX;
+                    if (pORTAL_ID != null)
+                        u.PORTAL_ID = pORTAL_ID;
 
                     ctx.T_OE_USERS.Add(u);
                     ctx.SaveChanges();
@@ -165,7 +167,23 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
         }
 
-        public static int UpdateT_OE_USERS(int idx, string newPWD_HASH, string newPWD_SALT, string newFNAME, string newLNAME, string newEMAIL, bool? newACT_IND, bool? newINIT_PWD_FLG, DateTime? newEFF_DATE, DateTime? newLAST_LOGIN_DT, string newPHONE, string newPHONE_EXT, int? newMODIFY_USR, int? LogAtmpt, bool? TrackInd)
+        public static T_OE_USERS GetT_OE_USERByPortalID(string portalID)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    return ctx.T_OE_USERS.FirstOrDefault(usr => usr.PORTAL_ID.ToUpper() == portalID.ToUpper());
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    throw ex;
+                }
+            }
+        }
+
+        public static int UpdateT_OE_USERS(int idx, string newPWD_HASH, string newPWD_SALT, string newFNAME, string newLNAME, string newEMAIL, bool? newACT_IND, bool? newINIT_PWD_FLG, DateTime? newEFF_DATE, DateTime? newLAST_LOGIN_DT, string newPHONE, string newPHONE_EXT, int? newMODIFY_USR, int? LogAtmpt, bool? TrackInd, string pORTAL_ID = null)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
             {
@@ -188,6 +206,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                     if (newMODIFY_USR != null) row.MODIFY_USERIDX = newMODIFY_USR;
                     if (LogAtmpt != null) row.LOG_ATMPT = LogAtmpt;
                     if (TrackInd != null) row.TRACK_IND = TrackInd.ConvertOrDefault<bool>();
+                    if (pORTAL_ID != null) row.PORTAL_ID = pORTAL_ID;
 
                     row.MODIFY_DT = System.DateTime.Now;
 
@@ -258,6 +277,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                 }
             }
         }
+
 
         //*****************ROLES **********************************
         public static int CreateT_OE_ROLES(global::System.String rOLE_NAME, global::System.String rOLE_DESC, int? cREATE_USER = 0)
@@ -440,10 +460,10 @@ namespace EmergencyHoundModel.DataAccessLayer
             {
                 try
                 {
-                    //first get all users 
+                    //first get all roles 
                     var allUsers = (from itemA in ctx.T_OE_ROLES select itemA);
 
-                    //next get all users in role
+                    //next get all roles assigned to user
                     var UsersInRole = (from itemA in ctx.T_OE_ROLES
                                        join itemB in ctx.T_OE_USER_ROLES on itemA.ROLE_IDX equals itemB.ROLE_IDX
                                        where itemB.USER_IDX == userIDX
@@ -482,6 +502,29 @@ namespace EmergencyHoundModel.DataAccessLayer
                 }
             }
         }
+
+        public static List<T_OE_ROLES> GetT_OE_ROLESInUserName(string userName)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    var roles = from itemA in ctx.T_OE_ROLES
+                                join itemB in ctx.T_OE_USER_ROLES on itemA.ROLE_IDX equals itemB.ROLE_IDX
+                                join itemC in ctx.T_OE_USERS on itemB.USER_IDX equals itemC.USER_IDX
+                                where itemC.USER_ID.ToUpper() == userName.ToUpper()
+                                select itemA;
+
+                    return roles.ToList();
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    return null;
+                }
+            }
+        }
+
 
         public static int CreateT_OE_USER_ROLE(global::System.Int32 rOLE_IDX, global::System.Int32 uSER_IDX, int? cREATE_USER = 0)
         {

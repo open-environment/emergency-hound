@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using EmergencyHoundModel;
 using EmergencyHoundModel.DataAccessLayer;
+using EmergencyHoundWeb.App_Logic;
 
 namespace EmergencyHoundWeb.ViewModels
 {
@@ -13,9 +14,10 @@ namespace EmergencyHoundWeb.ViewModels
     /// </summary>
     public static class ddlHelpers
     {
-        public static IEnumerable<SelectListItem> getList_ddl_jurisdictions()
+        public static IEnumerable<SelectListItem> getList_ddl_jurisdictions(int UserIDX)
         {
-            return db_EmergencyHound.GetT_OE_ORGANIZATIONS_ByUSERIDX_ORG((int)System.Web.Security.Membership.GetUser().ProviderUserKey, false).Select(x => new SelectListItem
+
+            return db_EmergencyHound.GetT_OE_ORGANIZATIONS_ByUSERIDX_ORG(UserIDX, false).Select(x => new SelectListItem
             {
                 Value = x.ORG_IDX.ToString(),
                 Text = x.ORG_NAME
@@ -58,9 +60,9 @@ namespace EmergencyHoundWeb.ViewModels
             });
         }
 
-        public static IEnumerable<SelectListItem> getList_ddl_resource_type()
+        public static IEnumerable<SelectListItem> getList_ddl_resource_type(int UserIDX)
         {
-            return db_Ref.GetT_EM_REF_RESOURCE_TYPE_byUserIDX((int)System.Web.Security.Membership.GetUser().ProviderUserKey).Select(x => new SelectListItem
+            return db_Ref.GetT_EM_REF_RESOURCE_TYPE_byUserIDX(UserIDX).Select(x => new SelectListItem
             {
                 Value = x.RESOURCE_TYPE_IDX.ToString(),
                 Text = x.RESOURCE_TYPE_NAME
@@ -107,65 +109,6 @@ namespace EmergencyHoundWeb.ViewModels
     }
 
 
-    //**********************************************************************************************************
-    //******************************* CERTIFICATION  ***********************************************************
-    //**********************************************************************************************************
-    public class vmCertificationViewModel
-    {
-        public List<QualificationDisplayType> QualDisplayType { get; set; }
-        public bool canAdd { get; set; }
-
-        //initialize 
-        public vmCertificationViewModel()
-        {
-            canAdd = db_EmergencyHound.BelongsToOrg((int)System.Web.Security.Membership.GetUser().ProviderUserKey);
-        }
-    }
-
-    public class vmCertificationAddViewModel
-    {
-        [Required]
-        [Display(Name = "Jurisdiction")]
-        public System.Guid ORG_IDX { get; set; }
-        [Display(Name = "Individual ID")]
-        public System.Guid? INDIVIDUAL_IDX { get; set; }
-        [Required]
-        [Display(Name = "Qualification Type")]
-        public System.Guid QUAL_TYPE_IDX { get; set; }
-        public DateTime? EFF_DATE { get; set; }
-        public DateTime? EXP_DATE { get; set; }
-        public string INDV_FIRST_NAME { get; set; }
-        public string INDV_MID_NAME { get; set; }
-        public string INDV_LAST_NAME { get; set; }
-        public DateTime? INDV_DOB { get; set; }
-        public string INDV_PHONE { get; set; }
-        public string INDV_EMAIL { get; set; }
-        public string ADD_LINE_ADR { get; set; }
-        public string ADD_CITY { get; set; }
-        public string ADD_STATE { get; set; }
-        public string ADD_ZIP { get; set; }
-        public string INDV_AFFILIATION { get; set; }
-
-        public IEnumerable<SelectListItem> Individuals { get; set; }
-        public IEnumerable<SelectListItem> Jurisdictions { get; set; }
-        public IEnumerable<SelectListItem> QualTypes { get; set; }
-
-
-        //initialize
-        public vmCertificationAddViewModel()
-        {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
-            Jurisdictions = ddlHelpers.getList_ddl_jurisdictions();
-            Individuals = db_EmergencyHound.GetT_EM_INDIVIDUALS_ByUserIDX(UserIDX, null, null).Select(x => new SelectListItem
-            {
-                Value = x.INDIVIDUAL_IDX.ToString(),
-                Text = x.INDV_LAST_NAME + ", " + x.INDV_FIRST_NAME
-            });
-            QualTypes = ddlHelpers.getList_ddl_qual_type();
-        }
-    }
-
-
 
     //**********************************************************************************************************
     //******************************* DASHBOARD ********************************************************************
@@ -191,9 +134,9 @@ namespace EmergencyHoundWeb.ViewModels
         public bool canAdd { get; set; }
 
         //initialize 
-        public vmDocumentListViewModel()
+        public vmDocumentListViewModel(int UserIDX)
         {
-            canAdd = db_EmergencyHound.BelongsToOrg((int)System.Web.Security.Membership.GetUser().ProviderUserKey);
+            canAdd = db_EmergencyHound.BelongsToOrg(UserIDX);
         }
     }
 
@@ -206,12 +149,12 @@ namespace EmergencyHoundWeb.ViewModels
         public IEnumerable<SelectListItem> ddl_jurisdiction { get; set; }
 
         //initialize
-        public vmDocumentEditViewModel()
+        public vmDocumentEditViewModel(int UserIDX)
         {
             ddl_doc_type = ddlHelpers.getList_ddl_doc_type();
             ddl_share_type = ddlHelpers.getList_ddl_share_type();
             ddl_doc_status_type = ddlHelpers.getList_ddl_doc_status_type();
-            ddl_jurisdiction = ddlHelpers.getList_ddl_jurisdictions();
+            ddl_jurisdiction = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
         }
     }
 
@@ -228,10 +171,10 @@ namespace EmergencyHoundWeb.ViewModels
         public bool canAdd { get; set; }
 
         //initialize
-        public vmIncidentIndexViewModel()
+        public vmIncidentIndexViewModel(int UserIDX)
         {
-            ddl_jurisdictions = ddlHelpers.getList_ddl_jurisdictions();
-            canAdd = db_EmergencyHound.BelongsToOrg((int)System.Web.Security.Membership.GetUser().ProviderUserKey);      
+            ddl_jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
+            canAdd = db_EmergencyHound.BelongsToOrg(UserIDX);      
         }
     }
 
@@ -248,9 +191,9 @@ namespace EmergencyHoundWeb.ViewModels
         public int? CurrTab { get; set; }
 
         //initialize
-        public vmIncidentEditViewModel()
+        public vmIncidentEditViewModel(int UserIDX)
         {
-            ddl_Jurisdictions = ddlHelpers.getList_ddl_jurisdictions();
+            ddl_Jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
             ddl_ShareType = ddlHelpers.getList_ddl_share_type();
             ddl_ManagementTeam = db_Ref.GetT_EM_REF_MANAGEMENT_ORG().Select(x => new SelectListItem
             {
@@ -281,14 +224,14 @@ namespace EmergencyHoundWeb.ViewModels
         public T_EM_INCIDENT_TEAM_DTL editTeamMember { get; set;  }
 
         //initialize
-        public vmIncidentTeamModel()
+        public vmIncidentTeamModel(int UserIDX)
         {
-            ddl_Individuals = db_EmergencyHound.GetT_EM_INDIVIDUALS_ByUserIDX((int)System.Web.Security.Membership.GetUser().ProviderUserKey, null, null).Select(x => new SelectListItem
+            ddl_Individuals = db_EmergencyHound.GetT_EM_INDIVIDUALS_ByUserIDX(UserIDX, null, null).Select(x => new SelectListItem
             {
                 Value = x.INDIVIDUAL_IDX.ToString(),
                 Text = x.INDV_LAST_NAME + ", " + x.INDV_FIRST_NAME
             });
-            ddl_Teams = db_EmergencyHound.GetT_EM_RESOURCE_TeamsByUserIDX((int)System.Web.Security.Membership.GetUser().ProviderUserKey).Select(x => new SelectListItem
+            ddl_Teams = db_EmergencyHound.GetT_EM_RESOURCE_TeamsByUserIDX(UserIDX).Select(x => new SelectListItem
             {
                 Value = x.RESOURCE_IDX.ToString(),
                 Text = x.T_EM_REF_RESOURCE_TYPE.RESOURCE_TYPE_NAME + " (" + x.RESOURCE_DESC + ")"
@@ -387,9 +330,9 @@ namespace EmergencyHoundWeb.ViewModels
         public bool canAdd { get; set; }
 
         //initialize
-        public vmIndividualListViewModel()
+        public vmIndividualListViewModel(int UserIDX)
         {
-            canAdd = db_EmergencyHound.BelongsToOrg((int)System.Web.Security.Membership.GetUser().ProviderUserKey);
+            canAdd = db_EmergencyHound.BelongsToOrg(UserIDX);
             ddl_qualtypes = ddlHelpers.getList_ddl_qual_type();
         }
     }
@@ -405,10 +348,9 @@ namespace EmergencyHoundWeb.ViewModels
 
 
         //initialize
-        public vmIndividualEditViewModel()
+        public vmIndividualEditViewModel(int UserIDX)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
-            ddl_jurisdiction = ddlHelpers.getList_ddl_jurisdictions();
+            ddl_jurisdiction = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
             ddl_qualtypes = ddlHelpers.getList_ddl_qual_type();
             new_t_em_qualifications = new T_EM_QUALIFICATIONS();
             new_t_em_qualifications.QUALIFICATION_IDX = Guid.NewGuid();
@@ -453,9 +395,9 @@ namespace EmergencyHoundWeb.ViewModels
         public bool canAdd { get; set; }
 
         //initialize
-        public vmResourceIndexViewModel()
+        public vmResourceIndexViewModel(int UserIDX)
         {
-            ddl_jurisdictions = ddlHelpers.getList_ddl_jurisdictions();
+            ddl_jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
             ddl_status = db_Ref.GetT_EM_REF_RESOURCE_STATUS().Select(x => new SelectListItem
             {
                 Value = x.RESOURCE_STATUS_CD.ToString(),
@@ -466,7 +408,7 @@ namespace EmergencyHoundWeb.ViewModels
                 Value = x.RESOURCE_KIND_DESC.ToString(),
                 Text = x.RESOURCE_KIND_DESC
             });
-            canAdd = db_EmergencyHound.BelongsToOrg((int)System.Web.Security.Membership.GetUser().ProviderUserKey);
+            canAdd = db_EmergencyHound.BelongsToOrg(UserIDX);
         }
 
 
@@ -500,11 +442,10 @@ namespace EmergencyHoundWeb.ViewModels
         public T_EM_RESOURCE_VER_HIST t_em_resource_ver_hist { get; set; }
 
         //intialize
-        public vmResourceEditViewModel()
+        public vmResourceEditViewModel(int UserIDX)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
-            Jurisdictions = ddlHelpers.getList_ddl_jurisdictions();
-            ResourceTypes = ddlHelpers.getList_ddl_resource_type();
+            Jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
+            ResourceTypes = ddlHelpers.getList_ddl_resource_type(UserIDX);
             ShareTypes = ddlHelpers.getList_ddl_share_type();
             StatusTypes = db_Ref.GetT_EM_REF_RESOURCE_STATUS().Select(x => new SelectListItem
             {
@@ -525,11 +466,10 @@ namespace EmergencyHoundWeb.ViewModels
         public IEnumerable<SelectListItem> StatusTypes { get; set; }
 
         //intialize
-        public vmResourceAddViewModel()
+        public vmResourceAddViewModel(int UserIDX)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
-            Jurisdictions = ddlHelpers.getList_ddl_jurisdictions();
-            ResourceTypes = ddlHelpers.getList_ddl_resource_type();
+            Jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
+            ResourceTypes = ddlHelpers.getList_ddl_resource_type(UserIDX);
             ShareTypes = db_Ref.GetT_EM_REF_SHARE_TYPE().Select(x => new SelectListItem
             {
                 Value = x.SHARE_TYPE.ToString(),
@@ -559,7 +499,7 @@ namespace EmergencyHoundWeb.ViewModels
         public IEnumerable<SelectListItem> ddl_Jurisdiction { get; set; }
 
         //initialize
-        public vmResourceTypeEditViewModel()
+        public vmResourceTypeEditViewModel(int UserIDX)
         {
             ddl_Category = db_Ref.GetT_EM_REF_RESOURCE_CAT().Select(x => new SelectListItem
             {
@@ -576,7 +516,7 @@ namespace EmergencyHoundWeb.ViewModels
                 Value = x.RESOURCE_CORE_CAP_DESC.ToString(),
                 Text = x.RESOURCE_CORE_CAP_DESC
             });
-            ddl_Jurisdiction = ddlHelpers.getList_ddl_jurisdictions();
+            ddl_Jurisdiction = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
         }
 
     }

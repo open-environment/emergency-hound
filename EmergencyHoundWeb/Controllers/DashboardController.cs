@@ -14,7 +14,7 @@ namespace EmergencyHoundWeb.Controllers
         [Authorize]
         public ActionResult Index(string m)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
 
             var model = new vmDashboardViewModel
             {
@@ -40,7 +40,7 @@ namespace EmergencyHoundWeb.Controllers
         [HttpPost]
         public ActionResult AllowJuris(int uidx, Guid oidx, string role)
         {
-            int MyUserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int MyUserIDX = Utils.GetUserIDX(User);
 
             T_OE_USERS uu = db_Accounts.GetT_OE_USERSByIDX(uidx);
             if (uu != null)
@@ -63,7 +63,8 @@ namespace EmergencyHoundWeb.Controllers
 
         public ActionResult RejectJuris(int uidx, Guid oidx)
         {
-            int MyUserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+
+            int MyUserIDX = Utils.GetUserIDX(User);
 
             T_OE_USERS uu = db_Accounts.GetT_OE_USERSByIDX(uidx);
             if (uu != null)

@@ -682,6 +682,7 @@
           <Property Name="MODIFY_USERIDX" Type="int" />
           <Property Name="MODIFY_DT" Type="datetime2" Precision="0" />
           <Property Name="TRACK_IND" Type="bit" Nullable="false" />
+          <Property Name="PORTAL_ID" Type="nvarchar" MaxLength="450" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'EMERG_DB.dbo.V_EM_INCIDENT_TEAM_DISPLAY' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2685,6 +2686,7 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <NavigationProperty Name="T_OE_USER_TOKENS" Relationship="EMERG_DBModel.FK__T_OE_USER__USER___625A9A57" FromRole="T_OE_USERS" ToRole="T_OE_USER_TOKENS" />
           <NavigationProperty Name="T_EM_USER_LOCATION" Relationship="EMERG_DBModel.FK__T_EM_USER__USER___1C873BEC" FromRole="T_OE_USERS" ToRole="T_EM_USER_LOCATION" />
           <Property Name="TRACK_IND" Type="Boolean" Nullable="false" />
+          <Property Name="PORTAL_ID" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="V_EM_INCIDENT_TEAM_DISPLAY">
           <Key>
@@ -4224,6 +4226,7 @@ warning 6002: The table/view 'EMERG_DB.dbo.V_EM_TIMELINE' does not have a primar
           <EntitySetMapping Name="T_OE_USERS">
             <EntityTypeMapping TypeName="EMERG_DBModel.T_OE_USERS">
               <MappingFragment StoreEntitySet="T_OE_USERS">
+                <ScalarProperty Name="PORTAL_ID" ColumnName="PORTAL_ID" />
                 <ScalarProperty Name="TRACK_IND" ColumnName="TRACK_IND" />
                 <ScalarProperty Name="MODIFY_DT" ColumnName="MODIFY_DT" />
                 <ScalarProperty Name="MODIFY_USERIDX" ColumnName="MODIFY_USERIDX" />

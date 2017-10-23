@@ -57,7 +57,7 @@ namespace EmergencyHoundWeb.Controllers
                 else
                 {
                     //can't find incident, so clear session and remove from user
-                    int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                    int UserIDX = Utils.GetUserIDX(User);
                     db_Accounts.UpdateT_OE_USERS_CurrentIncident(UserIDX, null);
                     Session.Remove("iidx");
                 }
@@ -69,9 +69,12 @@ namespace EmergencyHoundWeb.Controllers
         public ActionResult _PartialHeadNotification()
         {
             var model = new NotificationHeaderViewModel();
-            if (System.Web.Security.Membership.GetUser() != null)
+
+            int UserIDX = Utils.GetUserIDX(User);
+
+            if (UserIDX > 0)
             {
-                model.Notifications = db_EmergencyHound.GetT_EM_USER_NOTIFICATION_byUserIDX((int)System.Web.Security.Membership.GetUser().ProviderUserKey);
+                model.Notifications = db_EmergencyHound.GetT_EM_USER_NOTIFICATION_byUserIDX(UserIDX);
                 model.NotifyCount = model.Notifications == null ? 0 : model.Notifications.Count;
             }
 
@@ -82,9 +85,11 @@ namespace EmergencyHoundWeb.Controllers
         {
             var model = new vm_LeftMenuViewModel();
 
-            if (System.Web.Security.Membership.GetUser() != null)
+            int UserIDX = Utils.GetUserIDX(User);
+
+            if (UserIDX > 0)
             {
-                SP_DASHBOARD_COUNTS_Result res = db_EmergencyHound.GetSP_DASHBOARD_COUNTS((int)System.Web.Security.Membership.GetUser().ProviderUserKey);
+                SP_DASHBOARD_COUNTS_Result res = db_EmergencyHound.GetSP_DASHBOARD_COUNTS(UserIDX);
                 if (res != null)
                 {
                     model.IncCount = res.IncidentCount.ToString();

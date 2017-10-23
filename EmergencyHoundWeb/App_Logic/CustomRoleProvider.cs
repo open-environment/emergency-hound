@@ -40,8 +40,6 @@ namespace EmergencyHoundWeb.App_Logic
             }
 
             base.Initialize(name, config);
-
-
         }
         
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
@@ -78,13 +76,11 @@ namespace EmergencyHoundWeb.App_Logic
         {
             string tmpRoleNames = "";
 
-            int UserIDX = (int)Membership.GetUser().ProviderUserKey;
-
-            foreach (T_OE_ROLES r in db_Accounts.GetT_OE_ROLESInUser(UserIDX))
+            foreach (T_OE_ROLES r in db_Accounts.GetT_OE_ROLESInUserName(username))
                 tmpRoleNames += r.ROLE_NAME + ",";
 
             //************ custom logic to add JurisdictionAdmin role
-            if (db_EmergencyHound.IsAnOrgAdmin(UserIDX))
+            if (db_EmergencyHound.IsAnOrgAdmin(username))
                 tmpRoleNames += "JurisdictionAdmin,";
 
             if (tmpRoleNames.Length > 0)

@@ -14,7 +14,7 @@ namespace EmergencyHoundWeb.Controllers
         //********************************************** RESOURCE LISTING**********************************************************
         public ActionResult Index(Guid? selectOrgIDX, string selectKind, string selectStatusCd, string submitButton)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
             string OrgName = "";
             if (selectOrgIDX != null)
             {
@@ -24,7 +24,7 @@ namespace EmergencyHoundWeb.Controllers
             }
 
             //populate view model
-            var model = new vmResourceIndexViewModel
+            var model = new vmResourceIndexViewModel(UserIDX)
             {
                 selectOrgIDX = selectOrgIDX,
                 selectOrgName = OrgName,
@@ -60,7 +60,8 @@ namespace EmergencyHoundWeb.Controllers
         //********************************************** RESOURCE EDITING**********************************************************
         public ActionResult Add()
         {
-            var model = new vmResourceAddViewModel();
+            int UserIDX = Utils.GetUserIDX(User);
+            var model = new vmResourceAddViewModel(UserIDX);
             return View(model);
         }
 
@@ -71,7 +72,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
                 Guid? ResourceIDX = db_EmergencyHound.InsertUpdateT_EM_RESOURCE(null, t_em_resource.ORG_IDX, t_em_resource.RESOURCE_TYPE_IDX, t_em_resource.RESOURCE_COUNT, t_em_resource.RESOURCE_UNIT,
                     t_em_resource.RESOURCE_DESC, t_em_resource.RESOURCE_LAT, t_em_resource.RESOURCE_LONG, t_em_resource.SHARE_TYPE, t_em_resource.FEMA_NIMS_TYPE, t_em_resource.RESOURCE_STATUS_CD, true, UserIDX);
                 if (ResourceIDX != null)
@@ -87,10 +88,10 @@ namespace EmergencyHoundWeb.Controllers
 
         public ActionResult Edit(Guid? id)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
 
             //populate view model
-            var model = new vmResourceEditViewModel
+            var model = new vmResourceEditViewModel(UserIDX)
             {
                 t_em_resource_ver_hist = db_EmergencyHound.GetT_EM_RESOURCE_VER_HIST_LatestByResourceIDX(id),
                 sp_resource_dtl_result = db_EmergencyHound.GetSP_RESOURCE_DTL(id.ConvertOrDefault<Guid>())
@@ -142,7 +143,7 @@ namespace EmergencyHoundWeb.Controllers
             if (ModelState.IsValid)
             {
                 Guid? ResourceIDX = model.t_em_resource_RESOURCE_IDX;
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 if (submitButton == "Edit")
                 {
@@ -221,7 +222,7 @@ namespace EmergencyHoundWeb.Controllers
         //********************************************** RESOURCE TYPES **********************************************************
         public ActionResult ResourceType(Guid? orgID)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
 
             var model = new vmResourceTypeListViewModel
             {
@@ -233,7 +234,8 @@ namespace EmergencyHoundWeb.Controllers
 
         public ActionResult ResourceTypeEdit(Guid? id)
         {
-            var model = new vmResourceTypeEditViewModel();
+            int UserIDX = Utils.GetUserIDX(User);
+            var model = new vmResourceTypeEditViewModel(UserIDX);
 
             model.t_em_ref_resource_type = db_Ref.GetT_EM_REF_RESOURCE_TYPE_byIDX(id);
             if (model.t_em_ref_resource_type != null)
@@ -253,7 +255,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 Guid? ResourceTypeIDX = db_Ref.InsertUpdateT_EM_REF_RESOURCE_TYPE(model.t_em_ref_resource_type.RESOURCE_TYPE_IDX, model.t_em_ref_resource_type.RESOURCE_FEMA_ID,
                     model.t_em_ref_resource_type.RESOURCE_TYPE_NAME, model.t_em_ref_resource_type.RESOURCE_TYPE_DESC, model.t_em_ref_resource_type.RESOURCE_FUNCTION,
@@ -276,7 +278,7 @@ namespace EmergencyHoundWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ResourceTypeDelete(Guid id)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
 
             int SuccID = db_Ref.DeleteT_EM_REF_RESOURCE_TYPE(id, UserIDX);
             if (SuccID == 1)
@@ -290,7 +292,7 @@ namespace EmergencyHoundWeb.Controllers
         [HttpPost]
         public ActionResult ResourceTypeDtl(vmResourceTypeEditViewModel model)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
             int PropCount = db_Ref.GetT_EM_REF_RESOURCE_TYPE_DTL_CountbyTypeIDX(model.t_em_ref_resource_type.RESOURCE_TYPE_IDX);
 
             //set new Guid
@@ -313,7 +315,7 @@ namespace EmergencyHoundWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ResourceTypeDtlDelete(Guid id)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
 
             int SuccID = db_Ref.DeleteT_EM_REF_RESOURCE_TYPE_DTL(id, UserIDX);
             if (SuccID == 1)
@@ -330,9 +332,9 @@ namespace EmergencyHoundWeb.Controllers
         //********************************************** PEOPLE  **********************************************************
         public ActionResult People(string selectName, string selectQual, string submitButton)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
 
-            var model = new vmIndividualListViewModel {
+            var model = new vmIndividualListViewModel(UserIDX) {
                 t_em_individuals = db_EmergencyHound.GetT_EM_INDIVIDUALS_ByUserIDX(UserIDX, selectName, selectQual),
                 selectName = selectName,
                 selectQual = selectQual
@@ -347,7 +349,7 @@ namespace EmergencyHoundWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteIndividual(Guid id)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
             Guid? SuccID = db_EmergencyHound.InsertUpdateT_EM_INDIVIDUALS(id, null, null, null, null, null, null, null, null, null, null, null, null, null, false, UserIDX);
 
             if (SuccID != null)
@@ -361,7 +363,9 @@ namespace EmergencyHoundWeb.Controllers
 
         public ActionResult PeopleEdit(Guid? id)
         {
-            var model = new vmIndividualEditViewModel
+            int UserIDX = Utils.GetUserIDX(User);
+
+            var model = new vmIndividualEditViewModel(UserIDX)
             {
                 t_em_individual = db_EmergencyHound.GetT_EM_INDIVIDUAL_ByID(id),
                 t_em_qualifications = db_EmergencyHound.GetT_EM_QUALIFICATIONS_ByIndividualIDX(id)
@@ -385,7 +389,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 Guid? IndividualIDX = db_EmergencyHound.InsertUpdateT_EM_INDIVIDUALS(model.t_em_individual.INDIVIDUAL_IDX, model.t_em_individual.ORG_IDX,
                     model.t_em_individual.INDV_FIRST_NAME, model.t_em_individual.INDV_MID_NAME, model.t_em_individual.INDV_LAST_NAME, model.t_em_individual.INDV_DOB,
@@ -411,7 +415,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 Guid? QualIDX = db_EmergencyHound.InsertUpdateT_EM_QUALIFICATIONS(model.new_t_em_qualifications.QUALIFICATION_IDX, model.t_em_individual.ORG_IDX, 
                     model.new_t_em_qualifications.INDIVIDUAL_IDX, model.new_t_em_qualifications.QUAL_TYPE_IDX, model.new_t_em_qualifications.EFF_DATE, model.new_t_em_qualifications.EXP_DATE, true, UserIDX);
@@ -433,7 +437,7 @@ namespace EmergencyHoundWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PeopleQualDelete(Guid id)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
             int SuccID = db_EmergencyHound.DeleteT_EM_QUALIFICATIONS(id);
             if (SuccID > 0)
                 TempData["Success"] = "Person sucessfully deleted.";

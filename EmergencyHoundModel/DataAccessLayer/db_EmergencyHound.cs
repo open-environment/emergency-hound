@@ -2074,14 +2074,15 @@ namespace EmergencyHoundModel.DataAccessLayer
         /// </summary>
         /// <param name="uSER_IDX"></param>
         /// <returns></returns>
-        public static bool IsAnOrgAdmin(int uSER_IDX)
+        public static bool IsAnOrgAdmin(string uSER_ID)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
             {
                 try
                 {
                     int iCount = (from a in ctx.T_EM_USER_ORG
-                             where a.USER_IDX == uSER_IDX
+                                  join b in ctx.T_OE_USERS on a.USER_IDX equals b.USER_IDX
+                             where b.USER_ID.ToUpper() == uSER_ID.ToUpper()
                              && a.ROLE_CD == "A"
                              && a.STATUS_CD == "A"
                              select a).Count();
@@ -2223,7 +2224,39 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
         }
 
+        /// <summary>
+        /// Sets access to all organizations to inactive for a given user 
+        /// </summary>
+        /// <param name="uSER_IDX"></param>
+        public static void SetT_EM_USER_ORG_Inactive(int uSER_IDX)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    //first get all users 
+                    var xxx = (from itemA in ctx.T_EM_USER_ORG
+                                    where itemA.USER_IDX == uSER_IDX
+                                    select itemA);
 
+                    // now use First or a loop if you expect multiple
+                    foreach (var user_org in xxx)
+                    {
+                        user_org.STATUS_CD = "R";
+                    }
+
+                    ctx.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                }
+            }
+            return;
+        }
+
+        
         //******************T_EM_USER_LOCATION*******************************
         public static List<LocationDisplayType> GetT_EM_USER_LOCATION()
         {
@@ -2420,6 +2453,24 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
         }
 
+        public static T_OE_ORGANIZATIONS GetT_OE_ORGANIZATIONS_BYOrgName(string orgName)
+        {
+            using (EMERG_DBEntities ctx = new EMERG_DBEntities())
+            {
+                try
+                {
+                    return (from a in ctx.T_OE_ORGANIZATIONS
+                            where a.ORG_NAME.ToUpper() == orgName.ToUpper()
+                            select a).FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    db_Util.LogEFException(ex);
+                    return null;
+                }
+            }
+        }
+
         public static List<T_OE_ORGANIZATIONS> GetT_OE_ORGANIZATIONS_AllowJoin()
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
@@ -2446,14 +2497,16 @@ namespace EmergencyHoundModel.DataAccessLayer
                 try
                 {
                     ctx.Configuration.ProxyCreationEnabled = false;
-
-                    return (from a in ctx.T_OE_ORGANIZATIONS
+                    var xxx = (from a in ctx.T_OE_ORGANIZATIONS
                             join b in ctx.T_EM_USER_ORG on a.ORG_IDX equals b.ORG_IDX
                             where b.USER_IDX == UserIDX
                             && a.ACT_IND == true
+                            && b.ACT_IND == true
                             && (AdminOnly == true ? b.ROLE_CD == "A" : true)
                             && b.STATUS_CD == "A"
                             select a).ToList();
+
+                    return xxx;
                 }
                 catch (Exception ex)
                 {

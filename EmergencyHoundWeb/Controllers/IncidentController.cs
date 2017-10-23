@@ -18,7 +18,7 @@ namespace EmergencyHoundWeb.Controllers
     {
         public ActionResult Index(Guid? selectOrgIDX, string submitButton)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
             string OrgName = "";
             if (selectOrgIDX != null)
             {
@@ -28,7 +28,7 @@ namespace EmergencyHoundWeb.Controllers
             }
 
             //populate view model
-            var model = new vmIncidentIndexViewModel
+            var model = new vmIncidentIndexViewModel(UserIDX)
             {
                 selectOrgIDX = selectOrgIDX,
                 selectOrgName = OrgName,
@@ -46,7 +46,7 @@ namespace EmergencyHoundWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(Guid? id)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
 
             //make inactive
             Guid? SuccIDX = db_EmergencyHound.InsertUpdateT_EM_INCIDENT(id, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
@@ -63,8 +63,10 @@ namespace EmergencyHoundWeb.Controllers
 
         public ActionResult Create()
         {
+            int UserIDX = Utils.GetUserIDX(User);
+
             //populate view model
-            var model = new vmIncidentEditViewModel
+            var model = new vmIncidentEditViewModel(UserIDX)
             {
                 t_em_incident = new T_EM_INCIDENT()
             };
@@ -81,7 +83,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 Guid? SuccID = db_EmergencyHound.InsertUpdateT_EM_INCIDENT(null, model.t_em_incident.ORG_IDX, model.t_em_incident.INCIDENT_ID, model.t_em_incident.INCIDENT_NAME,
                     model.t_em_incident.INCIDENT_DESC, model.t_em_incident.INC_MANAGEMENT_ORG_CD, model.t_em_incident.INCIDENT_START_DT, model.t_em_incident.INCIDENT_END_DT,
@@ -110,12 +112,12 @@ namespace EmergencyHoundWeb.Controllers
             if (id != null)
             {
                 //set session and save current incident
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
                 Session["iidx"] = id.ToString();
                 db_Accounts.UpdateT_OE_USERS_CurrentIncident(UserIDX, id);
 
                 //populate view model
-                var model = new vmIncidentEditViewModel
+                var model = new vmIncidentEditViewModel(UserIDX)
                 {
                     t_em_incident = db_EmergencyHound.GetT_EM_INCIDENT(id)
                 };
@@ -138,7 +140,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 Guid? SuccIDX = db_EmergencyHound.InsertUpdateT_EM_INCIDENT(model.t_em_incident.INCIDENT_IDX, model.t_em_incident.ORG_IDX, model.t_em_incident.INCIDENT_ID,
                     model.t_em_incident.INCIDENT_NAME, model.t_em_incident.INCIDENT_DESC, model.t_em_incident.INC_MANAGEMENT_ORG_CD, model.t_em_incident.INCIDENT_START_DT,
@@ -203,7 +205,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 //update incident
                 Guid? SuccIDX = db_EmergencyHound.InsertUpdateT_EM_INCIDENT(model.t_em_incident.INCIDENT_IDX, null, model.t_em_incident.INCIDENT_ID,
@@ -257,7 +259,8 @@ namespace EmergencyHoundWeb.Controllers
             if (id != null)
             {
                 //populate view model
-                var model = new vmIncidentTeamModel
+                int UserIDX = Utils.GetUserIDX(User);
+                var model = new vmIncidentTeamModel(UserIDX)
                 {
                     IncidentIDX = id.ConvertOrDefault<Guid>(),
                     IncidentTeam = db_EmergencyHound.GetV_EM_INCIDENT_TEAM_DISPLAY_byIncidentIDX(id),
@@ -290,7 +293,7 @@ namespace EmergencyHoundWeb.Controllers
                     return RedirectToAction("Team", "Incident", new { id = model.IncidentIDX });
                 }
 
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 // ************* initialize the team scenario **********************************
                 if (model.TeamType != null && model.IncidentTeam == null)
@@ -351,12 +354,9 @@ namespace EmergencyHoundWeb.Controllers
                         Guid? logIDX_2 = db_EmergencyHound.InsertUpdateT_EM_INCIDENT_TEAM_DTL(null, null, model.IncidentIDX, LogIDX, null, null, "Logistics Unit B", null, 2, null, null, null, true, UserIDX);
                     }
 
-
-
                     return RedirectToAction("Team", "Incident", new { id = model.IncidentIDX });
                 }
             }
-
 
             return RedirectToAction("Team", "Incident", new { id = model.IncidentIDX });
 
@@ -384,7 +384,7 @@ namespace EmergencyHoundWeb.Controllers
 
                 //validation end *************************
 
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 Guid? EditTeamDtlIDX = db_EmergencyHound.InsertUpdateT_EM_INCIDENT_TEAM_DTL(model.editTeamMember.INCIDENT_TEAM_DTL_IDX, null, model.IncidentIDX,
                     model.editTeamMember.REPORTS_TO_TEAM_DTL_IDX, model.editTeamMember.INDIVIDUAL_IDX, model.editTeamMember.RESOURCE_IDX,
@@ -441,13 +441,13 @@ namespace EmergencyHoundWeb.Controllers
             T_EM_INCIDENT ii = db_EmergencyHound.GetT_EM_INCIDENT(id);
             if (ii != null)
             {
-                int userIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 var model = new vmIncidentResourceModel();
                 model.incident_idx = id;
                 model.newIncidentResource.INCIDENT_IDX = id.ConvertOrDefault<Guid>();
                 model.t_em_incident_resources = db_EmergencyHound.GetT_EM_INCIDENT_RESOURCES_byIncidentIDX(id);
-                model.ddl_Resource = db_EmergencyHound.GetSP_RESOURCE_ADV_SEARCH(userIDX, ii.ORG_IDX, null, null, null, null, null, null, null).Select(x => new SelectListItem
+                model.ddl_Resource = db_EmergencyHound.GetSP_RESOURCE_ADV_SEARCH(UserIDX, ii.ORG_IDX, null, null, null, null, null, null, null).Select(x => new SelectListItem
                 {
                     Value = x.RESOURCE_IDX.ToString(),
                     Text = x.RESOURCE_TYPE_NAME + (x.RESOURCE_DESC != null ? " (" + x.RESOURCE_DESC + ")" : "")
@@ -466,7 +466,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 db_EmergencyHound.InsertUpdateT_EM_INCIDENT_RESOURCES(model.newIncidentResource.INCIDENT_RESOURCE_IDX, model.newIncidentResource.INCIDENT_IDX,
                     model.newIncidentResource.RESOURCE_IDX, model.newIncidentResource.RESOURCE_COUNT, model.newIncidentResource.RESOURCE_ORDERED_DT, model.newIncidentResource.RESOURCE_ETA_DT,
@@ -532,7 +532,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 Guid? StatusIDX = db_EmergencyHound.InsertUpdateT_EM_INCIDENT_STATUS(model.new_t_em_incident_status.INC_STATUS_IDX, model.new_t_em_incident_status.INCIDENT_IDX,
                     model.new_t_em_incident_status.STATUS_TYPE_CD, model.new_t_em_incident_status.STATUS_DESC, model.new_t_em_incident_status.STATUS_DT, true, UserIDX);
@@ -602,7 +602,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 if (model.newOpPeriodName != null && model.newStartDate != null)
                     db_EmergencyHound.InsertUpdateT_EM_INCIDENT_OP_PERIOD(null, model.IncidentIDX, model.newOpPeriodName, model.newStartDate, model.newEndDate, null, null, null, UserIDX);
@@ -637,7 +637,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 Guid? OpPeriodIDX = db_EmergencyHound.InsertUpdateT_EM_INCIDENT_OP_PERIOD(model.t_em_incident_op_period.INCIDENT_OP_PERIOD_IDX, null, 
                     model.t_em_incident_op_period.OP_PERIOD_NAME, model.t_em_incident_op_period.OP_PERIOD_START_DT, model.t_em_incident_op_period.OP_PERIOD_END_DT,
@@ -662,7 +662,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 //handle insert or update cases
                 Guid? ObjectiveIDX = model.newObjective.INCIDENT_OBJECTIVE_IDX == Guid.Empty ? null : model.newObjective.INCIDENT_OBJECTIVE_IDX.ConvertOrDefault<Guid?>();
@@ -736,7 +736,7 @@ namespace EmergencyHoundWeb.Controllers
                     buffer = memoryStream.ToArray();
                 }
 
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 db_EmergencyHound.InsertUpdateT_EM_INCIDENT_ATTACH(null, id, buffer, "image", "", "", UserIDX);
             }

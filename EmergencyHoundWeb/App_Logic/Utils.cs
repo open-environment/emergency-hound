@@ -6,6 +6,7 @@ using System.Web.UI.WebControls;
 using System.IO;
 using EmergencyHoundModel.DataAccessLayer;
 using System.ComponentModel;
+using System.Security.Claims;
 
 namespace EmergencyHoundWeb.App_Logic
 {
@@ -408,5 +409,32 @@ namespace EmergencyHoundWeb.App_Logic
             else if (ts.TotalHours > 1) return ts.TotalHours.ConvertOrDefault<int>().ToString() + " hours";
             else return ts.TotalMinutes.ConvertOrDefault<int>().ToString() + " minutes";
         }
+
+
+        /// <summary>
+        /// Returns the internal ID of the authenticated user. If using membership, returns membership user. If using external ID provider, returns IPrincipal USERIDX claim
+        /// </summary>
+        /// <param name="User"></param>
+        /// <returns></returns>
+        public static int GetUserIDX(System.Security.Principal.IPrincipal User)
+        {
+            try
+            {
+                if (System.Configuration.ConfigurationManager.AppSettings["UseIdentityServer"] == "true")
+                {
+                    var identity = (ClaimsIdentity)User.Identity;
+                    IEnumerable<Claim> claims2 = identity.Claims;
+                    var UserIDXLoc = (from p in claims2 where p.Type == "UserIDX" select p.Value).FirstOrDefault();
+                    return UserIDXLoc.ConvertOrDefault<int>();
+                }
+                else
+                    return (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            }
+            catch {
+                //if fails, we don't care why, but need to return 0 to indicate not authenticated
+                return 0;
+            }
+        }
+
     }
 }

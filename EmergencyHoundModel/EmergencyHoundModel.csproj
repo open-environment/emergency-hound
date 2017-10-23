@@ -20,6 +20,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -100,6 +101,7 @@
     <Content Include="App_Data\1_CreateDatabase.sql" />
     <Content Include="App_Data\2_PopulateData.sql" />
     <Content Include="App_Data\3_PopulateProjectData.sql" />
+    <Content Include="App_Data\4_Migrations.sql" />
     <Content Include="App_Data\ChangeLog.txt" />
     <Content Include="packages.config" />
     <EntityDeploy Include="EmergencyHoundEFModel.edmx">

@@ -49,6 +49,7 @@ namespace EmergencyHoundModel
         public Nullable<int> MODIFY_USERIDX { get; set; }
         public Nullable<System.DateTime> MODIFY_DT { get; set; }
         public bool TRACK_IND { get; set; }
+        public string PORTAL_ID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<T_EM_INDIVIDUALS> T_EM_INDIVIDUALS { get; set; }

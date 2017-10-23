@@ -16,7 +16,7 @@ namespace EmergencyHoundWeb.Controllers
         // GET: /Jurisdiction/
         public ActionResult Index()
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
 
             var model = new vmJurisdictionListViewModel();
             model.t_oe_organizations = (User.IsInRole("Admins") ? 
@@ -61,7 +61,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
                 Guid? SuccID = db_EmergencyHound.InsertUpdateT_OE_ORGANIZATIONS(t_oe_organizations.ORG_IDX, t_oe_organizations.ORG_NAME, t_oe_organizations.ORG_DESC, t_oe_organizations.ALLOW_JOIN_IND, t_oe_organizations.ACT_IND, UserIDX);
                 if (SuccID != null)
                     return RedirectToAction("Index");
@@ -81,7 +81,7 @@ namespace EmergencyHoundWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteJurisdiction(Guid id)
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
             Guid? SuccID = db_EmergencyHound.InsertUpdateT_OE_ORGANIZATIONS(id, null, null, null, false, UserIDX);
 
             if (SuccID != null)
@@ -98,7 +98,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int MyUserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int MyUserIDX = Utils.GetUserIDX(User);
 
                 T_OE_USERS uu = db_Accounts.GetT_OE_USERSByIDX(uidx.ConvertOrDefault<int>());
                 if (uu != null)

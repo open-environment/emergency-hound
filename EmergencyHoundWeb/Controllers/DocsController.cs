@@ -7,6 +7,7 @@ using EmergencyHoundWeb.ViewModels;
 using EmergencyHoundModel.DataAccessLayer;
 using EmergencyHoundModel;
 using System.IO;
+using EmergencyHoundWeb.App_Logic;
 
 namespace EmergencyHoundWeb.Controllers
 {
@@ -15,15 +16,16 @@ namespace EmergencyHoundWeb.Controllers
         // GET: Docs
         public ActionResult Index()
         {
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
-            var model = new vmDocumentListViewModel();
+            int UserIDX = Utils.GetUserIDX(User);
+            var model = new vmDocumentListViewModel(UserIDX);
             model.t_em_documents = db_EmergencyHound.GetT_EM_DOCUMENTS(UserIDX);
             return View(model);
         }
 
         public ActionResult Edit(Guid? id)
         {
-            var model = new vmDocumentEditViewModel();
+            int UserIDX = Utils.GetUserIDX(User);
+            var model = new vmDocumentEditViewModel(UserIDX);
             model.t_em_document = db_EmergencyHound.GetT_EM_DOCUMENTS_byIDX(id);
 
             //insert case
@@ -64,8 +66,7 @@ namespace EmergencyHoundWeb.Controllers
 
             }
 
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
-
+            int UserIDX = Utils.GetUserIDX(User);
 
             Guid? d = db_EmergencyHound.InsertUpdateT_EM_DOCUMENTS(model.t_em_document.DOC_IDX, model.t_em_document.ORG_IDX, fileBytes, model.t_em_document.DOC_NAME,
                 model.t_em_document.DOC_TYPE, model.t_em_document.DOC_FILE_TYPE, model.t_em_document.DOC_SIZE, model.t_em_document.DOC_COMMENT, model.t_em_document.DOC_AUTHOR, model.t_em_document.SHARE_TYPE, model.t_em_document.DOC_STATUS_TYPE, true, UserIDX);

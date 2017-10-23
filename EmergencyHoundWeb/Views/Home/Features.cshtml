@@ -23,6 +23,13 @@
         <div class="container m-t-xl">
             <div class="row">
                 <div class="col-sm-7">
+
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    }
+                    <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+
                     <h2 class="font-thin m-b-lg">Works Great on <span class="text-primary">Mobile</span>, <span class="text-primary">Tablet</span> and <span class="text-primary">Desktop</span></h2>
                     <p class="h4 m-b-lg l-h-1x">
                         Emergency Hound will work no matter where you are, anywhere in the world. Even in remote locations with no Internet access - Emergency Hound will continue to work and synchronize your data when you are back 'on the grid'.

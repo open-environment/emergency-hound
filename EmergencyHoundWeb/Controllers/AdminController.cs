@@ -25,9 +25,15 @@ namespace EmergencyHoundWeb.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult DeleteUser()
+        {
+            return RedirectToAction("Users");
+        }
+
         // POST: /Admin/DeleteUser/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteUser(int id)
         {
             db_Accounts.DeleteT_OE_USERS(id);
@@ -67,7 +73,7 @@ namespace EmergencyHoundWeb.Controllers
         public ActionResult RoleEdit(vmAdminRoleEditViewModel model, string submitButton)
         {
             int SuccID = 0;
-            int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+            int UserIDX = Utils.GetUserIDX(User);
 
             // UPDATING ROLE
             if (submitButton == "Edit")
@@ -137,7 +143,7 @@ namespace EmergencyHoundWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int UserIDX = (int)System.Web.Security.Membership.GetUser().ProviderUserKey;
+                int UserIDX = Utils.GetUserIDX(User);
 
                 int SuccID = db_Ref.InsertUpdateT_OE_APP_SETTING(model.edit_app_setting.SETTING_IDX, model.edit_app_setting.SETTING_NAME, model.edit_app_setting.SETTING_VALUE, false, null, UserIDX);
                 if (SuccID > 0)

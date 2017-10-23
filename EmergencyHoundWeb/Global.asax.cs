@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Helpers;
+
 
 namespace EmergencyHoundWeb
 {
@@ -16,6 +18,10 @@ namespace EmergencyHoundWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            //Added for integration with IdentityServer
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = "sub";
+            //ClaimTypes.NameIdentifier;
         }
     }
 }
