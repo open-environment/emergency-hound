@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 
 using Microsoft.AspNet.Identity;
 using System.Web.Configuration;
+using System.Security.Claims;
 
 namespace EmergencyHoundWeb.Controllers
 {
@@ -114,6 +115,16 @@ namespace EmergencyHoundWeb.Controllers
             Response.Cache.SetNoStore();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public void SignoutCleanup(string sid)
+        {
+            var cp = (ClaimsPrincipal)User;
+            var sidClaim = cp.FindFirst("sid");
+            if (sidClaim != null && sidClaim.Value == sid)
+            {
+                Request.GetOwinContext().Authentication.SignOut("Cookies");
+            }
         }
 
 
