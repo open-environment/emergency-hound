@@ -34,9 +34,9 @@ namespace EmergencyHoundWeb
                 {
                     //IMPLICIT 
                     ClientId = "emergency_hound",
-                    Authority = ConfigurationManager.AppSettings["IdentityServerAuthority"],      //"http://localhost:3892/",  //ID Server
-                    RedirectUri = ConfigurationManager.AppSettings["IdentityServerRedirectURI"],  //"http://localhost:1244/signinoidc",  , // 
-                    PostLogoutRedirectUri =  ConfigurationManager.AppSettings["IdentityServerPostLogoutURI"], //"http://localhost:1244/signoutcallbackoidc",
+                    Authority = ConfigurationManager.AppSettings["IdentityServerAuthority"],      
+                    RedirectUri = ConfigurationManager.AppSettings["IdentityServerRedirectURI"],  
+                    PostLogoutRedirectUri =  ConfigurationManager.AppSettings["IdentityServerPostLogoutURI"], 
                     ResponseType = "id_token",
                     UseTokenLifetime = false,
 
@@ -82,7 +82,6 @@ namespace EmergencyHoundWeb
                                 throw new System.IdentityModel.Tokens.SecurityTokenValidationException();
 
 
-
                             //set all orgs for this user to Inactive
                             db_EmergencyHound.SetT_EM_USER_ORG_Inactive(UserIDX);
 
@@ -104,21 +103,6 @@ namespace EmergencyHoundWeb
                         }
                     }
 
-                    //HYBRID values
-                    //AuthenticationScheme = "oidc",    //--------
-                    //SignInScheme = "cookie",   //--------
-                    //Authority = "http://localhost:5003/",  //--------
-                    //RequireHttpsMetadata = false,    //--------
-                    //ClientId = "mvc",      //--------
-                    //ClientSecret = "superSecretPassword",   //--------
-                    //ResponseType = "code id_token",    //--------
-                    //Scope = {
-                    //    "offline_access",
-                    //    "openid",
-                    //    "profile"
-                    //},
-                    //GetClaimsFromUserInfoEndpoint = true,   //--------
-                    //SaveTokens = true
                 });
 
             }

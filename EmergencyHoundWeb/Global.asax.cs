@@ -12,6 +12,9 @@ namespace EmergencyHoundWeb
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        //this line added to overcome Katana middleware infinite redirect issue
+        protected void Session_Start() { }  
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
