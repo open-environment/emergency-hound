@@ -46,7 +46,7 @@ namespace EmergencyHoundWeb.Controllers
             if (uu != null)
             {
                 //approve association (and set role)
-                db_EmergencyHound.InsertUpdateT_EM_USER_ORG(uidx, oidx, role != null ? role : "U", "A", MyUserIDX);
+                db_EmergencyHound.InsertUpdateT_EM_USER_ORG(uidx, oidx, role ?? "U", "A", MyUserIDX);
 
                 //create an INDIVIDUAL account 
                 db_EmergencyHound.InsertUpdateT_EM_INDIVIDUALS(null, oidx, uu.FNAME, null, uu.LNAME,

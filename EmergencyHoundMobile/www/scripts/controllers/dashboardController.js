@@ -47,7 +47,7 @@
                         zoom: 9,
                         maxZoom: 14,
                         mapTypeId: google.maps.MapTypeId.HYBRID
-                    }
+                    };
                     var map = new google.maps.Map(document.getElementById('map_canvas'), map_options);
                     var markers = [];
                     var bounds = new google.maps.LatLngBounds();
@@ -70,7 +70,7 @@
                         //place markers
                         for (i = 0; i < $scope.resources.length; i++) {
                             try {
-                                if ($scope.resources[i].resourcE_LAT != null) {
+                                if ($scope.resources[i].resourcE_LAT !== null) {
 
                                     var content2 = '<div id="reparse_helper_ ' + $scope.resources[i].resourcE_IDX + '">' +
                                                 '<div id="siteNotice">' +
@@ -96,7 +96,7 @@
                     {
                         for (i = 0; i < $scope.incidents.length; i++) {
                             try {
-                                if ($scope.incidents[i].incidenT_LAT != null) {
+                                if ($scope.incidents[i].incidenT_LAT !== null) {
 
                                     var content2 = '<div id="reparse_helper_ ' + $scope.incidents[i].incidenT_IDX + '">' +
                                                 '<div id="siteNotice">' +
@@ -195,8 +195,8 @@
                     // create a marker
                     var facid = $(this).find("FacilityRegistryIdentifier").text();
                     var fac = $(this).find("FacilitySiteName").text();
-                    var addy = $(this).find("LocationAddressText").text() + "<br/>" + $(this).find("LocalityName").text() + ", " + $(this).find("StateUSPSCode").text() + $(this).find("LocationZIPCode").text()
-                    var link = "<a href='http://oaspub.epa.gov/enviro/multisys2_v2.get_list?facility_uin=" + facid + "' target='blank'>EPA Data</a>"
+                    var addy = $(this).find("LocationAddressText").text() + "<br/>" + $(this).find("LocalityName").text() + ", " + $(this).find("StateUSPSCode").text() + $(this).find("LocationZIPCode").text();
+                    var link = "<a href='http://oaspub.epa.gov/enviro/multisys2_v2.get_list?facility_uin=" + facid + "' target='blank'>EPA Data</a>";
                     var latlng1 = new google.maps.LatLng($(this).find("LatitudeMeasure").text(), $(this).find("LongitudeMeasure").text());
                     var marker1 = new google.maps.Marker({
                         position: latlng1,
@@ -220,7 +220,7 @@
                 });
             });
 
-        };
+        }
 
 
         //****************** MAPPING END *******************************

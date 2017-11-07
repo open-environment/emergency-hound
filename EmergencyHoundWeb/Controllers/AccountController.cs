@@ -9,9 +9,6 @@ using EmergencyHoundWeb.App_Logic;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-
-using Microsoft.AspNet.Identity;
-using System.Web.Configuration;
 using System.Security.Claims;
 
 namespace EmergencyHoundWeb.Controllers
@@ -39,7 +36,6 @@ namespace EmergencyHoundWeb.Controllers
         // GET: /Account/Login
         public ActionResult Login(string returnUrl)
         {
-            string UserIDX = User.Identity.GetUserId();
             string UserName = User.Identity.Name;
             System.Security.Principal.IIdentity ii = User.Identity; 
 

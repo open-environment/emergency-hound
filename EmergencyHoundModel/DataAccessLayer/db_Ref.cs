@@ -575,6 +575,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
+                    db_Util.LogEFException(ex);
                     return 0;
                 }
             }
@@ -602,6 +603,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
+                    db_Util.LogEFException(ex);
                     return 0;
                 }
             }
