@@ -36,20 +36,14 @@ namespace EmergencyHoundWeb.Controllers
         // GET: /Account/Login
         public ActionResult Login(string returnUrl)
         {
-            string UserName = User.Identity.Name;
-            System.Security.Principal.IIdentity ii = User.Identity; 
-
             //auto pass forward to dashboard if logged in
-            if (User.Identity.Name != "")
+            T_OE_USERS u = db_Accounts.GetT_OE_USERSByID(User.Identity.Name ?? "");
+            if (u != null)
             {
-                T_OE_USERS u = db_Accounts.GetT_OE_USERSByID(User.Identity.Name);
-                if (u != null)
+                if (u.ACT_IND == true)
                 {
-                    if (u.ACT_IND == true)
-                    {
-                        System.Web.HttpContext.Current.Session.Add("iidx", u.CURR_INCIDENT_IDX);
-                        return RedirectToAction("Index", "Dashboard");
-                    }
+                    System.Web.HttpContext.Current.Session.Add("iidx", u.CURR_INCIDENT_IDX);
+                    return RedirectToAction("Index", "Dashboard");
                 }
             }
 
@@ -113,15 +107,6 @@ namespace EmergencyHoundWeb.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public void SignoutCleanup(string sid)
-        {
-            var cp = (ClaimsPrincipal)User;
-            var sidClaim = cp.FindFirst("sid");
-            if (sidClaim != null && sidClaim.Value == sid)
-            {
-                Request.GetOwinContext().Authentication.SignOut("Cookies");
-            }
-        }
 
 
         // GET: /Account/Register
