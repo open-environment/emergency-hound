@@ -40,8 +40,8 @@
                                 <td>
                                     <a href="@Url.Action("UserEdit","Admin", new { id=item.USER_IDX })" class="btn btn-rounded btn-xs btn-icon btn-default"><i class="fa fa-pencil fa-success"></i></a>
                                     <div class="delete-section" style="display:inline">
-                                        <a class=" btn btn-rounded btn-xs btn-icon btn-danger delete-link" href="@Url.Action("Delete", new {id = item.USER_IDX})"><i class="fa fa-times "></i></a>
-                                        <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.USER_IDX" data-delete-path="@(Url.Content("~/"))" data-delete-p="/Admin/DeleteUser"><b>Confirm Delete</b></div>
+                                        <a class=" btn btn-rounded btn-xs btn-danger delete-link" href="@Url.Action("Delete", new {id = item.USER_IDX})"><i class="fa fa-times "></i></a>
+                                        <div class="btn btn-rounded btn-xs btn-warning delete-confirm" style="display:none" data-delete-id="@item.USER_IDX" data-delete-path="@(new Uri(Request.Url, Url.Content("~")))" data-delete-p="/Admin/DeleteUser"><b>Confirm Delete</b></div>
                                     </div>
                                 </td>
                                 <td>

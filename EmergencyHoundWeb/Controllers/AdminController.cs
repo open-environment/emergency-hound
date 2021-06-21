@@ -21,18 +21,13 @@ namespace EmergencyHoundWeb.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult DeleteUser()
-        {
-            return RedirectToAction("Users");
-        }
 
         // POST: /Admin/DeleteUser/5
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public ActionResult DeleteUser(int id)
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteUser(int? id)
         {
-            db_Accounts.DeleteT_OE_USERS(id);
+            db_Accounts.DeleteT_OE_USERS(id ?? -1);
             return RedirectToAction("Users");
         }
 

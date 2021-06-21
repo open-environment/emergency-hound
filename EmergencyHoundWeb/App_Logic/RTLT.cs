@@ -20,7 +20,7 @@ namespace EmergencyHoundWeb.App_Logic
 
                 do
                 {
-                    org.preptoolkit.rtlt.ResourceDefinitionSet resources = client.GetResources(null, null, "2013-10-20 18:08:11", "2018-12-28 18:08:11", null, null, null, null, page, true);
+                    org.preptoolkit.rtlt.ResourceDefinitionSet resources = client.GetResources(null, null, "2013-10-20 18:08:11", "2022-12-28 18:08:11", null, null, null, null, page, true);
 
                     foreach (org.preptoolkit.rtlt.ResourceDefinition resource in resources.Definitions)
                     {

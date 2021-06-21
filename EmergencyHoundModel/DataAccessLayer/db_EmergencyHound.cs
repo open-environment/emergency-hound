@@ -1123,6 +1123,7 @@ namespace EmergencyHoundModel.DataAccessLayer
             }
         }
 
+
         public static int GetT_EM_INCIDENT_TEAM_DTL_CountbyResourceIDX(Guid? ResourceIDX)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
@@ -1203,7 +1204,7 @@ namespace EmergencyHoundModel.DataAccessLayer
                     {
                         insInd = true;
                         e = new T_EM_INCIDENT_TEAM_DTL();
-                        if (iNCIDENT_TEAM_DTL_IDX == Guid.Empty)
+                        if (iNCIDENT_TEAM_DTL_IDX == null || iNCIDENT_TEAM_DTL_IDX == Guid.Empty)
                             e.INCIDENT_TEAM_DTL_IDX = Guid.NewGuid();
                         else
                             e.INCIDENT_TEAM_DTL_IDX = iNCIDENT_TEAM_DTL_IDX.ConvertOrDefault<Guid>();
@@ -1376,7 +1377,7 @@ namespace EmergencyHoundModel.DataAccessLayer
         }
 
         public static Guid? InsertUpdateT_EM_INDIVIDUALS(Guid? iNDIVIDUAL_IDX, Guid? oRG_IDX, string iNDV_FIRST_NAME, string iNDV_MID_NAME, string iNDV_LAST_NAME, DateTime? iNDV_DOB, 
-            string iNDV_PHONE, string iNDV_EMAIL, string aDD_LINE_ADR, string aDD_CITY, string aDD_STATE, string aDD_ZIP, int? lINKED_USERIDX, string iNDV_AFFILIATION, Boolean aCT_IND, int? cREATE_USER)
+            string iNDV_PHONE, string iNDV_EMAIL, string aDD_LINE_ADR, string aDD_CITY, string aDD_STATE, string aDD_ZIP, int? lINKED_USERIDX, string iNDV_AFFILIATION, bool? aCT_IND, int? cREATE_USER)
         {
             using (EMERG_DBEntities ctx = new EMERG_DBEntities())
             {
@@ -1424,9 +1425,10 @@ namespace EmergencyHoundModel.DataAccessLayer
                     if (aDD_CITY != null) e.ADD_CITY = aDD_CITY;
                     if (aDD_STATE != null) e.ADD_STATE = aDD_STATE;
                     if (aDD_ZIP != null) e.ADD_ZIP = aDD_ZIP;
-                    if (lINKED_USERIDX != null) e.LINKED_USERIDX = lINKED_USERIDX;
+                    if (lINKED_USERIDX == -1) e.LINKED_USERIDX = null;   //nulling out linked user IDX
+                    else if (lINKED_USERIDX != null) e.LINKED_USERIDX = lINKED_USERIDX;
                     if (iNDV_AFFILIATION != null) e.INDV_AFFILIATION = iNDV_AFFILIATION;
-                    e.ACT_IND = aCT_IND;
+                    if (aCT_IND != null) e.ACT_IND = aCT_IND ?? true;
 
                     if (insInd)
                         ctx.T_EM_INDIVIDUALS.Add(e);

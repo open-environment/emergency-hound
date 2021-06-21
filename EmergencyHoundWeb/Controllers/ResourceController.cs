@@ -250,7 +250,9 @@ namespace EmergencyHoundWeb.Controllers
             return View(model);
         }
 
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ResourceTypeEdit(vmResourceTypeEditViewModel model)
         {
             if (ModelState.IsValid)
@@ -259,7 +261,7 @@ namespace EmergencyHoundWeb.Controllers
 
                 Guid? ResourceTypeIDX = db_Ref.InsertUpdateT_EM_REF_RESOURCE_TYPE(model.t_em_ref_resource_type.RESOURCE_TYPE_IDX, model.t_em_ref_resource_type.RESOURCE_FEMA_ID,
                     model.t_em_ref_resource_type.RESOURCE_TYPE_NAME, model.t_em_ref_resource_type.RESOURCE_TYPE_DESC, model.t_em_ref_resource_type.RESOURCE_FUNCTION,
-                    model.t_em_ref_resource_type.RESOURCE_CATEGORY, model.t_em_ref_resource_type.RESOURCE_KIND, null, model.t_em_ref_resource_type.RESOURCE_CORE_CAP, 
+                    model.t_em_ref_resource_type.RESOURCE_CATEGORY, model.t_em_ref_resource_type.RESOURCE_KIND, null, model.t_em_ref_resource_type.RESOURCE_CORE_CAP,
                     model.t_em_ref_resource_type.RESOURCE_ORDERING_INST, 0, model.t_em_ref_resource_type.ORG_IDX, true, UserIDX);
 
                 if (ResourceTypeIDX != null)

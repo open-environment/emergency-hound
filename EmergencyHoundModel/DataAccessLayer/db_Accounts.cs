@@ -265,6 +265,20 @@ namespace EmergencyHoundModel.DataAccessLayer
             {
                 try
                 {
+                    //if user already exists in an incident team, then remove the linkage between user and individual
+                    List<T_EM_INDIVIDUALS> _inds = db_EmergencyHound.GetT_EM_INDIVIDUALS_ByUserIDX(idx, null, null);
+                    if (_inds != null && _inds.Count > 0)
+                    {
+                        //remove link to 
+                        //foreach (T_EM_INDIVIDUALS _ind in _inds)
+                        //    db_EmergencyHound.InsertUpdateT_EM_INDIVIDUALS(_ind.INDIVIDUAL_IDX, null, null, null, null, null, null, null, null, null, null, null, -1, null, null, delUserIDX);
+
+                        //set inactive
+                        UpdateT_OE_USERS(idx, null, null, null, null, null, false, null, null, null, null, null, null, null, null);
+
+                        return 2;
+                    }
+
                     T_OE_USERS row = ctx.T_OE_USERS.First(i => i.USER_IDX == idx);
                     ctx.T_OE_USERS.Remove(row);
                     ctx.SaveChanges();

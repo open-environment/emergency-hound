@@ -55,7 +55,7 @@
             @using (Html.BeginForm("ResourceTypeEdit", "Resource", FormMethod.Post, new { @class = "", @id = "iform" }))
             {
                 @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true)
+                @*@Html.ValidationSummary(true)*@
                 @Html.HiddenFor(model => model.t_em_ref_resource_type.RESOURCE_TYPE_IDX)
 
                 <section class="panel panel-default">

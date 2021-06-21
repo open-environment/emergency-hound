@@ -166,38 +166,38 @@
                                     @if (User.IsInRole("Admins"))
                                     {
 
-                                    <li class="@Html.ActivePage("Admin", "Users")">
+                                    <li class="@Html.NewActivePage("Admin", "Users")">
                                         <a href="@Url.Action("Users", "Admin")">
                                             <i class="fa fa-angle-right"></i>
                                             <span>Users</span>
                                         </a>
                                     </li>
-                                    <li class="@Html.ActivePage("Admin", "Roles")">
+                                    <li class="@Html.NewActivePage("Admin", "Roles")">
                                         <a href="@Url.Action("Roles", "Admin")">
                                             <i class="fa fa-angle-right"></i>
                                             <span>Roles</span>
                                         </a>
                                     </li>
-                                    <li class="@Html.ActivePage("Admin", "Settings")">
+                                    <li class="@Html.NewActivePage("Admin", "Settings")">
                                         <a href="@Url.Action("Settings", "Admin")">
                                             <i class="fa fa-angle-right"></i>
                                             <span>Settings</span>
                                         </a>
                                     </li>
-                                    <li class="@Html.ActivePage("Admin", "Tasks")">
+                                    <li class="@Html.NewActivePage("Admin", "Tasks")">
                                         <a href="@Url.Action("Tasks", "Admin")">
                                             <i class="fa fa-angle-right"></i>
                                             <span>Tasks</span>
                                         </a>
                                     </li>
                                     }
-                                    <li class="@Html.ActivePage("Jurisdiction", "Index")">
+                                    <li class="@Html.NewActivePage("Jurisdiction", "Index")">
                                         <a href="@Url.Action("Index","Jurisdiction")">
                                             <i class="fa fa-angle-right"></i>
                                             <span>Jurisdictions</span>
                                         </a>
                                     </li>
-                                    <li class="@Html.ActivePage("Resource", "ResourceType")">
+                                    <li class="@Html.NewActivePage("Resource", "ResourceType")">
                                         <a href="@Url.Action("ResourceType","Resource")">
                                             <i class="fa fa-angle-right"></i>
                                             <span>Resource Types</span>

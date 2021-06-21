@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web.Mvc;
 using EmergencyHoundModel;
 using EmergencyHoundModel.DataAccessLayer;
-using EmergencyHoundWeb.App_Logic;
 
 namespace EmergencyHoundWeb.ViewModels
 {
@@ -16,7 +15,6 @@ namespace EmergencyHoundWeb.ViewModels
     {
         public static IEnumerable<SelectListItem> getList_ddl_jurisdictions(int UserIDX)
         {
-
             return db_EmergencyHound.GetT_OE_ORGANIZATIONS_ByUSERIDX_ORG(UserIDX, false).Select(x => new SelectListItem
             {
                 Value = x.ORG_IDX.ToString(),
@@ -78,9 +76,6 @@ namespace EmergencyHoundWeb.ViewModels
             });
         }
 
-
-
-
     }
 
 
@@ -134,6 +129,7 @@ namespace EmergencyHoundWeb.ViewModels
         public bool canAdd { get; set; }
 
         //initialize 
+        public vmDocumentListViewModel() {}
         public vmDocumentListViewModel(int UserIDX)
         {
             canAdd = db_EmergencyHound.BelongsToOrg(UserIDX);
@@ -149,6 +145,7 @@ namespace EmergencyHoundWeb.ViewModels
         public IEnumerable<SelectListItem> ddl_jurisdiction { get; set; }
 
         //initialize
+        public vmDocumentEditViewModel() { }
         public vmDocumentEditViewModel(int UserIDX)
         {
             ddl_doc_type = ddlHelpers.getList_ddl_doc_type();
@@ -171,6 +168,7 @@ namespace EmergencyHoundWeb.ViewModels
         public bool canAdd { get; set; }
 
         //initialize
+        public vmIncidentIndexViewModel() { }
         public vmIncidentIndexViewModel(int UserIDX)
         {
             ddl_jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
@@ -191,6 +189,7 @@ namespace EmergencyHoundWeb.ViewModels
         public int? CurrTab { get; set; }
 
         //initialize
+        public vmIncidentEditViewModel() { }
         public vmIncidentEditViewModel(int UserIDX)
         {
             ddl_Jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
@@ -224,6 +223,7 @@ namespace EmergencyHoundWeb.ViewModels
         public T_EM_INCIDENT_TEAM_DTL editTeamMember { get; set;  }
 
         //initialize
+        public vmIncidentTeamModel() { }
         public vmIncidentTeamModel(int UserIDX)
         {
             ddl_Individuals = db_EmergencyHound.GetT_EM_INDIVIDUALS_ByUserIDX(UserIDX, null, null).Select(x => new SelectListItem
@@ -330,6 +330,7 @@ namespace EmergencyHoundWeb.ViewModels
         public bool canAdd { get; set; }
 
         //initialize
+        public vmIndividualListViewModel() { }
         public vmIndividualListViewModel(int UserIDX)
         {
             canAdd = db_EmergencyHound.BelongsToOrg(UserIDX);
@@ -348,6 +349,7 @@ namespace EmergencyHoundWeb.ViewModels
 
 
         //initialize
+        public vmIndividualEditViewModel() { }
         public vmIndividualEditViewModel(int UserIDX)
         {
             ddl_jurisdiction = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
@@ -395,6 +397,8 @@ namespace EmergencyHoundWeb.ViewModels
         public bool canAdd { get; set; }
 
         //initialize
+        public vmResourceIndexViewModel() { }
+
         public vmResourceIndexViewModel(int UserIDX)
         {
             ddl_jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
@@ -442,6 +446,10 @@ namespace EmergencyHoundWeb.ViewModels
         public T_EM_RESOURCE_VER_HIST t_em_resource_ver_hist { get; set; }
 
         //intialize
+        public vmResourceEditViewModel()
+        {
+        }
+
         public vmResourceEditViewModel(int UserIDX)
         {
             Jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
@@ -466,6 +474,9 @@ namespace EmergencyHoundWeb.ViewModels
         public IEnumerable<SelectListItem> StatusTypes { get; set; }
 
         //intialize
+        public vmResourceAddViewModel()
+        {
+        }
         public vmResourceAddViewModel(int UserIDX)
         {
             Jurisdictions = ddlHelpers.getList_ddl_jurisdictions(UserIDX);
@@ -499,6 +510,8 @@ namespace EmergencyHoundWeb.ViewModels
         public IEnumerable<SelectListItem> ddl_Jurisdiction { get; set; }
 
         //initialize
+        public vmResourceTypeEditViewModel() {}
+
         public vmResourceTypeEditViewModel(int UserIDX)
         {
             ddl_Category = db_Ref.GetT_EM_REF_RESOURCE_CAT().Select(x => new SelectListItem
